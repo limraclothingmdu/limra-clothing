@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Plus, Pencil, FolderOpen } from "lucide-react";
 import { redirect } from "next/navigation";
-
+import DeleteCategoryButton from "@/components/admin/DeleteCategoryButton";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminCategoriesPage() {
@@ -208,13 +208,21 @@ export default async function AdminCategoriesPage() {
                       </td>
 
                       <td className="px-6 py-5 text-right">
-                        <Link
-                          href={`/admin/categories/${category.id}/edit`}
-                          className="inline-flex items-center gap-2 rounded-full border border-[#081A4A]/15 px-4 py-2 text-sm font-semibold text-[#081A4A] transition hover:border-[#C89B3C] hover:text-[#C89B3C]"
-                        >
-                          <Pencil className="h-4 w-4" />
-                          Edit
-                        </Link>
+                         <div className="flex items-center justify-end gap-2">
+    <Link
+      href={`/admin/categories/${category.id}/edit`}
+      className="inline-flex items-center gap-2 rounded-full border border-[#081A4A]/15 px-4 py-2 text-sm font-semibold text-[#081A4A] transition hover:border-[#C89B3C] hover:text-[#C89B3C]"
+    >
+      <Pencil className="h-4 w-4" />
+      Edit
+    </Link>
+
+    <DeleteCategoryButton
+      categoryId={category.id}
+      categoryName={category.name}
+    />
+  </div>
+
                       </td>
                     </tr>
                   ))}

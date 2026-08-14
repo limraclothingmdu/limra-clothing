@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Loader2, Save } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
+import DeleteCategoryButton from "@/components/admin/DeleteCategoryButton";
 
 type Category = {
   id: string;
@@ -495,6 +496,13 @@ export default function EditCategoryPage() {
               Cancel
             </Link>
           </div>
+          {/* Delete Category */}
+<div className="mt-8 border-t border-red-100 pt-6">
+  <DeleteCategoryButton
+    categoryId={id}
+    categoryName={form.name}
+  />
+</div>
         </form>
       </div>
     </main>
