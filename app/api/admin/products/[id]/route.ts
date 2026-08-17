@@ -90,6 +90,25 @@ export async function PUT(
             keyword.trim().length > 0
         )
       : [];
+    const price =
+      body.price === null ||
+      body.price === undefined ||
+      body.price === ""
+        ? null
+        : Number(body.price);
+
+    const offerName =
+      typeof body.offer_name === "string" &&
+      body.offer_name.trim()
+        ? body.offer_name.trim()
+        : null;
+
+    const offerPrice =
+      body.offer_price === null ||
+      body.offer_price === undefined ||
+      body.offer_price === ""
+        ? null
+        : Number(body.offer_price);
 
     // Validation
     if (!name) {
@@ -152,7 +171,36 @@ export async function PUT(
         { status: 404 }
       );
     }
+    if (price !== null && (!Number.isFinite(price) || price < 0)) {
+  return NextResponse.json(
+    { error: "Price cannot be negative." },
+    { status: 400 }
+  );
+}
 
+if (
+  offerPrice !== null &&
+  (!Number.isFinite(offerPrice) || offerPrice < 0)
+) {
+  return NextResponse.json(
+    { error: "Offer price cannot be negative." },
+    { status: 400 }
+  );
+}
+
+if (
+  price !== null &&
+  offerPrice !== null &&
+  offerPrice >= price
+) {
+  return NextResponse.json(
+    {
+      error:
+        "Offer price must be lower than the regular price.",
+    },
+    { status: 400 }
+  );
+}
     // Check duplicate slug
     const {
       data: duplicateProduct,
@@ -238,6 +286,9 @@ export async function PUT(
         image,
         keywords,
         is_active: isActive,
+        price,
+  offer_name: offerName,
+  offer_price: offerPrice,
         updated_at: new Date().toISOString(),
       })
       .eq("id", id)

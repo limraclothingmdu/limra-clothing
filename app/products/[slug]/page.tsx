@@ -122,6 +122,8 @@ export default async function ProductPage({
   },
 ]);
 
+  const sellingPrice = product.offer_price ?? product.price;
+
 const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
@@ -148,18 +150,23 @@ const productSchema = {
     url: siteConfig.url,
   },
 
-  offers: {
-    "@type": "Offer",
-    url: productUrl,
-    priceCurrency: "INR",
-    availability: "https://schema.org/InStock",
+  ...(sellingPrice !== null
+    ? {
+        offers: {
+          "@type": "Offer",
+          url: productUrl,
+          priceCurrency: "INR",
+          price: sellingPrice,
+          availability: "https://schema.org/InStock",
 
-    seller: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
-  },
+          seller: {
+            "@type": "Organization",
+            name: siteConfig.name,
+            url: siteConfig.url,
+          },
+        },
+      }
+    : {}),
 };
 
   return (
@@ -241,6 +248,31 @@ const productSchema = {
             <h1 className="mt-4 font-serif text-4xl font-semibold text-[#081A4A] sm:text-5xl">
               {product.name}
             </h1>
+
+            {/* Pricing */}
+            <div className="mt-4 flex flex-col gap-1">
+              {product.offer_price && product.price ? (
+                <>
+                  {product.offer_name && (
+                    <span className="text-sm font-bold text-[#C89B3C] uppercase tracking-wide">
+                      {product.offer_name}
+                    </span>
+                  )}
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl font-bold text-[#081A4A]">
+                      ₹{product.offer_price}
+                    </span>
+                    <span className="text-lg text-[#222]/50 line-through">
+                      ₹{product.price}
+                    </span>
+                  </div>
+                </>
+              ) : product.price ? (
+                <span className="text-2xl font-bold text-[#081A4A]">
+                  ₹{product.price}
+                </span>
+              ) : null}
+            </div>
 
             <p className="mt-6 text-base leading-8 text-[#222]/65">
               {product.description}

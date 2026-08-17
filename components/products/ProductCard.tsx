@@ -43,6 +43,30 @@ export default function ProductCard({
           </p>
         )}
 
+        <div className="mt-4 flex flex-col gap-1">
+          {product.offer_price && product.price ? (
+            <>
+              {product.offer_name && (
+                <span className="text-xs font-bold text-[#C89B3C] uppercase tracking-wide">
+                  {product.offer_name}
+                </span>
+              )}
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-[#081A4A]">
+                  ₹{product.offer_price}
+                </span>
+                <span className="text-sm text-[#222]/50 line-through">
+                  ₹{product.price}
+                </span>
+              </div>
+            </>
+          ) : product.price ? (
+            <span className="text-lg font-bold text-[#081A4A]">
+              ₹{product.price}
+            </span>
+          ) : null}
+        </div>
+
         <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#081A4A]">
           View Product
           <ArrowRight className="h-4 w-4 text-[#C89B3C] transition-transform group-hover:translate-x-1" />

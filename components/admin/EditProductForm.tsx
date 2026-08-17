@@ -19,6 +19,9 @@ type Product = {
   image: string | null;
   is_active: boolean;
   category_id: string | null;
+  price: number | null;
+offer_name: string | null;
+offer_price: number | null;
 };
 
 type EditProductFormProps = {
@@ -60,6 +63,17 @@ export default function EditProductForm({
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [price, setPrice] = useState(
+  product.price?.toString() ?? ""
+);
+
+const [offerName, setOfferName] = useState(
+  product.offer_name ?? ""
+);
+
+const [offerPrice, setOfferPrice] = useState(
+  product.offer_price?.toString() ?? ""
+);
 
   function handleNameChange(value: string) {
     setName(value);
@@ -89,7 +103,35 @@ export default function EditProductForm({
       if (!description.trim()) {
         throw new Error("Product description is required.");
       }
+     const numericPrice = price ? Number(price) : null;
+const numericOfferPrice = offerPrice
+  ? Number(offerPrice)
+  : null;
 
+if (
+  numericPrice !== null &&
+  (!Number.isFinite(numericPrice) || numericPrice < 0)
+) {
+  throw new Error("Price cannot be negative.");
+}
+
+if (
+  numericOfferPrice !== null &&
+  (!Number.isFinite(numericOfferPrice) ||
+    numericOfferPrice < 0)
+) {
+  throw new Error("Offer price cannot be negative.");
+}
+
+if (
+  numericPrice !== null &&
+  numericOfferPrice !== null &&
+  numericOfferPrice >= numericPrice
+) {
+  throw new Error(
+    "Offer price must be lower than the regular price."
+  );
+}
       const keywordArray = keywords
         .split(",")
         .map((keyword) => keyword.trim())
@@ -112,6 +154,9 @@ export default function EditProductForm({
             keywords: keywordArray,
             image: image.trim() || null,
             is_active: isActive,
+              price: price ? Number(price) : null,
+  offer_name: offerName.trim() || null,
+  offer_price: offerPrice ? Number(offerPrice) : null,
           }),
         }
       );
@@ -278,6 +323,81 @@ export default function EditProductForm({
           </div>
         </div>
       </section>
+      {/* Pricing & Offers */}
+<section className="rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm sm:p-8">
+  <div className="mb-6">
+    <h2 className="font-serif text-2xl font-semibold text-[#081A4A]">
+      Pricing & Offers
+    </h2>
+
+    <p className="mt-1 text-sm text-[#222]/55">
+      Set the product price and any special offer.
+    </p>
+  </div>
+
+  <div className="grid gap-6 sm:grid-cols-2">
+    {/* Price */}
+    <div>
+      <label
+        htmlFor="price"
+        className="mb-2 block text-sm font-semibold text-[#081A4A]"
+      >
+        Price (₹)
+      </label>
+
+      <input
+        id="price"
+        type="number"
+        min="0"
+        step="0.01"
+        value={price}
+        onChange={(event) => setPrice(event.target.value)}
+        placeholder="599"
+        className="w-full rounded-xl border border-[#081A4A]/15 px-4 py-3 outline-none transition focus:border-[#C89B3C] focus:ring-2 focus:ring-[#C89B3C]/10"
+      />
+    </div>
+
+    {/* Offer Name */}
+    <div>
+      <label
+        htmlFor="offerName"
+        className="mb-2 block text-sm font-semibold text-[#081A4A]"
+      >
+        Special Offer Name
+      </label>
+
+      <input
+        id="offerName"
+        type="text"
+        value={offerName}
+        onChange={(event) => setOfferName(event.target.value)}
+        placeholder="Festival Offer"
+        className="w-full rounded-xl border border-[#081A4A]/15 px-4 py-3 outline-none transition focus:border-[#C89B3C] focus:ring-2 focus:ring-[#C89B3C]/10"
+      />
+    </div>
+
+    {/* Offer Price */}
+    <div>
+      <label
+        htmlFor="offerPrice"
+        className="mb-2 block text-sm font-semibold text-[#081A4A]"
+      >
+        Offer Price (₹)
+      </label>
+
+      <input
+        id="offerPrice"
+        type="number"
+        min="0"
+        step="0.01"
+        value={offerPrice}
+        onChange={(event) => setOfferPrice(event.target.value)}
+        placeholder="499"
+        className="w-full rounded-xl border border-[#081A4A]/15 px-4 py-3 outline-none transition focus:border-[#C89B3C] focus:ring-2 focus:ring-[#C89B3C]/10"
+      />
+    </div>
+  </div>
+</section>
 
       {/* SEO */}
       <section className="rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm sm:p-8">

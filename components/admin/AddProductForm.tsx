@@ -33,7 +33,9 @@ export default function AddProductForm({
   const [shortDescription, setShortDescription] = useState("");
   const [description, setDescription] = useState("");
   const [keywords, setKeywords] = useState("");
-
+  const [price, setPrice] = useState("");
+const [offerName, setOfferName] = useState("");
+const [offerPrice, setOfferPrice] = useState("");
   const [image, setImage] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -130,6 +132,23 @@ export default function AddProductForm({
       if (!description.trim()) {
         throw new Error("Product description is required.");
       }
+      if (price && Number(price) < 0) {
+  throw new Error("Price cannot be negative.");
+}
+
+if (offerPrice && Number(offerPrice) < 0) {
+  throw new Error("Offer price cannot be negative.");
+}
+
+if (
+  price &&
+  offerPrice &&
+  Number(offerPrice) >= Number(price)
+) {
+  throw new Error(
+    "Offer price must be lower than the regular price."
+  );
+}
 
       let imageUrl = image || null;
 
@@ -159,6 +178,17 @@ export default function AddProductForm({
             keywords: keywordArray,
             image: imageUrl,
             is_active: isActive,
+            price: price.trim()
+  ? Number(price)
+  : null,
+
+offer_name: offerName.trim()
+  ? offerName.trim()
+  : null,
+
+offer_price: offerPrice.trim()
+  ? Number(offerPrice)
+  : null,
           }),
         }
       );
@@ -344,6 +374,85 @@ export default function AddProductForm({
           </div>
         </div>
       </section>
+      {/* Pricing & Offers */}
+<section className="rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm sm:p-8">
+  <div className="mb-6">
+    <h2 className="font-serif text-2xl font-semibold text-[#081A4A]">
+      Pricing & Offers
+    </h2>
+
+    <p className="mt-1 text-sm text-[#222]/55">
+      Set the regular price and, if applicable, a special offer.
+    </p>
+  </div>
+
+  <div className="grid gap-6 sm:grid-cols-3">
+    {/* Price */}
+    <div>
+      <label
+        htmlFor="price"
+        className="mb-2 block text-sm font-semibold text-[#081A4A]"
+      >
+        Price (₹)
+      </label>
+
+      <input
+        id="price"
+        type="number"
+        min="0"
+        step="0.01"
+        value={price}
+        onChange={(event) => setPrice(event.target.value)}
+        placeholder="850"
+        className="w-full rounded-xl border border-[#081A4A]/15 px-4 py-3 outline-none transition focus:border-[#C89B3C] focus:ring-2 focus:ring-[#C89B3C]/10"
+      />
+    </div>
+
+    {/* Offer Name */}
+    <div>
+      <label
+        htmlFor="offerName"
+        className="mb-2 block text-sm font-semibold text-[#081A4A]"
+      >
+        Special Offer Name
+      </label>
+
+      <input
+        id="offerName"
+        type="text"
+        value={offerName}
+        onChange={(event) => setOfferName(event.target.value)}
+        placeholder="Wholesale Offer"
+        className="w-full rounded-xl border border-[#081A4A]/15 px-4 py-3 outline-none transition focus:border-[#C89B3C] focus:ring-2 focus:ring-[#C89B3C]/10"
+      />
+    </div>
+
+    {/* Offer Price */}
+    <div>
+      <label
+        htmlFor="offerPrice"
+        className="mb-2 block text-sm font-semibold text-[#081A4A]"
+      >
+        Offer Price (₹)
+      </label>
+
+      <input
+        id="offerPrice"
+        type="number"
+        min="0"
+        step="0.01"
+        value={offerPrice}
+        onChange={(event) => setOfferPrice(event.target.value)}
+        placeholder="699"
+        className="w-full rounded-xl border border-[#081A4A]/15 px-4 py-3 outline-none transition focus:border-[#C89B3C] focus:ring-2 focus:ring-[#C89B3C]/10"
+      />
+    </div>
+  </div>
+
+  <p className="mt-4 text-xs text-[#222]/45">
+    Leave the offer fields empty if there is no special offer.
+  </p>
+</section>
 
       {/* SEO */}
       <section className="rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm sm:p-8">
@@ -396,6 +505,7 @@ export default function AddProductForm({
             Upload a product image to Supabase
             Storage.
           </p>
+        
         </div>
 
         <div>

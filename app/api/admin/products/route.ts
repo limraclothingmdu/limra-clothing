@@ -57,7 +57,25 @@ export async function POST(request: Request) {
       typeof body.description === "string"
         ? body.description.trim()
         : "";
+    const price =
+      body.price === null ||
+      body.price === undefined ||
+      body.price === ""
+        ? null
+        : Number(body.price);
 
+    const offerName =
+      typeof body.offer_name === "string" &&
+      body.offer_name.trim()
+        ? body.offer_name.trim()
+        : null;
+
+    const offerPrice =
+      body.offer_price === null ||
+      body.offer_price === undefined ||
+      body.offer_price === ""
+        ? null
+        : Number(body.offer_price);
     const image =
       typeof body.image === "string" &&
       body.image.trim()
@@ -135,6 +153,7 @@ export async function POST(request: Request) {
         "Duplicate slug check failed:",
         existingError
       );
+      
 
       return NextResponse.json(
         {
@@ -157,7 +176,33 @@ export async function POST(request: Request) {
         }
       );
     }
+    if (price !== null && price < 0) {
+  return NextResponse.json(
+    { error: "Price cannot be negative." },
+    { status: 400 }
+  );
+}
 
+if (offerPrice !== null && offerPrice < 0) {
+  return NextResponse.json(
+    { error: "Offer price cannot be negative." },
+    { status: 400 }
+  );
+}
+
+if (
+  price !== null &&
+  offerPrice !== null &&
+  offerPrice >= price
+) {
+  return NextResponse.json(
+    {
+      error:
+        "Offer price must be lower than the regular price.",
+    },
+    { status: 400 }
+  );
+}
     // Verify category exists
     const { data: category, error: categoryError } =
       await supabase
@@ -198,14 +243,17 @@ export async function POST(request: Request) {
       await supabase
         .from("products")
         .insert({
-          name,
-          slug,
-          category_id: categoryId,
-          short_description: shortDescription || null,
-          description,
-          image,
-          keywords,
-          is_active: isActive,
+            name,
+  slug,
+  category_id: categoryId,
+  short_description: shortDescription || null,
+  description,
+  image,
+  keywords,
+  is_active: isActive,
+  price,
+  offer_name: offerName,
+  offer_price: offerPrice,
         })
         .select()
         .single();

@@ -10,24 +10,32 @@ export type Product = {
   image: string | null;
   keywords: string[];
   is_active: boolean;
+  price: number | null;
+  offer_name: string | null;
+  offer_price: number | null;
 };
+
+const productSelect = `
+  id,
+  slug,
+  name,
+  category_id,
+  short_description,
+  description,
+  image,
+  keywords,
+  is_active,
+  price,
+  offer_name,
+  offer_price
+`;
 
 export async function getProducts(): Promise<Product[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("products")
-    .select(`
-      id,
-      slug,
-      name,
-      category_id,
-      short_description,
-      description,
-      image,
-      keywords,
-      is_active
-    `)
+    .select(productSelect)
     .eq("is_active", true)
     .order("created_at", { ascending: false });
 
@@ -46,17 +54,7 @@ export async function getProductBySlug(
 
   const { data, error } = await supabase
     .from("products")
-    .select(`
-      id,
-      slug,
-      name,
-      category_id,
-      short_description,
-      description,
-      image,
-      keywords,
-      is_active
-    `)
+    .select(productSelect)
     .eq("slug", slug)
     .eq("is_active", true)
     .maybeSingle();
@@ -76,17 +74,7 @@ export async function getProductsByCategory(
 
   const { data, error } = await supabase
     .from("products")
-    .select(`
-      id,
-      slug,
-      name,
-      category_id,
-      short_description,
-      description,
-      image,
-      keywords,
-      is_active
-    `)
+    .select(productSelect)
     .eq("category_id", categoryId)
     .eq("is_active", true)
     .order("created_at", { ascending: false });

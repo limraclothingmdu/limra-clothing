@@ -36,7 +36,10 @@ export default async function EditProductPage({
       keywords,
       image,
       is_active,
-      category_id
+      category_id,
+  price,
+  offer_name,
+  offer_price
     `)
     .eq("id", id)
     .single();
