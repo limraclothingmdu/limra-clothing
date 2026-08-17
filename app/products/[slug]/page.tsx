@@ -34,9 +34,11 @@ export async function generateMetadata({
   }
 
   const canonicalUrl = `${siteConfig.url}/products/${product.slug}`;
-  const imageUrl = product.image
-    ? `${siteConfig.url}${product.image}`
-    : undefined;
+const imageUrl = product.image
+  ? product.image.startsWith("http")
+    ? product.image
+    : `${siteConfig.url}${product.image}`
+  : undefined;
 
   const title = `${product.name} Wholesale in Madurai | ${siteConfig.name}`;
 
@@ -105,7 +107,9 @@ export default async function ProductPage({
   const productUrl = `${siteConfig.url}/products/${product.slug}`;
   const productImage =
     product.image ?? "/images/products/mens-casual-shirt.jpg";
-  const imageUrl = `${siteConfig.url}${productImage}`;
+const imageUrl = productImage.startsWith("http")
+  ? productImage
+  : `${siteConfig.url}${productImage}`;
 
   const breadcrumbSchema = createBreadcrumbSchema([
   {
