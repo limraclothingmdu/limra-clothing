@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import "./globals.css";
 
 import { siteConfig } from "@/lib/site";
@@ -74,7 +74,8 @@ export default function RootLayout({
   <html lang="en" data-scroll-behavior="smooth">
     <body
       className={`${inter.variable} ${playfair.variable} antialiased`}
-    >
+      >
+        <GoogleAnalytics />
       <StructuredData />
       <Navbar />
       {children}
