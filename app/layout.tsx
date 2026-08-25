@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   creator: siteConfig.name,
 
   alternates: {
-    canonical: "/",
+    canonical: siteConfig.url,
   },
 
   openGraph: {
