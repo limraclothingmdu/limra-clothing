@@ -5,7 +5,7 @@ export const siteConfig = {
   description:
     "Limra Clothing is a wholesale and retail textile business based in Madurai, offering shirts, pants, T-shirts and other ready-made garments, with distribution across Tamil Nadu.",
 
-  url: "http://localhost:3001",
+  url: "https://limraclothing.in",
 
   contact: {
     phone: "8220523907",
