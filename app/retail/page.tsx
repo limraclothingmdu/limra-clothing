@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Retail Clothing in Madurai",
   description:
-    "Shop shirts, pants, T-shirts and ready-made clothing from Limra Clothing, a wholesale and retail textile business in Madurai.",
+  "Shop shirts, pants, T-shirts and ready-made clothing from Limra Clothing, a wholesale and retail clothing business in Madurai, Tamil Nadu.",
   keywords: [
     "retail clothing Madurai",
     "clothing shop Madurai",

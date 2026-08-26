@@ -11,8 +11,7 @@ export const metadata: Metadata = {
   title: "Textile & Garment Wholesalers in Madurai | Limra Clothing",
 
   description:
-    "Limra Clothing supplies wholesale shirts, pants, T-shirts and ready-made garments from Madurai, with clothing distribution across Tamil Leading readymade garment & fabric wholesalers in Madurai, Tamil Nadu. Get best bulk rates for men's shirts, t-shirts, and kids wear.",
-
+  "Limra Clothing is a leading readymade garment and clothing wholesaler in Madurai, Tamil Nadu, supplying men's shirts, T-shirts, pants and kids wear to retailers, wholesalers and businesses across Tamil Nadu.",
   keywords: [
     "wholesale clothing Madurai",
     "wholesale garments Madurai",
