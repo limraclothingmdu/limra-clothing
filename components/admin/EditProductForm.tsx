@@ -1,9 +1,16 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/navigation";
 
 type Category = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+type AttributeOption = {
   id: string;
   name: string;
   slug: string;
@@ -27,6 +34,12 @@ offer_price: number | null;
 type EditProductFormProps = {
   product: Product;
   categories: Category[];
+  sizes: AttributeOption[];
+  styles: AttributeOption[];
+  materials: AttributeOption[];
+  initialSizeIds: string[];
+  initialStyleIds: string[];
+  initialMaterialIds: string[];
 };
 
 function createSlug(value: string) {
@@ -41,6 +54,12 @@ function createSlug(value: string) {
 export default function EditProductForm({
   product,
   categories,
+  sizes,
+  styles,
+  materials,
+  initialSizeIds,
+  initialStyleIds,
+  initialMaterialIds,
 }: EditProductFormProps) {
   const router = useRouter();
 
@@ -48,6 +67,15 @@ export default function EditProductForm({
   const [slug, setSlug] = useState(product.slug);
   const [categoryId, setCategoryId] = useState(
     product.category_id ?? ""
+  );
+  const [selectedSizeIds, setSelectedSizeIds] = useState<string[]>(
+    initialSizeIds
+  );
+  const [selectedStyleIds, setSelectedStyleIds] = useState<string[]>(
+    initialStyleIds
+  );
+  const [selectedMaterialIds, setSelectedMaterialIds] = useState<string[]>(
+    initialMaterialIds
   );
   const [shortDescription, setShortDescription] = useState(
     product.short_description ?? ""
@@ -63,6 +91,17 @@ export default function EditProductForm({
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const toggleSelection = (
+    id: string,
+    setter: Dispatch<SetStateAction<string[]>>
+  ) => {
+    setter((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    );
+  };
   const [price, setPrice] = useState(
   product.price?.toString() ?? ""
 );
@@ -157,6 +196,9 @@ if (
               price: price ? Number(price) : null,
   offer_name: offerName.trim() || null,
   offer_price: offerPrice ? Number(offerPrice) : null,
+            size_ids: selectedSizeIds,
+            style_ids: selectedStyleIds,
+            material_ids: selectedMaterialIds,
           }),
         }
       );
@@ -398,6 +440,130 @@ if (
     </div>
   </div>
 </section>
+
+      {/* Product Attributes */}
+      <section className="rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm sm:p-8">
+        <div className="mb-6">
+          <h2 className="font-serif text-2xl font-semibold text-[#081A4A]">
+            Product Attributes
+          </h2>
+
+          <p className="mt-1 text-sm text-[#222]/55">
+            Select the available sizes, styles and materials for this product.
+          </p>
+        </div>
+
+        <div>
+          <h3 className="mb-3 text-sm font-bold text-[#081A4A]">Sizes</h3>
+
+          {sizes.length === 0 ? (
+            <p className="text-sm text-[#222]/50">No sizes available.</p>
+          ) : (
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {sizes.map((size: AttributeOption) => {
+                const checked = selectedSizeIds.includes(size.id);
+
+                return (
+                  <label
+                    key={size.id}
+                    className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition ${
+                      checked
+                        ? "border-[#C89B3C] bg-[#C89B3C]/5"
+                        : "border-[#081A4A]/10 hover:border-[#C89B3C]/50"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() =>
+                        toggleSelection(size.id, setSelectedSizeIds)
+                      }
+                      className="h-4 w-4 accent-[#081A4A]"
+                    />
+                    <span className="text-sm font-semibold text-[#081A4A]">
+                      {size.name}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="mt-8">
+          <h3 className="mb-3 text-sm font-bold text-[#081A4A]">Styles</h3>
+
+          {styles.length === 0 ? (
+            <p className="text-sm text-[#222]/50">No styles available.</p>
+          ) : (
+            <div className="grid gap-3 sm:grid-cols-2">
+              {styles.map((style: AttributeOption) => {
+                const checked = selectedStyleIds.includes(style.id);
+
+                return (
+                  <label
+                    key={style.id}
+                    className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition ${
+                      checked
+                        ? "border-[#C89B3C] bg-[#C89B3C]/5"
+                        : "border-[#081A4A]/10 hover:border-[#C89B3C]/50"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() =>
+                        toggleSelection(style.id, setSelectedStyleIds)
+                      }
+                      className="h-4 w-4 accent-[#081A4A]"
+                    />
+                    <span className="text-sm font-semibold text-[#081A4A]">
+                      {style.name}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="mt-8">
+          <h3 className="mb-3 text-sm font-bold text-[#081A4A]">Materials</h3>
+
+          {materials.length === 0 ? (
+            <p className="text-sm text-[#222]/50">No materials available.</p>
+          ) : (
+            <div className="grid gap-3 sm:grid-cols-2">
+              {materials.map((material: AttributeOption) => {
+                const checked = selectedMaterialIds.includes(material.id);
+
+                return (
+                  <label
+                    key={material.id}
+                    className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition ${
+                      checked
+                        ? "border-[#C89B3C] bg-[#C89B3C]/5"
+                        : "border-[#081A4A]/10 hover:border-[#C89B3C]/50"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() =>
+                        toggleSelection(material.id, setSelectedMaterialIds)
+                      }
+                      className="h-4 w-4 accent-[#081A4A]"
+                    />
+                    <span className="text-sm font-semibold text-[#081A4A]">
+                      {material.name}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* SEO */}
       <section className="rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm sm:p-8">

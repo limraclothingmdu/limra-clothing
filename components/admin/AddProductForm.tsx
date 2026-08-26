@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/navigation";
 
 type Category = {
@@ -9,8 +10,35 @@ type Category = {
   slug: string;
 };
 
+type Size = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+type Style = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+type Material = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
 type AddProductFormProps = {
   categories: Category[];
+  sizes: Size[];
+  styles: Style[];
+  materials: Material[];
+};
+
+type AttributeOption = {
+  id: string;
+  name: string;
+  slug: string;
 };
 
 function createSlug(value: string) {
@@ -24,12 +52,18 @@ function createSlug(value: string) {
 
 export default function AddProductForm({
   categories,
+  sizes,
+  styles,
+  materials,
 }: AddProductFormProps) {
   const router = useRouter();
 
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [selectedSizeIds, setSelectedSizeIds] = useState<string[]>([]);
+const [selectedStyleIds, setSelectedStyleIds] = useState<string[]>([]);
+const [selectedMaterialIds, setSelectedMaterialIds] = useState<string[]>([]);
   const [shortDescription, setShortDescription] = useState("");
   const [description, setDescription] = useState("");
   const [keywords, setKeywords] = useState("");
@@ -45,6 +79,17 @@ const [offerPrice, setOfferPrice] = useState("");
   const [uploadingImage, setUploadingImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const toggleSelection = (
+    id: string,
+    setter: Dispatch<SetStateAction<string[]>>
+  ) => {
+    setter((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    );
+  };
 
   function handleNameChange(value: string) {
     setName(value);
@@ -77,6 +122,7 @@ const [offerPrice, setOfferPrice] = useState("");
     const previewUrl = URL.createObjectURL(file);
     setImagePreview(previewUrl);
   }
+ 
 
   async function uploadImage(): Promise<string | null> {
     if (!imageFile) {
@@ -169,27 +215,31 @@ if (
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            name: name.trim(),
-            slug: createSlug(slug || name),
-            category_id: categoryId,
-            short_description:
-              shortDescription.trim(),
-            description: description.trim(),
-            keywords: keywordArray,
-            image: imageUrl,
-            is_active: isActive,
-            price: price.trim()
-  ? Number(price)
-  : null,
+  name: name.trim(),
+  slug: createSlug(slug || name),
+  category_id: categoryId,
+  short_description: shortDescription.trim(),
+  description: description.trim(),
+  keywords: keywordArray,
+  image: imageUrl,
+  is_active: isActive,
 
-offer_name: offerName.trim()
-  ? offerName.trim()
-  : null,
+  price: price.trim()
+    ? Number(price)
+    : null,
 
-offer_price: offerPrice.trim()
-  ? Number(offerPrice)
-  : null,
-          }),
+  offer_name: offerName.trim()
+    ? offerName.trim()
+    : null,
+
+  offer_price: offerPrice.trim()
+    ? Number(offerPrice)
+    : null,
+
+  size_ids: selectedSizeIds,
+  style_ids: selectedStyleIds,
+  material_ids: selectedMaterialIds,
+}),
         }
       );
 
@@ -251,6 +301,7 @@ offer_price: offerPrice.trim()
                 handleNameChange(
                   event.target.value
                 )
+                
               }
               placeholder="Men's Casual Shirt"
               className="w-full rounded-xl border border-[#081A4A]/15 px-4 py-3 outline-none transition focus:border-[#C89B3C] focus:ring-2 focus:ring-[#C89B3C]/10"
@@ -452,6 +503,149 @@ offer_price: offerPrice.trim()
   <p className="mt-4 text-xs text-[#222]/45">
     Leave the offer fields empty if there is no special offer.
   </p>
+      </section>
+      {/* Product Attributes */}
+<section className="rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm sm:p-8">
+  <div className="mb-6">
+    <h2 className="font-serif text-2xl font-semibold text-[#081A4A]">
+      Product Attributes
+    </h2>
+
+    <p className="mt-1 text-sm text-[#222]/55">
+      Select the available sizes, styles and materials for this product.
+    </p>
+  </div>
+
+  {/* Sizes */}
+  <div>
+    <h3 className="mb-3 text-sm font-bold text-[#081A4A]">
+      Sizes
+    </h3>
+
+    {sizes.length === 0 ? (
+      <p className="text-sm text-[#222]/50">
+        No active sizes available.
+      </p>
+    ) : (
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {sizes.map((size: AttributeOption) => {
+          const checked = selectedSizeIds.includes(size.id);
+
+          return (
+            <label
+              key={size.id}
+              className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition ${
+                checked
+                  ? "border-[#C89B3C] bg-[#C89B3C]/5"
+                  : "border-[#081A4A]/10 hover:border-[#C89B3C]/50"
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={() =>
+                  toggleSelection(size.id, setSelectedSizeIds)
+                }
+                className="h-4 w-4 accent-[#081A4A]"
+              />
+
+              <span className="text-sm font-semibold text-[#081A4A]">
+                {size.name}
+              </span>
+            </label>
+          );
+        })}
+      </div>
+    )}
+  </div>
+
+  {/* Styles */}
+  <div className="mt-8">
+    <h3 className="mb-3 text-sm font-bold text-[#081A4A]">
+      Styles
+    </h3>
+
+    {styles.length === 0 ? (
+      <p className="text-sm text-[#222]/50">
+        No active styles available.
+      </p>
+    ) : (
+      <div className="grid gap-3 sm:grid-cols-2">
+        {styles.map((style: AttributeOption) => {
+          const checked = selectedStyleIds.includes(style.id);
+
+          return (
+            <label
+              key={style.id}
+              className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition ${
+                checked
+                  ? "border-[#C89B3C] bg-[#C89B3C]/5"
+                  : "border-[#081A4A]/10 hover:border-[#C89B3C]/50"
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={() =>
+                  toggleSelection(style.id, setSelectedStyleIds)
+                }
+                className="h-4 w-4 accent-[#081A4A]"
+              />
+
+              <span className="text-sm font-semibold text-[#081A4A]">
+                {style.name}
+              </span>
+            </label>
+          );
+        })}
+      </div>
+    )}
+  </div>
+
+  {/* Materials */}
+  <div className="mt-8">
+    <h3 className="mb-3 text-sm font-bold text-[#081A4A]">
+      Materials
+    </h3>
+
+    {materials.length === 0 ? (
+      <p className="text-sm text-[#222]/50">
+        No active materials available.
+      </p>
+    ) : (
+      <div className="grid gap-3 sm:grid-cols-2">
+        {materials.map((material: AttributeOption) => {
+          const checked = selectedMaterialIds.includes(
+            material.id
+          );
+
+          return (
+            <label
+              key={material.id}
+              className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition ${
+                checked
+                  ? "border-[#C89B3C] bg-[#C89B3C]/5"
+                  : "border-[#081A4A]/10 hover:border-[#C89B3C]/50"
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={() =>
+                  toggleSelection(material.id, setSelectedMaterialIds)
+                }
+                className="h-4 w-4 accent-[#081A4A]"
+              />
+
+              <span className="text-sm font-semibold text-[#081A4A]">
+                {material.name}
+              </span>
+            </label>
+          );
+        })}
+      </div>
+    )}
+  </div>
 </section>
 
       {/* SEO */}

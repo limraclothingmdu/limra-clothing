@@ -15,10 +15,43 @@ export default async function NewProductPage() {
     redirect("/admin/login");
   }
 
-  const { data: categories, error } = await supabase
-    .from("categories")
-    .select("id, name, slug")
-    .order("name", { ascending: true });
+  // Load categories
+  const { data: categories, error: categoriesError } =
+    await supabase
+      .from("categories")
+      .select("id, name, slug")
+      .eq("is_active", true)
+      .order("name", { ascending: true });
+
+  // Load sizes
+  const { data: sizes, error: sizesError } =
+    await supabase
+      .from("product_sizes")
+      .select("id, name, slug")
+      .eq("is_active", true)
+      .order("name", { ascending: true });
+
+  // Load styles
+  const { data: styles, error: stylesError } =
+    await supabase
+      .from("product_styles")
+      .select("id, name, slug")
+      .eq("is_active", true)
+      .order("name", { ascending: true });
+
+  // Load materials
+  const { data: materials, error: materialsError } =
+    await supabase
+      .from("product_materials")
+      .select("id, name, slug")
+      .eq("is_active", true)
+      .order("name", { ascending: true });
+
+  const loadingError =
+    categoriesError ||
+    sizesError ||
+    stylesError ||
+    materialsError;
 
   return (
     <main className="min-h-screen bg-[#F7F5F0] px-4 py-10 sm:px-6 lg:px-8">
@@ -46,19 +79,24 @@ export default async function NewProductPage() {
           </p>
         </div>
 
-        {/* Category loading error */}
-        {error ? (
+        {/* Loading error */}
+        {loadingError ? (
           <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-600">
             <p className="font-bold">
-              Failed to load categories.
+              Failed to load product options.
             </p>
 
             <p className="mt-1">
-              {error.message}
+              {loadingError.message}
             </p>
           </div>
         ) : (
-          <AddProductForm categories={categories ?? []} />
+          <AddProductForm
+            categories={categories ?? []}
+            sizes={sizes ?? []}
+            styles={styles ?? []}
+            materials={materials ?? []}
+          />
         )}
       </div>
     </main>

@@ -7,12 +7,19 @@ import { createBreadcrumbSchema } from "@/lib/schema";
 import { getProductBySlug } from "@/lib/products";
 import { getCategoryById } from "@/lib/categories";
 import { siteConfig } from "@/lib/site";
+import { createClient } from "@/lib/supabase/server";
 
 
 type ProductPageProps = {
   params: Promise<{
     slug: string;
   }>;
+};
+
+type ProductAttribute = {
+  id: string;
+  name: string;
+  slug: string;
 };
 
 export async function generateMetadata({
@@ -101,6 +108,110 @@ export default async function ProductPage({
   if (!product) {
     notFound();
   }
+
+  const supabase = await createClient();
+
+  const [sizeRelationsResult, styleRelationsResult, materialRelationsResult] =
+    await Promise.all([
+      supabase
+        .from("product_size_relations")
+        .select("size_id")
+        .eq("product_id", product.id),
+      supabase
+        .from("product_style_relations")
+        .select("style_id")
+        .eq("product_id", product.id),
+      supabase
+        .from("product_material_relations")
+        .select("material_id")
+        .eq("product_id", product.id),
+    ]);
+
+  if (sizeRelationsResult.error) {
+    console.error(
+      "Product size relationships lookup failed:",
+      sizeRelationsResult.error
+    );
+  }
+
+  if (styleRelationsResult.error) {
+    console.error(
+      "Product style relationships lookup failed:",
+      styleRelationsResult.error
+    );
+  }
+
+  if (materialRelationsResult.error) {
+    console.error(
+      "Product material relationships lookup failed:",
+      materialRelationsResult.error
+    );
+  }
+
+  const sizeIds =
+    sizeRelationsResult.data?.map(
+      (relation: { size_id: string }) => relation.size_id
+    ) ?? [];
+  const styleIds =
+    styleRelationsResult.data?.map(
+      (relation: { style_id: string }) => relation.style_id
+    ) ?? [];
+  const materialIds =
+    materialRelationsResult.data?.map(
+      (relation: { material_id: string }) => relation.material_id
+    ) ?? [];
+
+  const [sizesResult, stylesResult, materialsResult] = await Promise.all([
+    sizeIds.length > 0
+      ? supabase
+          .from("product_sizes")
+          .select("id, name, slug")
+          .in("id", sizeIds)
+      : Promise.resolve({ data: [], error: null }),
+    styleIds.length > 0
+      ? supabase
+          .from("product_styles")
+          .select("id, name, slug")
+          .in("id", styleIds)
+      : Promise.resolve({ data: [], error: null }),
+    materialIds.length > 0
+      ? supabase
+          .from("product_materials")
+          .select("id, name, slug")
+          .in("id", materialIds)
+      : Promise.resolve({ data: [], error: null }),
+  ]);
+
+  if (sizesResult.error) {
+    console.error(
+      "Product sizes lookup failed:",
+      sizesResult.error
+    );
+  }
+
+  if (stylesResult.error) {
+    console.error(
+      "Product styles lookup failed:",
+      stylesResult.error
+    );
+  }
+
+  if (materialsResult.error) {
+    console.error(
+      "Product materials lookup failed:",
+      materialsResult.error
+    );
+  }
+
+  const sizes: ProductAttribute[] = sizesResult.error
+    ? []
+    : (sizesResult.data ?? []);
+  const styles: ProductAttribute[] = stylesResult.error
+    ? []
+    : (stylesResult.data ?? []);
+  const materials: ProductAttribute[] = materialsResult.error
+    ? []
+    : (materialsResult.data ?? []);
 
   const category = await getCategoryById(product.category_id);
 
@@ -293,6 +404,74 @@ const productSchema = {
                 </Link>
               </div>
             )}
+            {/* Product Attributes */}
+{(sizes.length > 0 ||
+  styles.length > 0 ||
+  materials.length > 0) && (
+  <div className="mt-8 space-y-6">
+
+    {/* Sizes */}
+    {sizes.length > 0 && (
+      <div>
+        <p className="mb-3 text-sm font-bold uppercase tracking-[0.15em] text-[#081A4A]">
+          Available Sizes
+        </p>
+
+        <div className="flex flex-wrap gap-2">
+          {sizes.map((size: ProductAttribute) => (
+            <span
+              key={size.id}
+              className="rounded-full border border-[#081A4A]/15 bg-white px-4 py-2 text-sm font-medium text-[#081A4A]"
+            >
+              {size.name}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* Styles */}
+    {styles.length > 0 && (
+      <div>
+        <p className="mb-3 text-sm font-bold uppercase tracking-[0.15em] text-[#081A4A]">
+          Style
+        </p>
+
+        <div className="flex flex-wrap gap-2">
+          {styles.map((style: ProductAttribute) => (
+            <span
+              key={style.id}
+              className="rounded-full border border-[#081A4A]/15 bg-white px-4 py-2 text-sm font-medium text-[#081A4A]"
+            >
+              {style.name}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* Materials */}
+    {materials.length > 0 && (
+      <div>
+        <p className="mb-3 text-sm font-bold uppercase tracking-[0.15em] text-[#081A4A]">
+          Material
+        </p>
+
+        <div className="flex flex-wrap gap-2">
+          {materials.map((material: ProductAttribute) => (
+            <span
+              key={material.id}
+              className="rounded-full border border-[#081A4A]/15 bg-white px-4 py-2 text-sm font-medium text-[#081A4A]"
+            >
+              {material.name}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
+
+  </div>
+)}
 
             {/* Wholesale Enquiry */}
             <div className="mt-8 rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm">

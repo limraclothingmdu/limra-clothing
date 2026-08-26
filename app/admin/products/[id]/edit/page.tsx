@@ -53,12 +53,57 @@ export default async function EditProductPage({
     .select("id, name, slug")
     .order("name", { ascending: true });
 
-  if (categoriesError) {
+  const { data: sizes, error: sizesError } = await supabase
+    .from("product_sizes")
+    .select("id, name, slug")
+    .eq("is_active", true)
+    .order("name", { ascending: true });
+
+  const { data: styles, error: stylesError } = await supabase
+    .from("product_styles")
+    .select("id, name, slug")
+    .eq("is_active", true)
+    .order("name", { ascending: true });
+
+  const { data: materials, error: materialsError } = await supabase
+    .from("product_materials")
+    .select("id, name, slug")
+    .eq("is_active", true)
+    .order("name", { ascending: true });
+
+  const { data: sizeRelations, error: sizeRelationsError } =
+    await supabase
+      .from("product_size_relations")
+      .select("size_id")
+      .eq("product_id", id);
+
+  const { data: styleRelations, error: styleRelationsError } =
+    await supabase
+      .from("product_style_relations")
+      .select("style_id")
+      .eq("product_id", id);
+
+  const { data: materialRelations, error: materialRelationsError } =
+    await supabase
+      .from("product_material_relations")
+      .select("material_id")
+      .eq("product_id", id);
+
+  const optionsError =
+    categoriesError ||
+    sizesError ||
+    stylesError ||
+    materialsError ||
+    sizeRelationsError ||
+    styleRelationsError ||
+    materialRelationsError;
+
+  if (optionsError) {
     return (
       <main className="min-h-screen bg-[#F7F5F0] px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-600">
-            Failed to load categories: {categoriesError.message}
+            Failed to load product options: {optionsError.message}
           </div>
         </div>
       </main>
@@ -92,6 +137,18 @@ export default async function EditProductPage({
         <EditProductForm
           product={product}
           categories={categories ?? []}
+          sizes={sizes ?? []}
+          styles={styles ?? []}
+          materials={materials ?? []}
+          initialSizeIds={
+            sizeRelations?.map((item) => item.size_id) ?? []
+          }
+          initialStyleIds={
+            styleRelations?.map((item) => item.style_id) ?? []
+          }
+          initialMaterialIds={
+            materialRelations?.map((item) => item.material_id) ?? []
+          }
         />
       </div>
     </main>

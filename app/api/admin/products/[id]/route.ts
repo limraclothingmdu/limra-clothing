@@ -47,6 +47,27 @@ export async function PUT(
 
     const body = await request.json();
 
+    const sizeIds: string[] = Array.isArray(body.size_ids)
+      ? body.size_ids.filter(
+          (id: unknown): id is string =>
+            typeof id === "string" && id.trim().length > 0
+        )
+      : [];
+
+    const styleIds: string[] = Array.isArray(body.style_ids)
+      ? body.style_ids.filter(
+          (id: unknown): id is string =>
+            typeof id === "string" && id.trim().length > 0
+        )
+      : [];
+
+    const materialIds: string[] = Array.isArray(body.material_ids)
+      ? body.material_ids.filter(
+          (id: unknown): id is string =>
+            typeof id === "string" && id.trim().length > 0
+        )
+      : [];
+
     const name =
       typeof body.name === "string"
         ? body.name.trim()
@@ -307,6 +328,126 @@ if (
         },
         { status: 500 }
       );
+    }
+
+    const { error: sizeDeleteError } = await supabase
+      .from("product_size_relations")
+      .delete()
+      .eq("product_id", product.id);
+
+    if (sizeDeleteError) {
+      console.error(
+        "Product size relationships deletion failed:",
+        sizeDeleteError
+      );
+
+      return NextResponse.json(
+        { error: sizeDeleteError.message },
+        { status: 500 }
+      );
+    }
+
+    if (sizeIds.length > 0) {
+      const { error: sizeInsertError } = await supabase
+        .from("product_size_relations")
+        .insert(
+          sizeIds.map((sizeId: string) => ({
+            product_id: product.id,
+            size_id: sizeId,
+          }))
+        );
+
+      if (sizeInsertError) {
+        console.error(
+          "Product size relationships insertion failed:",
+          sizeInsertError
+        );
+
+        return NextResponse.json(
+          { error: sizeInsertError.message },
+          { status: 500 }
+        );
+      }
+    }
+
+    const { error: styleDeleteError } = await supabase
+      .from("product_style_relations")
+      .delete()
+      .eq("product_id", product.id);
+
+    if (styleDeleteError) {
+      console.error(
+        "Product style relationships deletion failed:",
+        styleDeleteError
+      );
+
+      return NextResponse.json(
+        { error: styleDeleteError.message },
+        { status: 500 }
+      );
+    }
+
+    if (styleIds.length > 0) {
+      const { error: styleInsertError } = await supabase
+        .from("product_style_relations")
+        .insert(
+          styleIds.map((styleId: string) => ({
+            product_id: product.id,
+            style_id: styleId,
+          }))
+        );
+
+      if (styleInsertError) {
+        console.error(
+          "Product style relationships insertion failed:",
+          styleInsertError
+        );
+
+        return NextResponse.json(
+          { error: styleInsertError.message },
+          { status: 500 }
+        );
+      }
+    }
+
+    const { error: materialDeleteError } = await supabase
+      .from("product_material_relations")
+      .delete()
+      .eq("product_id", product.id);
+
+    if (materialDeleteError) {
+      console.error(
+        "Product material relationships deletion failed:",
+        materialDeleteError
+      );
+
+      return NextResponse.json(
+        { error: materialDeleteError.message },
+        { status: 500 }
+      );
+    }
+
+    if (materialIds.length > 0) {
+      const { error: materialInsertError } = await supabase
+        .from("product_material_relations")
+        .insert(
+          materialIds.map((materialId: string) => ({
+            product_id: product.id,
+            material_id: materialId,
+          }))
+        );
+
+      if (materialInsertError) {
+        console.error(
+          "Product material relationships insertion failed:",
+          materialInsertError
+        );
+
+        return NextResponse.json(
+          { error: materialInsertError.message },
+          { status: 500 }
+        );
+      }
     }
 
     return NextResponse.json({
