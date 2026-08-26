@@ -32,8 +32,8 @@ export const metadata: Metadata = {
   description: siteConfig.description,
 
   icons: {
-    icon: "/images/limra-favicon.png",
-  },
+  icon: "/images/limra-favicon.jpeg",
+},
 
   keywords: siteConfig.keywords,
 
