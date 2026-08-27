@@ -405,6 +405,9 @@ const productSchema = {
                 </Link>
               </div>
             )}
+            <p className="text-xs text-red-500">
+  ATTRIBUTES VERSION 2
+</p>
             {/* Product Attributes */}
 {(sizes.length > 0 ||
   styles.length > 0 ||
