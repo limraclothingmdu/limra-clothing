@@ -283,97 +283,118 @@ export default async function AdminProductsPage() {
                 </table>
               </div>
 
-              {/* Mobile / Tablet Cards */}
-              <div className="divide-y divide-[#081A4A]/10 lg:hidden">
-                {products.map((product) => {
-                  const category = Array.isArray(product.categories)
-                    ? product.categories[0]
-                    : product.categories;
+             {/* Mobile / Tablet Cards */}
+<div className="divide-y divide-[#081A4A]/10 lg:hidden">
+  {products.map((product) => {
+    const category = Array.isArray(product.categories)
+      ? product.categories[0]
+      : product.categories;
 
-                  return (
-                    <div
-                      key={product.id}
-                      className="p-5 sm:p-6"
-                    >
-                      <div className="flex gap-4">
-                        <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#F7F5F0]">
-                          {product.image ? (
-                            <Image
-                              src={product.image}
-                              alt={product.name}
-                              fill
-                              sizes="96px"
-                              className="object-cover"
-                            />
-                          ) : (
-                            <div className="flex h-full items-center justify-center">
-                              <Package className="h-7 w-7 text-[#081A4A]/30" />
-                            </div>
-                          )}
-                        </div>
+    const hasOffer =
+      product.offer_price !== null &&
+      product.offer_price !== undefined &&
+      product.price !== null &&
+      product.price !== undefined;
 
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="min-w-0">
-                              <h3 className="truncate font-semibold text-[#081A4A]">
-                                {product.name}
-                              </h3>
+    return (
+      <div
+        key={product.id}
+        className="p-5 sm:p-6"
+      >
+        <div className="flex gap-4">
+          {/* Product Image */}
+          <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#F7F5F0]">
+            {product.image ? (
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                sizes="96px"
+                className="object-cover"
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <Package className="h-7 w-7 text-[#081A4A]/30" />
+              </div>
+            )}
+          </div>
 
-                              <p className="mt-1 truncate text-xs text-[#222]/45">
-                                /products/{product.slug}
-                              </p>
-                            </div>
+          {/* Product Details */}
+          <div className="min-w-0 flex-1">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h3 className="truncate font-semibold text-[#081A4A]">
+                  {product.name}
+                </h3>
 
-                            <span
-                              className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${
-                                product.is_active
-                                  ? "bg-green-50 text-green-700"
-                                  : "bg-gray-100 text-gray-500"
-                              }`}
-                            >
-                              {product.is_active ? "Active" : "Inactive"}
-                            </span>
-                          </div>
+                <p className="mt-1 truncate text-xs text-[#222]/45">
+                  /products/{product.slug}
+                </p>
+              </div>
 
-                          <p className="mt-3 text-xs text-[#222]/50">
-                            Category:{" "}
-                            <span className="font-semibold text-[#081A4A]">
-                              {category?.name ?? "Uncategorized"}
-                            </span>
-                          </p>
+              <span
+                className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                  product.is_active
+                    ? "bg-green-50 text-green-700"
+                    : "bg-gray-100 text-gray-500"
+                }`}
+              >
+                {product.is_active ? "Active" : "Inactive"}
+              </span>
+            </div>
 
-                          {product.price !== null && (
-                            <p className="mt-2 font-semibold text-[#081A4A]">
-                              ₹{Number(product.price).toLocaleString("en-IN")}
+            {/* Category */}
+            <p className="mt-3 text-xs text-[#222]/50">
+              Category:{" "}
+              <span className="font-semibold text-[#081A4A]">
+                {category?.name ?? "Uncategorized"}
+              </span>
+            </p>
 
-                              {product.offer_price !== null && (
-                                <span className="ml-2 text-sm font-medium text-[#C89B3C]">
-                                  ₹
-                                  {Number(product.offer_price).toLocaleString(
-                                    "en-IN"
-                                  )}
-                                </span>
-                              )}
-                            </p>
-                          )}
-                        </div>
-                      </div>
+            {/* Pricing */}
+            {hasOffer ? (
+              <div className="mt-2">
+                {product.offer_name && (
+                  <p className="text-xs font-bold uppercase tracking-wide text-[#C89B3C]">
+                    {product.offer_name}
+                  </p>
+                )}
 
-                      <div className="mt-5 flex items-center justify-end gap-4 border-t border-[#081A4A]/10 pt-4">
-                        <Link
-                          href={`/admin/products/${product.id}/edit`}
-                          className="inline-flex items-center gap-1.5 text-sm font-bold text-[#081A4A] hover:text-[#C89B3C]"
-                        >
-                          <Edit className="h-4 w-4" />
-                          Edit
-                        </Link>
+                <div className="mt-1 flex items-center gap-2">
+                  <span className="font-semibold text-[#081A4A]">
+                    ₹{Number(product.offer_price).toLocaleString("en-IN")}
+                  </span>
 
-                        <DeleteProductButton
-                          productId={product.id}
-                          productName={product.name}
-                        />
-                      </div>
-                    </div>
+                  <span className="text-sm text-[#222]/40 line-through">
+                    ₹{Number(product.price).toLocaleString("en-IN")}
+                  </span>
+                </div>
+              </div>
+            ) : product.price !== null &&
+              product.price !== undefined ? (
+              <p className="mt-2 font-semibold text-[#081A4A]">
+                ₹{Number(product.price).toLocaleString("en-IN")}
+              </p>
+            ) : null}
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="mt-5 flex items-center justify-end gap-4 border-t border-[#081A4A]/10 pt-4">
+          <Link
+            href={`/admin/products/${product.id}/edit`}
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#081A4A] hover:text-[#C89B3C]"
+          >
+            <Edit className="h-4 w-4" />
+            Edit
+          </Link>
+
+          <DeleteProductButton
+            productId={product.id}
+            productName={product.name}
+          />
+        </div>
+      </div>
                   );
                 })}
               </div>

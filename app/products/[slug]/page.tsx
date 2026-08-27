@@ -9,7 +9,8 @@ import { getCategoryById } from "@/lib/categories";
 import { siteConfig } from "@/lib/site";
 import { createClient } from "@/lib/supabase/server";
 
-
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 type ProductPageProps = {
   params: Promise<{
     slug: string;

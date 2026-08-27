@@ -14,62 +14,69 @@ export default function ProductCard({
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group overflow-hidden rounded-2xl border border-[#081A4A]/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+      className="group block overflow-hidden rounded-2xl border border-[#081A4A]/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
     >
+      {/* Product Image */}
       <div className="relative aspect-[4/5] overflow-hidden bg-[#EDEDED]">
         {product.image ? (
           <Image
             src={product.image}
             alt={`${product.name} wholesale from Limra Clothing`}
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-[#222]/40">
+          <div className="flex h-full items-center justify-center px-4 text-center text-sm text-[#222]/40">
             No image available
           </div>
         )}
       </div>
 
-      <div className="p-5">
-        <h3 className="font-serif text-xl font-semibold text-[#081A4A]">
+      {/* Product Information */}
+      <div className="p-4 sm:p-5">
+        <h3 className="line-clamp-2 font-serif text-lg font-semibold leading-tight text-[#081A4A] sm:text-xl">
           {product.name}
         </h3>
 
         {product.short_description && (
-          <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#222]/60">
+          <p className="mt-2 line-clamp-2 text-xs leading-5 text-[#222]/60 sm:text-sm sm:leading-6">
             {product.short_description}
           </p>
         )}
 
-        <div className="mt-4 flex flex-col gap-1">
-          {product.offer_price && product.price ? (
+        {/* Pricing */}
+        <div className="mt-3 flex flex-col gap-1 sm:mt-4">
+          {product.offer_price !== null &&
+          product.price !== null ? (
             <>
               {product.offer_name && (
-                <span className="text-xs font-bold text-[#C89B3C] uppercase tracking-wide">
+                <span className="text-[10px] font-bold uppercase tracking-wide text-[#C89B3C] sm:text-xs">
                   {product.offer_name}
                 </span>
               )}
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold text-[#081A4A]">
+
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-base font-bold text-[#081A4A] sm:text-lg">
                   ₹{product.offer_price}
                 </span>
-                <span className="text-sm text-[#222]/50 line-through">
+
+                <span className="text-xs text-[#222]/50 line-through sm:text-sm">
                   ₹{product.price}
                 </span>
               </div>
             </>
-          ) : product.price ? (
-            <span className="text-lg font-bold text-[#081A4A]">
+          ) : product.price !== null ? (
+            <span className="text-base font-bold text-[#081A4A] sm:text-lg">
               ₹{product.price}
             </span>
           ) : null}
         </div>
 
-        <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#081A4A]">
+        {/* View Product */}
+        <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#081A4A] sm:mt-4 sm:gap-2 sm:text-sm">
           View Product
-          <ArrowRight className="h-4 w-4 text-[#C89B3C] transition-transform group-hover:translate-x-1" />
+          <ArrowRight className="h-3.5 w-3.5 text-[#C89B3C] transition-transform group-hover:translate-x-1 sm:h-4 sm:w-4" />
         </span>
       </div>
     </Link>
