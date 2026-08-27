@@ -407,7 +407,11 @@ const productSchema = {
             )}
             <p className="text-xs text-red-500">
   ATTRIBUTES VERSION 2
-</p>
+            </p>
+            <div className="text-xs text-red-500">
+  Sizes: {sizes.length} | Styles: {styles.length} | Materials: {materials.length}
+</div>
+            
             {/* Product Attributes */}
 {(sizes.length > 0 ||
   styles.length > 0 ||
