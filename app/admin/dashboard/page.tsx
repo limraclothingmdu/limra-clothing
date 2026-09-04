@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Plus,
   Shirt,
+  Tags,
 } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
@@ -233,6 +234,28 @@ export default async function AdminDashboardPage() {
   <ArrowRight className="h-5 w-5 text-[#C89B3C] transition-transform group-hover:translate-x-1" />
 </Link>
           </div>
+          <Link
+  href="/admin/attributes"
+  className="group flex items-center justify-between rounded-xl border border-[#081A4A]/10 p-5 transition-all hover:border-[#C89B3C]/40 hover:shadow-md"
+>
+  <div className="flex items-center gap-4">
+    <div className="rounded-lg bg-[#081A4A]/5 p-2.5">
+      <Tags className="h-5 w-5 text-[#081A4A]" />
+    </div>
+
+    <div>
+      <p className="font-semibold text-[#081A4A]">
+        Manage Attributes
+      </p>
+
+      <p className="mt-1 text-sm text-[#222]/50">
+        Manage sizes, styles and materials
+      </p>
+    </div>
+  </div>
+
+  <ArrowRight className="h-5 w-5 text-[#C89B3C] transition-transform group-hover:translate-x-1" />
+</Link>
         </section>
 
         {/* Recent Products */}
