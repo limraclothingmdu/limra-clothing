@@ -255,6 +255,18 @@ export default async function AdminDashboardPage() {
   </div>
 
   <ArrowRight className="h-5 w-5 text-[#C89B3C] transition-transform group-hover:translate-x-1" />
+          </Link>
+          <Link
+  href="/admin/blogs"
+  className="rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+>
+  <h2 className="text-xl font-bold text-[#081A4A]">
+    Blogs
+  </h2>
+
+  <p className="mt-2 text-sm text-[#222]/60">
+    Manage SEO articles, guides and clothing insights.
+  </p>
 </Link>
         </section>
 
