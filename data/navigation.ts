@@ -24,16 +24,22 @@ export const navigation: NavigationItem[] = [
     name: "Wholesale",
     href: "/wholesale",
   },
+  // {
+  //   name: "Retail",
+  //   href: "/retail",
+  // },
+  // {
+  //   name: "Gallery",
+  //   href: "/gallery",
+  // },
   {
-    name: "Retail",
-    href: "/retail",
+    name: "Blog",
+    href: "/blog",
   },
-  {
-    name: "Gallery",
-    href: "/gallery",
-  },
+
   {
     name: "Contact",
     href: "/contact",
   },
+  
 ];
