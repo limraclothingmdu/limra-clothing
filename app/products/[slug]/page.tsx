@@ -304,7 +304,7 @@ const productSchema = {
       />
 
       {/* Product Section */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
         {/* Breadcrumb Navigation */}
         <nav
           aria-label="Breadcrumb"
@@ -342,18 +342,18 @@ const productSchema = {
           Back to Products
         </Link>
 
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-14">
           {/* Product Image */}
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-[#EDEDED]">
-            <Image
-              src={productImage}
-              alt={`${product.name} wholesale from Limra Clothing Madurai`}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
-          </div>
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-[#081A4A]/10 bg-white shadow-lg shadow-[#081A4A]/10">
+  <Image
+    src={productImage}
+    alt={`${product.name} wholesale from Limra Clothing Madurai`}
+    fill
+    priority
+    sizes="(max-width: 1024px) 100vw, 50vw"
+    className="object-cover"
+  />
+</div>
 
           {/* Product Information */}
           <div>
