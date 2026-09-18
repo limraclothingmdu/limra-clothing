@@ -7,6 +7,7 @@ import { siteConfig } from "@/lib/site";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import StructuredData from "@/components/seo/StructuredData";
+import WhatsAppButton from "@/components/layout/WhatsAppButton";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -86,7 +87,8 @@ export default function RootLayout({
       <StructuredData />
       <Navbar />
       {children}
-      <Footer />
+        <Footer />
+        <WhatsAppButton />
     </body>
   </html>
 );
