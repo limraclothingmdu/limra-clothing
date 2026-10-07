@@ -28,8 +28,6 @@ export default function WhatsAppButton() {
     const text = messages[messageIndex];
     let index = 0;
 
-    setTypedText("");
-
     const typingInterval = setInterval(() => {
       if (index < text.length) {
         setTypedText(text.slice(0, index + 1));
@@ -48,6 +46,7 @@ export default function WhatsAppButton() {
       setVisible(false);
 
       setTimeout(() => {
+        setTypedText("");
         setMessageIndex((current) => (current + 1) % messages.length);
         setVisible(true);
       }, 500);

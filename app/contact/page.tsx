@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -57,7 +57,7 @@ export default function ContactPage() {
             </p>
 
             <h1 className="mt-5 font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
-              Let's Talk
+              Let&apos;s Talk
               <span className="block text-[#C89B3C]">
                 Wholesale Clothing
               </span>

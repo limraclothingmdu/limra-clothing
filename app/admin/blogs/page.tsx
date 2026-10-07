@@ -20,26 +20,44 @@ export default function AdminBlogsPage() {
   const [deleting, setDeleting] = useState<string | null>(null);
 
   async function loadBlogs() {
-    try {
-      const response = await fetch("/api/admin/blogs");
+    const response = await fetch("/api/admin/blogs", {
+      cache: "no-store",
+    });
 
-      if (!response.ok) {
-        throw new Error("Failed to load blogs");
-      }
-
-      const data = await response.json();
-
-      setBlogs(data);
-    } catch (error) {
-      console.error(error);
-      alert("Failed to load blogs.");
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      throw new Error("Failed to load blogs");
     }
+
+    return response.json();
   }
 
   useEffect(() => {
-    loadBlogs();
+    let cancelled = false;
+
+    async function fetchBlogs() {
+      try {
+        const data = await loadBlogs();
+
+        if (cancelled) return;
+
+        setBlogs(data);
+      } catch (error) {
+        if (cancelled) return;
+
+        console.error(error);
+        alert("Failed to load blogs.");
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void fetchBlogs();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   async function deleteBlog(id: string) {

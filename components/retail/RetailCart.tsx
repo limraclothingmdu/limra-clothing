@@ -25,26 +25,31 @@ export default function RetailCart() {
   const [items, setItems] = useState<RetailCartItem[]>([]);
   const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
+  const loadCart = () => {
     setItems(getCart());
     setLoaded(true);
+  };
 
-    function handleCartUpdated() {
-      setItems(getCart());
-    }
+  const frame = requestAnimationFrame(loadCart);
 
-    window.addEventListener(
+  function handleCartUpdated() {
+    setItems(getCart());
+  }
+
+  window.addEventListener(
+    "limra-cart-updated",
+    handleCartUpdated
+  );
+
+  return () => {
+    cancelAnimationFrame(frame);
+    window.removeEventListener(
       "limra-cart-updated",
       handleCartUpdated
     );
-
-    return () => {
-      window.removeEventListener(
-        "limra-cart-updated",
-        handleCartUpdated
-      );
-    };
-  }, []);
+  };
+}, []);
 
   function handleQuantityChange(
     item: RetailCartItem,

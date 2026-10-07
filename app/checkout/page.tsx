@@ -75,16 +75,22 @@ export default function CheckoutPage() {
    * ------------------------------------------------------------
    */
 
-  useEffect(() => {
-    if (authLoading || !user) {
-      return;
-    }
+useEffect(() => {
+  if (authLoading || !user) {
+    return;
+  }
 
+  const loadCart = () => {
     const cart = getCart();
 
     setItems(cart);
     setLoaded(true);
-  }, [authLoading, user]);
+  };
+
+  const frame = requestAnimationFrame(loadCart);
+
+  return () => cancelAnimationFrame(frame);
+}, [authLoading, user]);
 
   /*
    * ------------------------------------------------------------

@@ -100,9 +100,62 @@ export default function AttributesPage() {
       setLoading(false);
     }
   }
+  async function fetchAttributes(type: AttributeType) {
+    const response = await fetch(
+      `/api/admin/attributes/${type}`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    );
 
-  useEffect(() => {
-    loadAttributes(activeType);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error || `Failed to load ${type}.`
+      );
+    }
+
+    return data[type] ?? data.items ?? [];
+  }
+
+   useEffect(() => {
+    let cancelled = false;
+
+    async function loadActiveAttributes() {
+      try {
+        setLoading(true);
+        setError("");
+
+        const list = await fetchAttributes(activeType);
+
+        if (cancelled) return;
+
+        setItems((previous) => ({
+          ...previous,
+          [activeType]: list,
+        }));
+      } catch (err) {
+        if (cancelled) return;
+
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Something went wrong."
+        );
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadActiveAttributes();
+
+    return () => {
+      cancelled = true;
+    };
   }, [activeType]);
 
   function resetForm() {

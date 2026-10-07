@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Gallery | Limra Clothing Madurai",
   description:
-    "View Limra Clothing's store, clothing collections and ready-made garments in Madurai. Wholesale and retail clothing distributed across Tamil Nadu.",
+    "View Limra Clothing&apos;s store, clothing collections and ready-made garments in Madurai. Wholesale and retail clothing distributed across Tamil Nadu.",
   keywords: [
     "Limra Clothing Madurai",
     "clothing shop Madurai",
@@ -56,7 +56,7 @@ export default function GalleryPage() {
             </h1>
 
             <p className="mt-6 text-base leading-8 text-white/60 sm:text-lg">
-              Explore Limra Clothing's store and ready-made clothing
+              Explore Limra Clothing&apos;s store and ready-made clothing
               collections from Madurai.
             </p>
           </div>
