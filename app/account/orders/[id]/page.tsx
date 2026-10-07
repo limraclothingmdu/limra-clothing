@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
+import EditDeliveryAddressForm from "@/components/account/EditDeliveryAddressForm";
 
 type PageProps = {
   params: Promise<{
@@ -50,6 +51,10 @@ function getStatusLabel(status: OrderStatus) {
     case "cancelled":
       return "Cancelled";
   }
+}
+
+function canEditAddress(status: OrderStatus) {
+  return ["pending", "confirmed", "processing"].includes(status);
 }
 
 export default async function AccountOrderDetailPage({
@@ -113,6 +118,8 @@ export default async function AccountOrderDetailPage({
     notFound();
   }
 
+  const status = order.status as OrderStatus;
+
   const statusSteps: OrderStatus[] = [
     "pending",
     "confirmed",
@@ -121,7 +128,8 @@ export default async function AccountOrderDetailPage({
     "delivered",
   ];
 
-  const currentIndex = statusSteps.indexOf(order.status as OrderStatus);
+  const currentIndex = statusSteps.indexOf(status);
+  const addressEditable = canEditAddress(status);
 
   return (
     <main className="min-h-screen bg-[#F7F5F0] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
@@ -130,211 +138,309 @@ export default async function AccountOrderDetailPage({
           href="/account/orders"
           className="text-sm font-semibold text-[#C89B3C] hover:underline"
         >
-          ← Back to My Orders
+          ← Back to Orders
         </Link>
 
         <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#C89B3C]">
-              Limra Clothing
-            </p>
+            <p className="text-sm text-gray-500">Order #{order.id}</p>
 
-            <h1 className="mt-2 text-3xl font-bold text-[#081A4A] sm:text-4xl">
+            <h1 className="mt-1 text-3xl font-bold tracking-tight text-[#1F2937]">
               Order Details
             </h1>
 
-            <p className="mt-2 break-all font-mono text-sm text-[#222]/50">
-              #{order.id}
+            <p className="mt-2 text-sm text-gray-500">
+              Placed on {formatDate(order.created_at)}
             </p>
           </div>
 
-          <p className="text-sm text-[#222]/50">
-            {formatDate(order.created_at)}
-          </p>
+          <div className="rounded-full bg-[#C89B3C]/10 px-4 py-2 text-sm font-semibold text-[#9A7424]">
+            {getStatusLabel(status)}
+          </div>
         </div>
 
-        {order.status === "cancelled" ? (
-          <section className="mt-8 rounded-2xl border border-red-200 bg-red-50 p-6">
-            <h2 className="font-bold text-red-700">Order Cancelled</h2>
-            <p className="mt-2 text-sm leading-6 text-red-700/80">
-              This order has been cancelled. Please contact Limra Clothing if
-              you need assistance.
-            </p>
-          </section>
-        ) : (
-          <section className="mt-8 rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm sm:p-8">
-            <h2 className="text-xl font-bold text-[#081A4A]">
-              Order Status
-            </h2>
+        {/* Order progress */}
+        <section className="mt-8 rounded-2xl bg-white p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-[#1F2937]">
+            Order Status
+          </h2>
 
-            <div className="mt-8 space-y-6">
+          <div className="mt-6 overflow-x-auto">
+            <div className="flex min-w-[600px] items-start">
               {statusSteps.map((step, index) => {
-                const active = index <= currentIndex;
-                const current = step === order.status;
+                const completed =
+                  currentIndex >= 0 && index <= currentIndex;
 
                 return (
-                  <div key={step} className="flex items-start gap-4">
+                  <div
+                    key={step}
+                    className="relative flex flex-1 flex-col items-center"
+                  >
+                    {index < statusSteps.length - 1 && (
+                      <div
+                        className={`absolute left-1/2 top-4 h-0.5 w-full ${
+                          currentIndex > index
+                            ? "bg-[#C89B3C]"
+                            : "bg-gray-200"
+                        }`}
+                      />
+                    )}
+
                     <div
-                      className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                        active
-                          ? "bg-[#C89B3C] text-[#081A4A]"
-                          : "bg-[#081A4A]/10 text-[#081A4A]/40"
+                      className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
+                        completed
+                          ? "bg-[#C89B3C] text-white"
+                          : "bg-gray-200 text-gray-500"
                       }`}
                     >
                       {index + 1}
                     </div>
 
-                    <div>
-                      <p
-                        className={`font-semibold ${
-                          active
-                            ? "text-[#081A4A]"
-                            : "text-[#222]/40"
-                        }`}
-                      >
-                        {getStatusLabel(step)}
-                      </p>
-
-                      {current && (
-                        <p className="mt-1 text-sm text-[#C89B3C]">
-                          Current status
-                        </p>
-                      )}
-                    </div>
+                    <p
+                      className={`mt-3 text-center text-xs font-medium ${
+                        completed
+                          ? "text-[#1F2937]"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      {getStatusLabel(step)}
+                    </p>
                   </div>
                 );
               })}
             </div>
-          </section>
-        )}
+          </div>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_340px]">
-          <section className="rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm sm:p-8">
-            <h2 className="text-xl font-bold text-[#081A4A]">
+          {status === "cancelled" && (
+            <div className="mt-6 rounded-xl bg-red-50 p-4 text-sm text-red-700">
+              This order has been cancelled.
+            </div>
+          )}
+        </section>
+
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
+          {/* Items */}
+          <section className="rounded-2xl bg-white p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-[#1F2937]">
               Items
             </h2>
 
-            <div className="mt-6 divide-y divide-[#081A4A]/10">
-              {order.order_items.map((item) => (
+            <div className="mt-5 divide-y divide-gray-100">
+              {order.order_items?.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-start justify-between gap-4 py-5 first:pt-0 last:pb-0"
+                  className="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0"
                 >
-                  <div>
-                    <p className="font-semibold text-[#081A4A]">
+                  <div className="min-w-0">
+                    <h3 className="font-medium text-[#1F2937]">
                       {item.product_name}
-                    </p>
+                    </h3>
 
                     {item.product_sku && (
-                      <p className="mt-1 text-xs text-[#222]/40">
+                      <p className="mt-1 text-xs text-gray-500">
                         SKU: {item.product_sku}
                       </p>
                     )}
 
                     {item.size_name && (
-                      <p className="mt-1 text-sm text-[#222]/55">
+                      <p className="mt-1 text-sm text-gray-500">
                         Size: {item.size_name}
                       </p>
                     )}
 
-                    <p className="mt-1 text-sm text-[#222]/55">
+                    <p className="mt-1 text-sm text-gray-500">
                       Quantity: {item.quantity}
                     </p>
                   </div>
 
-                  <p className="shrink-0 font-bold text-[#081A4A]">
-                    {formatPrice(item.total_price, order.currency)}
-                  </p>
+                  <div className="shrink-0 text-right">
+                    <p className="font-semibold text-[#1F2937]">
+                      {formatPrice(
+                        Number(item.total_price),
+                        order.currency
+                      )}
+                    </p>
+
+                    <p className="mt-1 text-xs text-gray-500">
+                      {formatPrice(
+                        Number(item.unit_price),
+                        order.currency
+                      )}{" "}
+                      each
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
           </section>
 
-          <aside className="h-fit rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm">
-            <h2 className="text-xl font-bold text-[#081A4A]">
-              Payment Summary
+          {/* Order summary */}
+          <section className="h-fit rounded-2xl bg-white p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-[#1F2937]">
+              Order Summary
             </h2>
 
-            <div className="mt-6 space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-[#222]/55">Subtotal</span>
-                <span>
-                  {formatPrice(order.subtotal, order.currency)}
+            <div className="mt-5 space-y-3 text-sm">
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-500">Subtotal</span>
+                <span className="font-medium">
+                  {formatPrice(
+                    Number(order.subtotal),
+                    order.currency
+                  )}
                 </span>
               </div>
 
-              <div className="flex justify-between">
-                <span className="text-[#222]/55">Shipping</span>
-                <span>
-                  {formatPrice(order.shipping_amount, order.currency)}
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-500">Shipping</span>
+                <span className="font-medium">
+                  {formatPrice(
+                    Number(order.shipping_amount),
+                    order.currency
+                  )}
                 </span>
               </div>
 
-              {order.discount_amount > 0 && (
-                <div className="flex justify-between text-green-700">
-                  <span>Discount</span>
-                  <span>
-                    -{formatPrice(order.discount_amount, order.currency)}
+              {Number(order.discount_amount) > 0 && (
+                <div className="flex justify-between gap-4">
+                  <span className="text-gray-500">Discount</span>
+                  <span className="font-medium text-green-600">
+                    -{" "}
+                    {formatPrice(
+                      Number(order.discount_amount),
+                      order.currency
+                    )}
                   </span>
                 </div>
               )}
 
-              <div className="border-t border-[#081A4A]/10 pt-4">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-[#081A4A]">
-                    Total
-                  </span>
-
-                  <span className="text-xl font-bold text-[#081A4A]">
-                    {formatPrice(order.total_amount, order.currency)}
+              <div className="border-t border-gray-100 pt-3">
+                <div className="flex justify-between gap-4 text-base font-bold">
+                  <span>Total</span>
+                  <span className="text-[#C89B3C]">
+                    {formatPrice(
+                      Number(order.total_amount),
+                      order.currency
+                    )}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 rounded-xl bg-[#F7F5F0] p-4">
-              <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#222]/40">
-                Payment
-              </p>
+            <div className="mt-5 rounded-xl bg-gray-50 p-4">
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-sm text-gray-500">
+                  Payment
+                </span>
 
-              <p className="mt-1 font-semibold capitalize text-[#081A4A]">
-                {order.payment_status.replace("_", " ")}
-              </p>
+                <span
+                  className={`text-sm font-semibold ${
+                    order.payment_status === "paid"
+                      ? "text-green-600"
+                      : "text-amber-600"
+                  }`}
+                >
+                  {order.payment_status === "paid"
+                    ? "Paid"
+                    : order.payment_status}
+                </span>
+              </div>
             </div>
-          </aside>
+          </section>
         </div>
 
-        <section className="mt-8 rounded-2xl border border-[#081A4A]/10 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="text-xl font-bold text-[#081A4A]">
-            Delivery Address
+        {/* Delivery Address */}
+        <section className="mt-8 rounded-2xl bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-[#1F2937]">
+                Delivery Address
+              </h2>
+
+              {addressEditable ? (
+                <p className="mt-1 text-sm text-gray-500">
+                  You can update your delivery address until the
+                  order is shipped.
+                </p>
+              ) : (
+                <p className="mt-1 text-sm text-gray-500">
+                  This delivery address is locked because the order
+                  has been shipped or completed.
+                </p>
+              )}
+            </div>
+
+            {!addressEditable && (
+              <span className="inline-flex w-fit items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600">
+                Address Locked
+              </span>
+            )}
+          </div>
+
+          <div className="mt-6">
+            <EditDeliveryAddressForm
+              orderId={order.id}
+              editable={addressEditable}
+              initialValues={{
+                customerName: order.customer_name ?? "",
+                customerPhone: order.customer_phone ?? "",
+                addressLine1: order.shipping_address_line1 ?? "",
+                addressLine2: order.shipping_address_line2 ?? "",
+                city: order.shipping_city ?? "",
+                state: order.shipping_state ?? "",
+                postalCode: order.shipping_postal_code ?? "",
+              }}
+            />
+          </div>
+        </section>
+
+        {/* Customer information */}
+        <section className="mt-8 rounded-2xl bg-white p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-[#1F2937]">
+            Customer Information
           </h2>
 
-          <div className="mt-5 text-sm leading-7 text-[#222]/70">
-            <p className="font-semibold text-[#081A4A]">
-              {order.customer_name}
-            </p>
-
-            <p>{order.customer_phone}</p>
-
-            {order.customer_email && <p>{order.customer_email}</p>}
-
-            <div className="mt-3">
-              <p>{order.shipping_address_line1}</p>
-
-              {order.shipping_address_line2 && (
-                <p>{order.shipping_address_line2}</p>
-              )}
-
-              <p>
-                {order.shipping_city}, {order.shipping_state}
+          <div className="mt-5 grid gap-5 sm:grid-cols-2">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                Name
               </p>
+              <p className="mt-1 text-sm text-gray-700">
+                {order.customer_name}
+              </p>
+            </div>
 
-              <p>{order.shipping_postal_code}</p>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                Phone
+              </p>
+              <p className="mt-1 text-sm text-gray-700">
+                {order.customer_phone}
+              </p>
+            </div>
 
-              <p>{order.shipping_country}</p>
+            <div className="sm:col-span-2">
+              <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                Email
+              </p>
+              <p className="mt-1 text-sm text-gray-700">
+                {order.customer_email}
+              </p>
             </div>
           </div>
         </section>
+
+        {order.notes && (
+          <section className="mt-8 rounded-2xl bg-white p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-[#1F2937]">
+              Order Notes
+            </h2>
+
+            <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-gray-600">
+              {order.notes}
+            </p>
+          </section>
+        )}
       </div>
     </main>
   );
