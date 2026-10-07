@@ -15,11 +15,11 @@ const staticRoutes = [
     priority: 0.9,
     changeFrequency: "weekly" as const,
   },
-  // {
-  //   path: "/retail",
-  //   priority: 0.9,
-  //   changeFrequency: "weekly" as const,
-  // },
+  {
+    path: "/retail",
+    priority: 0.9,
+    changeFrequency: "weekly" as const,
+  },
   {
     path: "/categories",
     priority: 0.8,
