@@ -59,9 +59,9 @@ export default async function Products() {
         {featuredProducts.length > 0 ? (
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featuredProducts.map((product) => {
-              const categoryName =
-                categoryMap.get(product.category_id) ??
-                "Clothing";
+              const categoryName = product.category_id
+  ? categoryMap.get(product.category_id) ?? "Clothing"
+  : "Clothing";
 
               return (
                 <Link

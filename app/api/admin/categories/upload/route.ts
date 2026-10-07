@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdminApi } from "@/lib/auth/require-admin-api";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -11,19 +12,15 @@ const ALLOWED_TYPES = [
 
 export async function POST(request: Request) {
   try {
+    const admin = await requireAdminApi();
+
+if (!admin.authorized) {
+  return NextResponse.json(
+    { error: admin.error },
+    { status: admin.status }
+  );
+}
     const supabase = await createClient();
-
-    // Check authentication
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
 
     const formData = await request.formData();
     const file = formData.get("file");

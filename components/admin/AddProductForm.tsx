@@ -69,7 +69,19 @@ const [selectedMaterialIds, setSelectedMaterialIds] = useState<string[]>([]);
   const [keywords, setKeywords] = useState("");
   const [price, setPrice] = useState("");
 const [offerName, setOfferName] = useState("");
-const [offerPrice, setOfferPrice] = useState("");
+  const [offerPrice, setOfferPrice] = useState("");
+  const [retailEnabled, setRetailEnabled] = useState(false);
+const [retailPrice, setRetailPrice] = useState("");
+const [retailOfferPrice, setRetailOfferPrice] = useState("");
+  const [sizeStocks, setSizeStocks] = useState<Record<string, string>>({});
+  const updateSizeStock = (sizeId: string, value: string) => {
+  setSizeStocks((prev) => ({
+    ...prev,
+    [sizeId]: value,
+  }));
+};
+const [sku, setSku] = useState("");
+const [isFeatured, setIsFeatured] = useState(false);
   const [image, setImage] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -201,6 +213,46 @@ if (
       if (imageFile) {
         imageUrl = await uploadImage();
       }
+if (
+  retailEnabled &&
+  (!retailPrice || Number(retailPrice) < 0)
+) {
+  setError("Retail price is required when retail selling is enabled.");
+  return;
+}
+
+if (
+  retailOfferPrice &&
+  retailPrice &&
+  Number(retailOfferPrice) >= Number(retailPrice)
+) {
+  setError(
+    "Retail offer price must be lower than the retail price."
+  );
+  return;
+}
+
+if (retailEnabled) {
+  if (selectedSizeIds.length === 0) {
+    throw new Error("Please select at least one size for the retail product.");
+  }
+
+  for (const sizeId of selectedSizeIds) {
+    const stockValue = sizeStocks[sizeId];
+
+    if (stockValue === undefined || stockValue.trim() === "") {
+      throw new Error("Please enter stock quantity for every selected size.");
+    }
+
+    const stock = Number(stockValue);
+
+    if (!Number.isInteger(stock) || stock < 0) {
+      throw new Error(
+        "Stock quantity must be a valid number greater than or equal to 0."
+      );
+    }
+  }
+}
 
       const keywordArray = keywords
         .split(",")
@@ -208,63 +260,112 @@ if (
         .filter(Boolean);
 
       const response = await fetch(
-        "/api/admin/products",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-  name: name.trim(),
-  slug: createSlug(slug || name),
-  category_id: categoryId,
-  short_description: shortDescription.trim(),
-  description: description.trim(),
-  keywords: keywordArray,
-  image: imageUrl,
-  is_active: isActive,
+  "/api/admin/products",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: name.trim(),
+      slug: createSlug(slug || name),
+      category_id: categoryId,
+      short_description: shortDescription.trim(),
+      description: description.trim(),
+      keywords: keywordArray,
+      image: imageUrl,
+      is_active: isActive,
 
-  price: price.trim()
-    ? Number(price)
-    : null,
+      // Wholesale
+      price: price.trim()
+        ? Number(price)
+        : null,
 
-  offer_name: offerName.trim()
-    ? offerName.trim()
-    : null,
+      offer_name: offerName.trim()
+        ? offerName.trim()
+        : null,
 
-  offer_price: offerPrice.trim()
-    ? Number(offerPrice)
-    : null,
+      offer_price: offerPrice.trim()
+        ? Number(offerPrice)
+        : null,
 
-  size_ids: selectedSizeIds,
-  style_ids: selectedStyleIds,
-  material_ids: selectedMaterialIds,
-}),
-        }
-      );
+      // Retail
+      retail_enabled: retailEnabled,
 
-      const result = await response.json();
+      retail_price: retailEnabled
+        ? Number(retailPrice)
+        : null,
 
-      if (!response.ok) {
-        throw new Error(
-          result.error ||
-            "Failed to create product."
-        );
-      }
+      retail_offer_price:
+        retailEnabled && retailOfferPrice.trim()
+          ? Number(retailOfferPrice)
+          : null,
 
-      router.push("/admin/products");
-      router.refresh();
-    } catch (err) {
+
+      sku:
+        retailEnabled && sku.trim()
+          ? sku.trim().toUpperCase()
+          : null,
+
+      is_featured: retailEnabled
+        ? isFeatured
+        : false,
+
+      // Attributes
+      size_ids: selectedSizeIds,
+      size_stocks: retailEnabled
+        ? Object.fromEntries(
+            selectedSizeIds.map((sizeId) => [
+              sizeId,
+              Number(sizeStocks[sizeId]),
+            ])
+          )
+        : {},
+      style_ids: selectedStyleIds,
+      material_ids: selectedMaterialIds,
+    }),
+  }
+);
+
+// Read response safely
+const responseText = await response.text();
+
+let result: {
+  success?: boolean;
+  error?: string;
+  product?: unknown;
+} = {};
+
+try {
+  result = responseText
+    ? JSON.parse(responseText)
+    : {};
+} catch {
+  throw new Error(
+    responseText ||
+      `Request failed with status ${response.status}.`
+  );
+}
+
+if (!response.ok) {
+  throw new Error(
+    result.error ||
+      `Failed to create product. (${response.status})`
+  );
+}
+
+router.push("/admin/products");
+router.refresh();
+    } catch (submitError) {
       setError(
-        err instanceof Error
-          ? err.message
-          : "Something went wrong."
+        submitError instanceof Error
+          ? submitError.message
+          : "Failed to create product."
       );
-
+    } finally {
       setLoading(false);
     }
   }
-
   return (
     <form
       onSubmit={handleSubmit}
@@ -528,33 +629,68 @@ if (
       </p>
     ) : (
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {sizes.map((size: AttributeOption) => {
-          const checked = selectedSizeIds.includes(size.id);
+       {sizes.map((size) => {
+  const isSelected = selectedSizeIds.includes(size.id);
 
-          return (
-            <label
-              key={size.id}
-              className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition ${
-                checked
-                  ? "border-[#C89B3C] bg-[#C89B3C]/5"
-                  : "border-[#081A4A]/10 hover:border-[#C89B3C]/50"
-              }`}
-            >
-              <input
-                type="checkbox"
-                checked={checked}
-                onChange={() =>
-                  toggleSelection(size.id, setSelectedSizeIds)
-                }
-                className="h-4 w-4 accent-[#081A4A]"
-              />
+  return (
+    <div
+      key={size.id}
+      className="flex items-center gap-3 rounded-lg border p-3"
+    >
+      <label className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={() => {
+  setSelectedSizeIds((prev) => {
+    const isSelected = prev.includes(size.id);
 
-              <span className="text-sm font-semibold text-[#081A4A]">
-                {size.name}
-              </span>
-            </label>
-          );
-        })}
+    if (isSelected) {
+      // Remove stock when size is deselected
+      setSizeStocks((stocks) => {
+        const updated = { ...stocks };
+        delete updated[size.id];
+        return updated;
+      });
+
+      return prev.filter((id) => id !== size.id);
+    }
+
+    // Add size with empty stock
+    setSizeStocks((stocks) => ({
+      ...stocks,
+      [size.id]: stocks[size.id] ?? "",
+    }));
+
+    return [...prev, size.id];
+  });
+}}
+        />
+
+        <span>{size.name}</span>
+      </label>
+
+      {isSelected && (
+        <div className="ml-auto flex items-center gap-2">
+          <label className="text-sm text-gray-600">
+            Stock
+          </label>
+
+          <input
+            type="number"
+            min="0"
+            value={sizeStocks[size.id] ?? ""}
+            onChange={(e) =>
+              updateSizeStock(size.id, e.target.value)
+            }
+            placeholder="0"
+            className="w-24 rounded-md border px-3 py-2"
+          />
+        </div>
+      )}
+    </div>
+  );
+})}
       </div>
     )}
   </div>
@@ -809,7 +945,129 @@ if (
           </p>
         </div>
       )}
+   {/* Retail Settings */}
+<div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+  <div className="mb-5">
+    <h2 className="text-lg font-semibold text-gray-900">
+      Retail Settings
+    </h2>
 
+    <p className="mt-1 text-sm text-gray-500">
+      Configure this product for online retail sales.
+    </p>
+  </div>
+
+  {/* Enable Retail */}
+  <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-gray-200 p-4">
+    <input
+      type="checkbox"
+      checked={retailEnabled}
+      onChange={(e) =>
+        setRetailEnabled(e.target.checked)
+      }
+      className="h-4 w-4 rounded border-gray-300"
+    />
+
+    <div>
+      <p className="font-medium text-gray-900">
+        Enable Retail Selling
+      </p>
+
+      <p className="text-sm text-gray-500">
+        Make this product available in the online retail store.
+      </p>
+    </div>
+  </label>
+
+  {retailEnabled && (
+    <div className="mt-5 space-y-5">
+      {/* Retail Price */}
+      <div className="grid gap-5 md:grid-cols-2">
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Retail Price *
+          </label>
+
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            value={retailPrice}
+            onChange={(e) =>
+              setRetailPrice(e.target.value)
+            }
+            placeholder="e.g. 799"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#081A4A]"
+          />
+        </div>
+
+        {/* Retail Offer Price */}
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Retail Offer Price
+          </label>
+
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            value={retailOfferPrice}
+            onChange={(e) =>
+              setRetailOfferPrice(e.target.value)
+            }
+            placeholder="e.g. 699"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#081A4A]"
+          />
+        </div>
+      </div>
+
+      {/* SKU + Stock */}
+      <div className="grid gap-5 md:grid-cols-2">
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            SKU
+          </label>
+
+          <input
+            type="text"
+            value={sku}
+            onChange={(e) =>
+              setSku(e.target.value)
+            }
+            placeholder="e.g. LIM-SHIRT-001"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 uppercase outline-none focus:border-[#081A4A]"
+          />
+
+          <p className="mt-1 text-xs text-gray-500">
+            Optional unique product code.
+          </p>
+        </div>
+      </div>
+
+      {/* Featured */}
+      <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-gray-200 p-4">
+        <input
+          type="checkbox"
+          checked={isFeatured}
+          onChange={(e) =>
+            setIsFeatured(e.target.checked)
+          }
+          className="h-4 w-4 rounded border-gray-300"
+        />
+
+        <div>
+          <p className="font-medium text-gray-900">
+            Featured Product
+          </p>
+
+          <p className="text-sm text-gray-500">
+            Show this product in featured retail sections.
+          </p>
+        </div>
+      </label>
+    </div>
+  )}
+</div>
       {/* Actions */}
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <button
@@ -840,6 +1098,7 @@ if (
               : "Save Product"}
         </button>
       </div>
+     
     </form>
   );
-}
+};

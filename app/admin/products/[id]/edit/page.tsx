@@ -25,6 +25,10 @@ export default async function EditProductPage({
     redirect("/admin/login");
   }
 
+  // --------------------------------------------------
+  // PRODUCT
+  // --------------------------------------------------
+
   const { data: product, error: productError } = await supabase
     .from("products")
     .select(`
@@ -37,9 +41,14 @@ export default async function EditProductPage({
       image,
       is_active,
       category_id,
-  price,
-  offer_name,
-  offer_price
+      price,
+      offer_name,
+      offer_price,
+      retail_enabled,
+      retail_price,
+      retail_offer_price,
+      sku,
+      is_featured
     `)
     .eq("id", id)
     .single();
@@ -47,6 +56,10 @@ export default async function EditProductPage({
   if (productError || !product) {
     notFound();
   }
+
+  // --------------------------------------------------
+  // PRODUCT OPTIONS
+  // --------------------------------------------------
 
   const { data: categories, error: categoriesError } = await supabase
     .from("categories")
@@ -71,6 +84,10 @@ export default async function EditProductPage({
     .eq("is_active", true)
     .order("name", { ascending: true });
 
+  // --------------------------------------------------
+  // PRODUCT ATTRIBUTE RELATIONS
+  // --------------------------------------------------
+
   const { data: sizeRelations, error: sizeRelationsError } =
     await supabase
       .from("product_size_relations")
@@ -89,6 +106,19 @@ export default async function EditProductPage({
       .select("material_id")
       .eq("product_id", id);
 
+  // --------------------------------------------------
+  // SIZE-WISE STOCK
+  // --------------------------------------------------
+
+  const { data: sizeStocks, error: sizeStocksError } = await supabase
+    .from("product_size_stock")
+    .select("size_id, stock_quantity")
+    .eq("product_id", id);
+
+  // --------------------------------------------------
+  // CHECK FOR LOADING ERRORS
+  // --------------------------------------------------
+
   const optionsError =
     categoriesError ||
     sizesError ||
@@ -96,7 +126,8 @@ export default async function EditProductPage({
     materialsError ||
     sizeRelationsError ||
     styleRelationsError ||
-    materialRelationsError;
+    materialRelationsError ||
+    sizeStocksError;
 
   if (optionsError) {
     return (
@@ -109,6 +140,10 @@ export default async function EditProductPage({
       </main>
     );
   }
+
+  // --------------------------------------------------
+  // PAGE
+  // --------------------------------------------------
 
   return (
     <main className="min-h-screen bg-[#F7F5F0] px-4 py-10 sm:px-6 lg:px-8">
@@ -148,6 +183,12 @@ export default async function EditProductPage({
           }
           initialMaterialIds={
             materialRelations?.map((item) => item.material_id) ?? []
+          }
+          initialSizeStocks={
+            sizeStocks?.map((item) => ({
+              size_id: item.size_id,
+              stock_quantity: item.stock_quantity,
+            })) ?? []
           }
         />
       </div>

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdminApi } from "@/lib/auth/require-admin-api";
 
 function createSlug(value: string) {
   return value
@@ -12,18 +13,16 @@ function createSlug(value: string) {
 
 export async function GET() {
   try {
-    const supabase = await createClient();
+    const admin = await requireAdminApi();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
+    if (!admin.authorized) {
       return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
+        { error: admin.error },
+        { status: admin.status }
       );
     }
+
+    const supabase = await createClient();
 
     const { data, error } = await supabase
       .from("product_sizes")
@@ -50,18 +49,15 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const admin = await requireAdminApi();
+
+if (!admin.authorized) {
+  return NextResponse.json(
+    { error: admin.error },
+    { status: admin.status }
+  );
+}
     const supabase = await createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
 
     const body = await request.json();
 
@@ -140,18 +136,15 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+    const admin = await requireAdminApi();
+
+if (!admin.authorized) {
+  return NextResponse.json(
+    { error: admin.error },
+    { status: admin.status }
+  );
+}
     const supabase = await createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
 
     const body = await request.json();
 
@@ -233,18 +226,15 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    const admin = await requireAdminApi();
+
+if (!admin.authorized) {
+  return NextResponse.json(
+    { error: admin.error },
+    { status: admin.status }
+  );
+}
     const supabase = await createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
 
     const body = await request.json();
 

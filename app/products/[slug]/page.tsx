@@ -214,7 +214,9 @@ export default async function ProductPage({
     ? []
     : (materialsResult.data ?? []);
 
-  const category = await getCategoryById(product.category_id);
+  const category = product.category_id
+  ? await getCategoryById(product.category_id)
+  : null;
 
   const productUrl = `${siteConfig.url}/products/${product.slug}`;
   const productImage =

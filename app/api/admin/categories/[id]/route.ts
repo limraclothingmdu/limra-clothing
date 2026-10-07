@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-
+import { requireAdminApi } from "@/lib/auth/require-admin-api";
 type RouteContext = {
   params: Promise<{
     id: string;
@@ -21,81 +21,40 @@ export async function GET(
   _request: Request,
   { params }: RouteContext
 ) {
-  try {
-    const { id } = await params;
+  const { id } = await params;
 
-    const supabase = await createClient();
+  const admin = await requireAdminApi();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
-    if (!id) {
-      return NextResponse.json(
-        { error: "Category ID is required." },
-        { status: 400 }
-      );
-    }
-
-    const {
-      data: category,
-      error,
-    } = await supabase
-      .from("categories")
-      .select(
-        "id, name, slug, short_description, description, image, keywords, is_active"
-      )
-      .eq("id", id)
-      .maybeSingle();
-
-    if (error) {
-      console.error(
-        "Category fetch failed:",
-        error
-      );
-
-      return NextResponse.json(
-        {
-          error: "Could not load the category.",
-        },
-        { status: 500 }
-      );
-    }
-
-    if (!category) {
-      return NextResponse.json(
-        {
-          error: "Category not found.",
-        },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      category,
-    });
-  } catch (error) {
-    console.error(
-      "Get category error:",
-      error
-    );
-
+  if (!admin.authorized) {
     return NextResponse.json(
-      {
-        error:
-          "Something went wrong while loading the category.",
-      },
+      { error: admin.error },
+      { status: admin.status }
+    );
+  }
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("blogs")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    return NextResponse.json(
+      { error: error.message },
       { status: 500 }
     );
   }
+
+  if (!data) {
+    return NextResponse.json(
+      { error: "Blog not found" },
+      { status: 404 }
+    );
+  }
+
+  return NextResponse.json(data);
 }
 
 // UPDATE CATEGORY
@@ -106,18 +65,16 @@ export async function PUT(
   try {
     const { id } = await params;
 
-    const supabase = await createClient();
+    const admin = await requireAdminApi();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+if (!admin.authorized) {
+  return NextResponse.json(
+    { error: admin.error },
+    { status: admin.status }
+  );
+}
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+const supabase = await createClient();
 
     if (!id) {
       return NextResponse.json(
@@ -362,25 +319,16 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    const supabase = await createClient();
+    const admin = await requireAdminApi();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+if (!admin.authorized) {
+  return NextResponse.json(
+    { error: admin.error },
+    { status: admin.status }
+  );
+}
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
-    if (!id) {
-      return NextResponse.json(
-        { error: "Category ID is required." },
-        { status: 400 }
-      );
-    }
+const supabase = await createClient();
 
     // Check category
     const {

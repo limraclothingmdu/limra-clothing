@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-
+import { requireAdminApi } from "@/lib/auth/require-admin-api";
 import { createClient } from "@/lib/supabase/server";
 
 type RouteContext = {
@@ -14,18 +14,16 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const supabase = await createClient();
+  const admin = await requireAdminApi();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (!admin.authorized) {
     return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
+      { error: admin.error },
+      { status: admin.status }
     );
   }
+
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("blogs")
@@ -55,19 +53,15 @@ export async function PUT(
   { params }: RouteContext
 ) {
   const { id } = await params;
+const admin = await requireAdminApi();
 
+if (!admin.authorized) {
+  return NextResponse.json(
+    { error: admin.error },
+    { status: admin.status }
+  );
+}
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
-    );
-  }
 
   try {
     const body = await request.json();
@@ -157,19 +151,15 @@ export async function DELETE(
   { params }: RouteContext
 ) {
   const { id } = await params;
+const admin = await requireAdminApi();
 
+if (!admin.authorized) {
+  return NextResponse.json(
+    { error: admin.error },
+    { status: admin.status }
+  );
+}
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
-    );
-  }
 
   const { error } = await supabase
     .from("blogs")

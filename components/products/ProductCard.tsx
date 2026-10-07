@@ -6,14 +6,30 @@ import type { Product } from "@/lib/products";
 
 type ProductCardProps = {
   product: Product;
+  hrefPrefix?: string;
+  priceType?: "wholesale" | "retail";
 };
 
 export default function ProductCard({
   product,
+  hrefPrefix = "/products",
+  priceType = "wholesale",
 }: ProductCardProps) {
+  const productHref = `${hrefPrefix}/${product.slug}`;
+
+  const displayPrice =
+    priceType === "retail"
+      ? product.retail_price ?? null
+      : product.price;
+
+  const displayOfferPrice =
+    priceType === "retail"
+      ? product.retail_offer_price ?? null
+      : product.offer_price;
+
   return (
     <Link
-      href={`/products/${product.slug}`}
+      href={productHref}
       className="group block overflow-hidden rounded-2xl border border-[#081A4A]/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
     >
       {/* Product Image */}
@@ -21,7 +37,11 @@ export default function ProductCard({
         {product.image ? (
           <Image
             src={product.image}
-            alt={`${product.name} wholesale from Limra Clothing`}
+            alt={`${product.name} ${
+              priceType === "retail"
+                ? "retail"
+                : "wholesale"
+            } from Limra Clothing`}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -47,8 +67,8 @@ export default function ProductCard({
 
         {/* Pricing */}
         <div className="mt-3 flex flex-col gap-1 sm:mt-4">
-          {product.offer_price !== null &&
-          product.price !== null ? (
+          {displayOfferPrice !== null &&
+          displayPrice !== null ? (
             <>
               {product.offer_name && (
                 <span className="text-[10px] font-bold uppercase tracking-wide text-[#C89B3C] sm:text-xs">
@@ -58,17 +78,17 @@ export default function ProductCard({
 
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-base font-bold text-[#081A4A] sm:text-lg">
-                  ₹{product.offer_price}
+                  ₹{displayOfferPrice}
                 </span>
 
                 <span className="text-xs text-[#222]/50 line-through sm:text-sm">
-                  ₹{product.price}
+                  ₹{displayPrice}
                 </span>
               </div>
             </>
-          ) : product.price !== null ? (
+          ) : displayPrice !== null ? (
             <span className="text-base font-bold text-[#081A4A] sm:text-lg">
-              ₹{product.price}
+              ₹{displayPrice}
             </span>
           ) : null}
         </div>

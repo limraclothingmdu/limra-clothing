@@ -1,20 +1,18 @@
 import { NextResponse } from "next/server";
-
+import { requireAdminApi } from "@/lib/auth/require-admin-api";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
-  const supabase = await createClient();
+  const admin = await requireAdminApi();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (!admin.authorized) {
     return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
+      { error: admin.error },
+      { status: admin.status }
     );
   }
+
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("blogs")
@@ -34,18 +32,16 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const admin = await requireAdminApi();
+
+if (!admin.authorized) {
+  return NextResponse.json(
+    { error: admin.error },
+    { status: admin.status }
+  );
+}
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
-    );
-  }
 
   try {
     const body = await request.json();

@@ -16,7 +16,7 @@ export default function LogoutButton() {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
-      console.error("Logout failed:", error);
+      console.error("Admin logout failed:", error);
       setLoading(false);
       return;
     }
@@ -30,7 +30,7 @@ export default function LogoutButton() {
       type="button"
       onClick={handleLogout}
       disabled={loading}
-      className="rounded-full bg-[#081A4A] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0d286b] disabled:cursor-not-allowed disabled:opacity-60"
+      className="rounded-full bg-[#081A4A] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#0d286b] disabled:cursor-not-allowed disabled:opacity-60"
     >
       {loading ? "Logging out..." : "Logout"}
     </button>

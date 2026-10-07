@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -21,13 +22,50 @@ export default function AdminLoginPage() {
 
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data, error: loginError } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
+    if (loginError || !data.user) {
       setError("Invalid email or password.");
+      setLoading(false);
+      return;
+    }
+
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("role, is_active")
+      .eq("id", data.user.id)
+      .maybeSingle();
+
+    if (profileError || !profile) {
+      await supabase.auth.signOut();
+
+      setError(
+        "Admin profile not found. Please contact the website administrator."
+      );
+      setLoading(false);
+      return;
+    }
+
+    if (profile.role !== "admin") {
+      await supabase.auth.signOut();
+
+      setError(
+        "This account does not have administrator access. Please use the customer login."
+      );
+      setLoading(false);
+      return;
+    }
+
+    if (!profile.is_active) {
+      await supabase.auth.signOut();
+
+      setError(
+        "This administrator account is inactive. Please contact the website administrator."
+      );
       setLoading(false);
       return;
     }
@@ -37,7 +75,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#F7F5F0] px-4">
+    <main className="flex min-h-screen items-center justify-center bg-[#F7F5F0] px-4 py-12">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         <div className="mb-8 text-center">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#C89B3C]">
@@ -49,7 +87,7 @@ export default function AdminLoginPage() {
           </h1>
 
           <p className="mt-2 text-sm text-[#222]/60">
-            Sign in to manage your clothing catalogue.
+            Sign in to manage the Limra Clothing website.
           </p>
         </div>
 
@@ -95,7 +133,7 @@ export default function AdminLoginPage() {
           </div>
 
           {error && (
-            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm leading-5 text-red-600">
               {error}
             </p>
           )}
@@ -108,6 +146,15 @@ export default function AdminLoginPage() {
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
+
+        <div className="mt-6 border-t border-[#081A4A]/10 pt-5 text-center">
+          <Link
+            href="/login"
+            className="text-sm font-semibold text-[#081A4A]/70 hover:text-[#C89B3C]"
+          >
+            ← Customer Login
+          </Link>
+        </div>
       </div>
     </main>
   );

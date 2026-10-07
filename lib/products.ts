@@ -4,15 +4,26 @@ export type Product = {
   id: string;
   slug: string;
   name: string;
-  category_id: string;
+  category_id: string | null;
   short_description: string | null;
   description: string;
   image: string | null;
   keywords: string[];
   is_active: boolean;
+
+  // Wholesale pricing
   price: number | null;
   offer_name: string | null;
   offer_price: number | null;
+
+  // Retail pricing
+  retail_enabled?: boolean;
+  retail_price?: number | null;
+  retail_offer_price?: number | null;
+
+  // Retail information
+  sku?: string | null;
+  is_featured?: boolean;
 };
 
 const productSelect = `
@@ -27,7 +38,12 @@ const productSelect = `
   is_active,
   price,
   offer_name,
-  offer_price
+  offer_price,
+  retail_enabled,
+  retail_price,
+  retail_offer_price,
+  sku,
+  is_featured
 `;
 
 export async function getProducts(): Promise<Product[]> {
@@ -80,7 +96,10 @@ export async function getProductsByCategory(
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Failed to fetch category products:", error);
+    console.error(
+      "Failed to fetch category products:",
+      error
+    );
     return [];
   }
 
