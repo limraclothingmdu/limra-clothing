@@ -61,13 +61,13 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main>
-      <Hero />
-      <About />
-      <CategoriesPreview />
-      <Products />
-      <WhyChooseUs />
-      <FAQ />
-    </main>
+<main>
+  <Hero />
+  <Products />
+  <About />
+  <CategoriesPreview />
+  <WhyChooseUs />
+  <FAQ />
+</main>
   );
 }
