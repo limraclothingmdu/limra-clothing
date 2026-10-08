@@ -92,7 +92,7 @@ export default async function RetailProductsPage() {
     )
     .eq("is_active", true)
     .eq("retail_enabled", true)
-    .gt("retail_stock", 0)
+    
     .order("is_featured", {
       ascending: false,
     })
