@@ -22,8 +22,7 @@ type RetailProductPurchaseProps = {
   sizes: RetailSize[];
   price: number | null;
   offerPrice: number | null;
-  shippingCharge: number;
-  retailStock: number;
+shippingCharge: number;
 };
 
 export default function RetailProductPurchase({
@@ -36,7 +35,7 @@ export default function RetailProductPurchase({
   price,
   offerPrice,
   shippingCharge,
-  retailStock,
+  
 }: RetailProductPurchaseProps) {
   const router = useRouter();
 
@@ -47,9 +46,9 @@ export default function RetailProductPurchase({
   const selectedSize = sizes.find(
     (size) => size.id === selectedSizeId
   );
-  const availableStock = selectedSize
-    ? Math.min(selectedSize.stock_quantity, retailStock)
-    : 0;
+ const availableStock = selectedSize
+  ? Math.max(0, selectedSize.stock_quantity)
+  : 0;
 
   const unitPrice = offerPrice ?? price;
 
@@ -124,7 +123,7 @@ export default function RetailProductPurchase({
           {sizes.map((size) => {
             const isSelected = selectedSizeId === size.id;
             const isOutOfStock =
-              Math.min(size.stock_quantity, retailStock) <= 0;
+  size.stock_quantity <= 0;
 
             return (
               <button

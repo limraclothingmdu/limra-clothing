@@ -74,7 +74,7 @@ export async function POST(request: Request) {
     }
 
     /*
-     * Prevent absurdly large quantities.
+     * Validate cart items.
      */
     for (const item of items) {
       if (
@@ -88,33 +88,70 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
+
+      /*
+       * Retail products in Limra are size-based.
+       */
+      if (!item.sizeId) {
+        return NextResponse.json(
+          {
+            error: `Please select a size for "${item.productName}".`,
+          },
+          { status: 400 }
+        );
+      }
     }
 
     /*
-     * Fetch the actual products from Supabase.
+     * Prevent duplicate product + size combinations.
+     *
+     * Example:
+     * Product A / M / Qty 2
+     * Product A / M / Qty 2
+     *
+     * These should be one cart line, not two.
+     */
+    const itemKeys = new Set<string>();
+
+    for (const item of items) {
+      const key = `${item.productId}:${item.sizeId}`;
+
+      if (itemKeys.has(key)) {
+        return NextResponse.json(
+          {
+            error: `Duplicate item detected for "${item.productName}".`,
+          },
+          { status: 400 }
+        );
+      }
+
+      itemKeys.add(key);
+    }
+
+    /*
+     * Fetch actual products from Supabase.
      */
     const productIds = [
       ...new Set(items.map((item) => item.productId)),
     ];
 
     const { data: products, error: productsError } = await supabase
-      .from("products")
-      .select(
-        `
-          id,
-          name,
-          sku,
-          retail_enabled,
-          retail_price,
-          retail_offer_price,
-          retail_shipping_charge,
-          retail_free_shipping,
-          retail_stock,
-          is_active
-        `
-      )
-      .in("id", productIds);
-
+  .from("products")
+  .select(
+    `
+      id,
+      name,
+      sku,
+      retail_enabled,
+      retail_price,
+      retail_offer_price,
+      retail_shipping_charge,
+      retail_free_shipping,
+      retail_stock,
+      is_active
+    `
+  )
+  .in("id", productIds);
     if (productsError) {
       console.error("Product validation error:", productsError);
 
@@ -126,13 +163,15 @@ export async function POST(request: Request) {
 
     if (!products || products.length !== productIds.length) {
       return NextResponse.json(
-        { error: "One or more products are no longer available." },
+        {
+          error: "One or more products are no longer available.",
+        },
         { status: 400 }
       );
     }
 
     /*
-     * Fetch all requested sizes.
+     * Fetch requested sizes.
      */
     const sizeIds = [
       ...new Set(
@@ -142,56 +181,60 @@ export async function POST(request: Request) {
       ),
     ];
 
-    let sizes: {
-      id: string;
-      name: string;
-    }[] = [];
+    const { data: sizeData, error: sizesError } = await supabase
+      .from("product_sizes")
+      .select("id, name")
+      .in("id", sizeIds);
 
-    if (sizeIds.length > 0) {
-      const { data: sizeData, error: sizesError } = await supabase
-        .from("product_sizes")
-        .select("id, name")
-        .in("id", sizeIds);
+    if (sizesError) {
+      console.error("Size validation error:", sizesError);
 
-      if (sizesError) {
-        console.error("Size validation error:", sizesError);
+      return NextResponse.json(
+        { error: "Unable to validate selected sizes." },
+        { status: 500 }
+      );
+    }
 
-        return NextResponse.json(
-          { error: "Unable to validate selected sizes." },
-          { status: 500 }
-        );
-      }
+    const sizes =
+      sizeData?.map((size) => ({
+        id: size.id,
+        name: size.name,
+      })) ?? [];
 
-      sizes = sizeData ?? [];
+    /*
+     * Make sure every requested size actually exists.
+     */
+    if (sizes.length !== sizeIds.length) {
+      return NextResponse.json(
+        { error: "One or more selected sizes are invalid." },
+        { status: 400 }
+      );
     }
 
     /*
-     * Fetch size stock.
+     * Fetch size-level stock.
      */
-    let sizeStock: {
-      product_id: string;
-      size_id: string;
-      stock_quantity: number;
-    }[] = [];
+    const { data: stockData, error: stockError } = await supabase
+      .from("product_size_stock")
+      .select("product_id, size_id, stock_quantity")
+      .in("product_id", productIds)
+      .in("size_id", sizeIds);
 
-    if (sizeIds.length > 0) {
-      const { data: stockData, error: stockError } = await supabase
-        .from("product_size_stock")
-        .select("product_id, size_id, stock_quantity")
-        .in("product_id", productIds)
-        .in("size_id", sizeIds);
+    if (stockError) {
+      console.error("Stock validation error:", stockError);
 
-      if (stockError) {
-        console.error("Stock validation error:", stockError);
-
-        return NextResponse.json(
-          { error: "Unable to validate product stock." },
-          { status: 500 }
-        );
-      }
-
-      sizeStock = stockData ?? [];
+      return NextResponse.json(
+        { error: "Unable to validate product stock." },
+        { status: 500 }
+      );
     }
+
+    const sizeStock =
+      stockData?.map((stock) => ({
+        product_id: stock.product_id,
+        size_id: stock.size_id,
+        stock_quantity: Number(stock.stock_quantity),
+      })) ?? [];
 
     let subtotal = 0;
     let shipping = 0;
@@ -200,13 +243,16 @@ export async function POST(request: Request) {
       productId: string;
       productName: string;
       productSku: string | null;
-      sizeId: string | null;
-      sizeName: string | null;
+      sizeId: string;
+      sizeName: string;
       quantity: number;
       unitPrice: number;
       totalPrice: number;
     }[] = [];
 
+    /*
+     * Validate every cart item against trusted database data.
+     */
     for (const item of items) {
       const product = products.find(
         (product) => product.id === item.productId
@@ -214,7 +260,9 @@ export async function POST(request: Request) {
 
       if (!product) {
         return NextResponse.json(
-          { error: `Product "${item.productName}" is unavailable.` },
+          {
+            error: `Product "${item.productName}" is unavailable.`,
+          },
           { status: 400 }
         );
       }
@@ -228,76 +276,81 @@ export async function POST(request: Request) {
         );
       }
 
-      if (!item.sizeId) {
-  const retailStock = Number(product.retail_stock ?? 0);
+      const size = sizes.find(
+        (size) => size.id === item.sizeId
+      );
 
-  if (!Number.isInteger(retailStock) || retailStock < item.quantity) {
-    return NextResponse.json(
-      { error: `Insufficient stock for "${product.name}".` },
-      { status: 400 }
-    );
-  }
-}
-
-const retailPrice = Number(product.retail_price ?? 0);
-const retailOfferPrice = Number(product.retail_offer_price ?? 0);
-
-if (!Number.isFinite(retailPrice) || retailPrice <= 0) {
-  return NextResponse.json(
-    { error: `"${product.name}" does not have a valid retail price.` },
-    { status: 400 }
-  );
-}
-
-const unitPrice =
-  Number.isFinite(retailOfferPrice) &&
-  retailOfferPrice > 0 &&
-  retailOfferPrice < retailPrice
-    ? retailOfferPrice
-    : retailPrice;
-
-      if (!Number.isFinite(unitPrice) || unitPrice <= 0) {
+      if (!size) {
         return NextResponse.json(
-          { error: `"${product.name}" does not have a valid retail price.` },
+          {
+            error: `Selected size for "${product.name}" is invalid.`,
+          },
           { status: 400 }
         );
       }
 
-      let sizeName: string | null = null;
+      /*
+       * Check actual stock for this exact product + size.
+       */
+      const stock = sizeStock.find(
+        (stock) =>
+          stock.product_id === product.id &&
+          stock.size_id === item.sizeId
+      );
 
-      if (item.sizeId) {
-        const size = sizes.find(
-          (size) => size.id === item.sizeId
+      if (
+        !stock ||
+        !Number.isInteger(stock.stock_quantity) ||
+        stock.stock_quantity < item.quantity
+      ) {
+        return NextResponse.json(
+          {
+            error: `Insufficient stock for "${product.name}" in size ${size.name}.`,
+          },
+          { status: 400 }
         );
-
-        if (!size) {
-          return NextResponse.json(
-            { error: `Selected size for "${product.name}" is invalid.` },
-            { status: 400 }
-          );
-        }
-
-        sizeName = size.name;
-
-        const stock = sizeStock.find(
-          (stock) =>
-            stock.product_id === product.id &&
-            stock.size_id === item.sizeId
-        );
-
-        if (!stock || stock.stock_quantity < item.quantity) {
-          return NextResponse.json(
-            {
-              error: `Insufficient stock for "${product.name}" in size ${size.name}.`,
-            },
-            { status: 400 }
-          );
-        }
       }
 
-      const totalPrice = unitPrice * item.quantity;
+      /*
+       * Server-side retail pricing.
+       *
+       * Never trust price values sent from the browser.
+       */
+      const retailPrice = Number(
+        product.retail_price ?? 0
+      );
+
+      const retailOfferPrice = Number(
+        product.retail_offer_price ?? 0
+      );
+
+      if (
+        !Number.isFinite(retailPrice) ||
+        retailPrice <= 0
+      ) {
+        return NextResponse.json(
+          {
+            error: `"${product.name}" does not have a valid retail price.`,
+          },
+          { status: 400 }
+        );
+      }
+
+      const unitPrice =
+        Number.isFinite(retailOfferPrice) &&
+        retailOfferPrice > 0 &&
+        retailOfferPrice < retailPrice
+          ? retailOfferPrice
+          : retailPrice;
+
+      const totalPrice =
+        unitPrice * item.quantity;
 
       subtotal += totalPrice;
+
+      /*
+       * Server-side shipping calculation.
+       */
       shipping = Math.max(
         shipping,
         getRetailShippingCharge(product)
@@ -307,8 +360,8 @@ const unitPrice =
         productId: product.id,
         productName: product.name,
         productSku: product.sku,
-        sizeId: item.sizeId || null,
-        sizeName,
+        sizeId: size.id,
+        sizeName: size.name,
         quantity: item.quantity,
         unitPrice,
         totalPrice,
@@ -317,7 +370,10 @@ const unitPrice =
 
     subtotal = Number(subtotal.toFixed(2));
     shipping = Number(shipping.toFixed(2));
-    const total = Number((subtotal + shipping).toFixed(2));
+
+    const total = Number(
+      (subtotal + shipping).toFixed(2)
+    );
 
     if (total < 1) {
       return NextResponse.json(
@@ -326,20 +382,28 @@ const unitPrice =
       );
     }
 
+    /*
+     * Razorpay credentials.
+     */
     const keyId = process.env.RAZORPAY_KEY_ID;
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
 
     if (!keyId || !keySecret) {
-      console.error("Razorpay credentials are not configured.");
+      console.error(
+        "Razorpay credentials are not configured."
+      );
 
       return NextResponse.json(
-        { error: "Payment service is not configured." },
+        {
+          error: "Payment service is not configured.",
+        },
         { status: 500 }
       );
     }
 
     /*
-     * Create Razorpay order using the SERVER-CALCULATED amount.
+     * Create Razorpay order using the
+     * SERVER-CALCULATED amount.
      */
     const razorpay = new Razorpay({
       key_id: keyId,
@@ -348,47 +412,54 @@ const unitPrice =
 
     const receipt = `limra_${crypto.randomUUID()}`;
 
-    const razorpayOrder = await razorpay.orders.create({
-      amount: Math.round(total * 100),
-      currency: "INR",
-      receipt,
-    });
+    const razorpayOrder =
+      await razorpay.orders.create({
+        amount: Math.round(total * 100),
+        currency: "INR",
+        receipt,
+      });
 
     /*
- * Store the Limra order.
- *
- * The Razorpay order ID is stored directly on the order
- * so payment verification can locate this exact order.
- */
-    const { data: limraOrder, error: orderError } = await supabase
-      .from("orders")
-      .insert({
-        user_id: user.id,
-        razorpay_order_id: razorpayOrder.id,
-        status: "pending",
-        payment_status: "pending",
-        subtotal,
-        shipping_amount: shipping,
-        discount_amount: 0,
-        total_amount: total,
-        currency: "INR",
-        customer_name: customerName.trim(),
-        customer_phone: customerPhone.trim(),
-        customer_email: user.email ?? null,
-        shipping_address_line1: addressLine1.trim(),
-        shipping_address_line2:
-          addressLine2?.trim() || null,
-        shipping_city: city.trim(),
-        shipping_state: state.trim(),
-        shipping_postal_code: postalCode.trim(),
-        shipping_country: "India",
-        notes: `Razorpay Order ID: ${razorpayOrder.id}`,
-      })
-      .select("id")
-      .single();
+     * Create Limra order.
+     */
+    const { data: limraOrder, error: orderError } =
+      await supabase
+        .from("orders")
+        .insert({
+          user_id: user.id,
+          razorpay_order_id: razorpayOrder.id,
+          status: "pending",
+          payment_status: "pending",
+          subtotal,
+          shipping_amount: shipping,
+          discount_amount: 0,
+          total_amount: total,
+          currency: "INR",
+
+          customer_name: customerName.trim(),
+          customer_phone: customerPhone.trim(),
+          customer_email: user.email ?? null,
+
+          shipping_address_line1:
+            addressLine1.trim(),
+          shipping_address_line2:
+            addressLine2?.trim() || null,
+          shipping_city: city.trim(),
+          shipping_state: state.trim(),
+          shipping_postal_code:
+            postalCode.trim(),
+          shipping_country: "India",
+
+          notes: `Razorpay Order ID: ${razorpayOrder.id}`,
+        })
+        .select("id")
+        .single();
 
     if (orderError || !limraOrder) {
-      console.error("Limra order creation error:", orderError);
+      console.error(
+        "Limra order creation error:",
+        orderError
+      );
 
       return NextResponse.json(
         { error: "Unable to create your order." },
@@ -399,30 +470,36 @@ const unitPrice =
     /*
      * Store immutable order-item snapshots.
      */
-    const { error: itemsError } = await supabase
-      .from("order_items")
-      .insert(
-        validatedItems.map((item) => ({
-          order_id: limraOrder.id,
-          product_id: item.productId,
-          size_id: item.sizeId,
-          product_name: item.productName,
-          product_sku: item.productSku,
-          size_name: item.sizeName,
-          quantity: item.quantity,
-          unit_price: item.unitPrice,
-          total_price: item.totalPrice,
-        }))
-      );
+    const { error: itemsError } =
+      await supabase
+        .from("order_items")
+        .insert(
+          validatedItems.map((item) => ({
+            order_id: limraOrder.id,
+            product_id: item.productId,
+            size_id: item.sizeId,
+
+            product_name: item.productName,
+            product_sku: item.productSku,
+            size_name: item.sizeName,
+
+            quantity: item.quantity,
+            unit_price: item.unitPrice,
+            total_price: item.totalPrice,
+          }))
+        );
 
     if (itemsError) {
-      console.error("Order item creation error:", itemsError);
+      console.error(
+        "Order item creation error:",
+        itemsError
+      );
 
-      /*
-       * Do not expose database internals to the customer.
-       */
       return NextResponse.json(
-        { error: "Unable to create your order items." },
+        {
+          error:
+            "Unable to create your order items.",
+        },
         { status: 500 }
       );
     }
@@ -435,10 +512,15 @@ const unitPrice =
       key_id: keyId,
     });
   } catch (error) {
-    console.error("Create Razorpay order error:", error);
+    console.error(
+      "Create Razorpay order error:",
+      error
+    );
 
     return NextResponse.json(
-      { error: "Unable to create payment order." },
+      {
+        error: "Unable to create payment order.",
+      },
       { status: 500 }
     );
   }

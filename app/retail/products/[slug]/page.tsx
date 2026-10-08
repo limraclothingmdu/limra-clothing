@@ -610,7 +610,7 @@ export default async function RetailProductPage({
       ? 0
       : Number(product.retail_shipping_charge ?? 0)
   }
-  retailStock={Number(product.retail_stock ?? 0)}
+  
 />
 
             {/* Stock Summary */}
