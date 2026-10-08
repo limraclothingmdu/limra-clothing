@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import crypto from "node:crypto";
 import Razorpay from "razorpay";
 
 import { createClient } from "@/lib/supabase/server";
+import { getRetailShippingCharge } from "@/lib/retail/pricing";
 
 type CartItem = {
   productId: string;
@@ -105,8 +107,10 @@ export async function POST(request: Request) {
           retail_enabled,
           retail_price,
           retail_offer_price,
-          is_active,
-          stock_quantity
+          retail_shipping_charge,
+          retail_free_shipping,
+          retail_stock,
+          is_active
         `
       )
       .in("id", productIds);
@@ -190,6 +194,7 @@ export async function POST(request: Request) {
     }
 
     let subtotal = 0;
+    let shipping = 0;
 
     const validatedItems: {
       productId: string;
@@ -223,10 +228,33 @@ export async function POST(request: Request) {
         );
       }
 
-      const unitPrice =
-        product.retail_offer_price != null
-          ? Number(product.retail_offer_price)
-          : Number(product.retail_price);
+      if (!item.sizeId) {
+  const retailStock = Number(product.retail_stock ?? 0);
+
+  if (!Number.isInteger(retailStock) || retailStock < item.quantity) {
+    return NextResponse.json(
+      { error: `Insufficient stock for "${product.name}".` },
+      { status: 400 }
+    );
+  }
+}
+
+const retailPrice = Number(product.retail_price ?? 0);
+const retailOfferPrice = Number(product.retail_offer_price ?? 0);
+
+if (!Number.isFinite(retailPrice) || retailPrice <= 0) {
+  return NextResponse.json(
+    { error: `"${product.name}" does not have a valid retail price.` },
+    { status: 400 }
+  );
+}
+
+const unitPrice =
+  Number.isFinite(retailOfferPrice) &&
+  retailOfferPrice > 0 &&
+  retailOfferPrice < retailPrice
+    ? retailOfferPrice
+    : retailPrice;
 
       if (!Number.isFinite(unitPrice) || unitPrice <= 0) {
         return NextResponse.json(
@@ -265,22 +293,15 @@ export async function POST(request: Request) {
             { status: 400 }
           );
         }
-      } else {
-        const stockQuantity = Number(product.stock_quantity ?? 0);
-
-        if (stockQuantity < item.quantity) {
-          return NextResponse.json(
-            {
-              error: `Insufficient stock for "${product.name}".`,
-            },
-            { status: 400 }
-          );
-        }
       }
 
       const totalPrice = unitPrice * item.quantity;
 
       subtotal += totalPrice;
+      shipping = Math.max(
+        shipping,
+        getRetailShippingCharge(product)
+      );
 
       validatedItems.push({
         productId: product.id,
@@ -295,8 +316,10 @@ export async function POST(request: Request) {
     }
 
     subtotal = Number(subtotal.toFixed(2));
+    shipping = Number(shipping.toFixed(2));
+    const total = Number((subtotal + shipping).toFixed(2));
 
-    if (subtotal < 1) {
+    if (total < 1) {
       return NextResponse.json(
         { error: "Order amount is invalid." },
         { status: 400 }
@@ -326,17 +349,17 @@ export async function POST(request: Request) {
     const receipt = `limra_${crypto.randomUUID()}`;
 
     const razorpayOrder = await razorpay.orders.create({
-      amount: Math.round(subtotal * 100),
+      amount: Math.round(total * 100),
       currency: "INR",
       receipt,
     });
 
     /*
-     * Store the Limra order.
-     *
-     * The Razorpay order ID is included in notes so the
-     * verification RPC can securely locate this exact order.
-     */
+ * Store the Limra order.
+ *
+ * The Razorpay order ID is stored directly on the order
+ * so payment verification can locate this exact order.
+ */
     const { data: limraOrder, error: orderError } = await supabase
       .from("orders")
       .insert({
@@ -345,9 +368,9 @@ export async function POST(request: Request) {
         status: "pending",
         payment_status: "pending",
         subtotal,
-        shipping_amount: 0,
+        shipping_amount: shipping,
         discount_amount: 0,
-        total_amount: subtotal,
+        total_amount: total,
         currency: "INR",
         customer_name: customerName.trim(),
         customer_phone: customerPhone.trim(),

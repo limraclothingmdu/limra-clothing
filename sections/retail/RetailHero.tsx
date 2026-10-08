@@ -26,15 +26,17 @@ export default function RetailHero() {
           </p>
 
           <h1 className="mt-5 font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
-            Ready-Made Clothing
+            Retail Clothing in Madurai
             <span className="block text-[#C89B3C]">
-              for Everyday Style
+              Shirts, Pants, T-Shirts & More
             </span>
           </h1>
 
           <p className="mt-6 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
-            Explore shirts, pants, T-shirts and other ready-made
-            clothing products available from Limra Clothing in Madurai.
+            Shop ready-made clothing from Limra Clothing in Madurai,
+            including shirts, pants, T-shirts, ladies wear and other
+            quality garments for everyday wear. We serve retail
+            customers across Tamil Nadu.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">

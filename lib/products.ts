@@ -20,6 +20,9 @@ export type Product = {
   retail_enabled?: boolean;
   retail_price?: number | null;
   retail_offer_price?: number | null;
+  retail_shipping_charge?: number | string | null;
+  retail_free_shipping?: boolean;
+  retail_stock?: number | string | null;
 
   // Retail information
   sku?: string | null;
@@ -42,6 +45,9 @@ const productSelect = `
   retail_enabled,
   retail_price,
   retail_offer_price,
+  retail_shipping_charge,
+  retail_free_shipping,
+  retail_stock,
   sku,
   is_featured
 `;
@@ -57,6 +63,24 @@ export async function getProducts(): Promise<Product[]> {
 
   if (error) {
     console.error("Failed to fetch products:", error);
+    return [];
+  }
+
+  return data ?? [];
+}
+export async function getRetailProducts(): Promise<Product[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("products")
+    .select(productSelect)
+    .eq("is_active", true)
+    .eq("retail_enabled", true)
+    .order("is_featured", { ascending: false })
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Failed to fetch retail products:", error);
     return [];
   }
 

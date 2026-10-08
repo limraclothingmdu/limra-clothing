@@ -22,6 +22,8 @@ type RetailProductPurchaseProps = {
   sizes: RetailSize[];
   price: number | null;
   offerPrice: number | null;
+  shippingCharge: number;
+  retailStock: number;
 };
 
 export default function RetailProductPurchase({
@@ -33,6 +35,8 @@ export default function RetailProductPurchase({
   sizes,
   price,
   offerPrice,
+  shippingCharge,
+  retailStock,
 }: RetailProductPurchaseProps) {
   const router = useRouter();
 
@@ -43,6 +47,9 @@ export default function RetailProductPurchase({
   const selectedSize = sizes.find(
     (size) => size.id === selectedSizeId
   );
+  const availableStock = selectedSize
+    ? Math.min(selectedSize.stock_quantity, retailStock)
+    : 0;
 
   const unitPrice = offerPrice ?? price;
 
@@ -61,7 +68,7 @@ export default function RetailProductPurchase({
     }
 
     setQuantity((current) =>
-      Math.min(current + 1, selectedSize.stock_quantity)
+      Math.min(current + 1, availableStock)
     );
   }
 
@@ -70,7 +77,7 @@ export default function RetailProductPurchase({
       return;
     }
 
-    if (selectedSize.stock_quantity <= 0) {
+    if (availableStock <= 0) {
       return;
     }
 
@@ -90,7 +97,8 @@ export default function RetailProductPurchase({
       sku,
       quantity,
       unitPrice,
-      maxStock: selectedSize.stock_quantity,
+      shippingCharge,
+      maxStock: availableStock,
     });
 
     router.push("/retail/cart");
@@ -107,7 +115,7 @@ export default function RetailProductPurchase({
 
           {selectedSize && (
             <span className="text-sm text-[#222]/55">
-              {selectedSize.stock_quantity} available
+              {availableStock} available
             </span>
           )}
         </div>
@@ -115,7 +123,8 @@ export default function RetailProductPurchase({
         <div className="mt-4 flex flex-wrap gap-3">
           {sizes.map((size) => {
             const isSelected = selectedSizeId === size.id;
-            const isOutOfStock = size.stock_quantity <= 0;
+            const isOutOfStock =
+              Math.min(size.stock_quantity, retailStock) <= 0;
 
             return (
               <button
@@ -163,7 +172,7 @@ export default function RetailProductPurchase({
             onClick={increaseQuantity}
             disabled={
               !selectedSize ||
-              quantity >= selectedSize.stock_quantity
+              quantity >= availableStock
             }
             className="flex h-12 w-12 items-center justify-center text-[#081A4A] transition hover:bg-[#F7F5F0] disabled:cursor-not-allowed disabled:opacity-40"
           >
@@ -179,7 +188,7 @@ export default function RetailProductPurchase({
         disabled={
           adding ||
           !selectedSize ||
-          selectedSize.stock_quantity <= 0 ||
+          availableStock <= 0 ||
           unitPrice === null
         }
         className="mt-7 flex w-full items-center justify-center gap-3 rounded-xl bg-[#081A4A] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#0d286b] disabled:cursor-not-allowed disabled:opacity-50"
@@ -190,7 +199,7 @@ export default function RetailProductPurchase({
           ? "Adding to Cart..."
           : !selectedSize
             ? "Select a Size"
-            : selectedSize.stock_quantity <= 0
+            : availableStock <= 0
               ? "Out of Stock"
               : "Add to Cart"}
       </button>

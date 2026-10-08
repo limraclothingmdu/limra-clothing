@@ -203,6 +203,15 @@ const supabase = await createClient();
         ? null
         : Number(body.retail_offer_price);
 
+    const retailShippingCharge = Number(
+      body.retail_shipping_charge ?? 0
+    );
+    const retailFreeShipping =
+      typeof body.retail_free_shipping === "boolean"
+        ? body.retail_free_shipping
+        : false;
+    const retailStock = Number(body.retail_stock ?? 0);
+
     const sku =
       typeof body.sku === "string" &&
       body.sku.trim()
@@ -339,6 +348,30 @@ const supabase = await createClient();
           error:
             "Retail offer price must be lower than the retail price.",
         },
+        { status: 400 }
+      );
+    }
+
+    if (
+      retailEnabled &&
+      (retailPrice === null ||
+        !Number.isFinite(retailPrice) ||
+        Number(retailPrice) <= 0)
+    ) {
+      return NextResponse.json(
+        { error: "Retail price must be greater than zero." },
+        { status: 400 }
+      );
+    }
+    if (!Number.isFinite(retailShippingCharge) || retailShippingCharge < 0) {
+      return NextResponse.json(
+        { error: "Shipping charge must be zero or greater." },
+        { status: 400 }
+      );
+    }
+    if (!Number.isInteger(retailStock) || retailStock < 0) {
+      return NextResponse.json(
+        { error: "Retail stock must be a non-negative whole number." },
         { status: 400 }
       );
     }
@@ -586,6 +619,14 @@ const supabase = await createClient();
         retail_offer_price: retailEnabled
           ? retailOfferPrice
           : null,
+        retail_shipping_charge:
+          retailEnabled && !retailFreeShipping
+            ? retailShippingCharge
+            : 0,
+        retail_free_shipping: retailEnabled
+          ? retailFreeShipping
+          : false,
+        retail_stock: retailEnabled ? retailStock : 0,
         sku: retailEnabled
           ? sku
           : null,

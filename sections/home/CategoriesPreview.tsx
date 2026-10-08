@@ -25,8 +25,8 @@ export default async function CategoriesPreview() {
             </h2>
 
             <p className="mt-4 max-w-xl text-sm leading-7 text-[#222]/60">
-              Explore our ready-made clothing categories and discover
-              products for your wholesale business.
+              Explore ready-made clothing categories from Limra Clothing,
+              including collections for retail customers and wholesale buyers.
             </p>
           </div>
 
@@ -65,7 +65,7 @@ export default async function CategoriesPreview() {
 
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#C89B3C]">
-                    Collection
+                    Clothing Collection
                   </p>
 
                   <h3 className="mt-2 font-serif text-2xl font-semibold text-white">
@@ -73,7 +73,7 @@ export default async function CategoriesPreview() {
                   </h3>
 
                   <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white/80">
-                    Explore
+                    Explore Collection
                     <ArrowUpRight className="h-4 w-4 text-[#C89B3C] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </span>
                 </div>
@@ -85,11 +85,11 @@ export default async function CategoriesPreview() {
             <Layers3 className="mx-auto h-10 w-10 text-[#081A4A]/20" />
 
             <h3 className="mt-4 font-serif text-2xl font-semibold text-[#081A4A]">
-              Categories Coming Soon
+              Clothing Categories Coming Soon
             </h3>
 
             <p className="mt-2 text-sm text-[#222]/55">
-              Our clothing categories will be available here soon.
+              Our ready-made clothing categories will be available here soon.
             </p>
           </div>
         )}

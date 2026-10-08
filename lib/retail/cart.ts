@@ -11,6 +11,7 @@ export type RetailCartItem = {
 
   quantity: number;
   unitPrice: number;
+  shippingCharge?: number;
 
   maxStock: number;
 };
@@ -85,6 +86,7 @@ export function addToCart(item: RetailCartItem) {
 
     existingItem.maxStock = item.maxStock;
     existingItem.unitPrice = item.unitPrice;
+    existingItem.shippingCharge = item.shippingCharge;
     existingItem.productName = item.productName;
     existingItem.image = item.image;
     existingItem.sku = item.sku;

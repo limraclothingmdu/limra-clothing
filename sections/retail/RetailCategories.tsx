@@ -15,15 +15,17 @@ export default async function RetailCategories() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#C89B3C]">
-            Our Clothing
+            Retail Collections
           </p>
 
           <h2 className="mt-3 font-serif text-4xl font-semibold text-[#081A4A]">
-            Explore Our Categories
+            Explore Our Clothing Categories
           </h2>
 
           <p className="mt-4 text-sm leading-7 text-[#222]/60">
-            Browse the clothing categories available from Limra Clothing.
+            Explore ready-made clothing categories available for retail
+            customers at Limra Clothing in Madurai, with collections
+            suitable for customers across Tamil Nadu.
           </p>
         </div>
 

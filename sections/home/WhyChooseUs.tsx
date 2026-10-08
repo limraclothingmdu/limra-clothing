@@ -8,30 +8,30 @@ import {
 const benefits = [
   {
     number: "01",
-    title: "Wholesale & Retail",
+    title: "Retail & Wholesale",
     description:
-      "We serve both individual retail customers and wholesale buyers with clothing requirements.",
+      "Shop ready-made clothing online or connect with Limra Clothing for wholesale garment requirements.",
     icon: ShoppingBag,
   },
   {
     number: "02",
-    title: "Ready-Made Garments",
+    title: "Ready-Made Collection",
     description:
-      "Explore shirts, pants, T-shirts, boys' wear and other ready-made clothing categories.",
+      "Explore shirts, T-shirts, trousers, ladies wear and other ready-made clothing categories.",
     icon: Package,
   },
   {
     number: "03",
     title: "Tamil Nadu Distribution",
     description:
-      "Based in Madurai, we distribute clothing products to customers and businesses across Tamil Nadu.",
+      "Based in Madurai, we serve customers and businesses with clothing distribution across Tamil Nadu.",
     icon: Truck,
   },
   {
     number: "04",
     title: "Madurai Based",
     description:
-      "Visit our business in Solaiyalagupuram, Madurai for your clothing and textile requirements.",
+      "Visit Limra Clothing on Solaiyalagupuram Main Road, Madurai for your clothing requirements.",
     icon: MapPin,
   },
 ];
@@ -53,13 +53,13 @@ export default function WhyChooseUs() {
             id="why-choose-heading"
             className="mt-3 font-serif text-4xl font-semibold leading-tight text-[#081A4A] sm:text-5xl"
           >
-            Clothing for Retail & Wholesale
+            Quality Clothing from Madurai
           </h2>
 
           <p className="mt-5 text-sm leading-7 text-[#222]/60 sm:text-base">
-            From individual clothing needs to wholesale requirements,
-            Limra Clothing serves customers from Madurai and distributes
-            across Tamil Nadu.
+            Whether you are shopping for yourself or sourcing garments for
+            your business, Limra Clothing provides ready-made clothing with
+            retail and wholesale options.
           </p>
         </div>
 

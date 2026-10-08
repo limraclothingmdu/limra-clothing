@@ -73,6 +73,9 @@ const [offerName, setOfferName] = useState("");
   const [retailEnabled, setRetailEnabled] = useState(false);
 const [retailPrice, setRetailPrice] = useState("");
 const [retailOfferPrice, setRetailOfferPrice] = useState("");
+const [retailShippingCharge, setRetailShippingCharge] = useState("0");
+const [retailFreeShipping, setRetailFreeShipping] = useState(false);
+const [retailStock, setRetailStock] = useState("0");
   const [sizeStocks, setSizeStocks] = useState<Record<string, string>>({});
   const updateSizeStock = (sizeId: string, value: string) => {
   setSizeStocks((prev) => ({
@@ -215,10 +218,17 @@ if (
       }
 if (
   retailEnabled &&
-  (!retailPrice || Number(retailPrice) < 0)
+  (!retailPrice || Number(retailPrice) <= 0)
 ) {
   setError("Retail price is required when retail selling is enabled.");
   return;
+}
+
+if (!Number.isFinite(Number(retailShippingCharge)) || Number(retailShippingCharge) < 0) {
+  throw new Error("Shipping charge must be zero or greater.");
+}
+if (!Number.isInteger(Number(retailStock)) || Number(retailStock) < 0) {
+  throw new Error("Retail stock must be a non-negative whole number.");
 }
 
 if (
@@ -300,6 +310,15 @@ if (retailEnabled) {
         retailEnabled && retailOfferPrice.trim()
           ? Number(retailOfferPrice)
           : null,
+      retail_shipping_charge: retailEnabled && !retailFreeShipping
+        ? Number(retailShippingCharge)
+        : 0,
+      retail_free_shipping: retailEnabled
+        ? retailFreeShipping
+        : false,
+      retail_stock: retailEnabled
+        ? Number(retailStock)
+        : 0,
 
 
       sku:
@@ -1016,6 +1035,44 @@ router.refresh();
               setRetailOfferPrice(e.target.value)
             }
             placeholder="e.g. 699"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#081A4A]"
+          />
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Shipping Charge
+          </label>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            value={retailShippingCharge}
+            onChange={(e) => setRetailShippingCharge(e.target.value)}
+            disabled={retailFreeShipping}
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#081A4A] disabled:bg-gray-100"
+          />
+          <label className="mt-3 flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={retailFreeShipping}
+              onChange={(e) => setRetailFreeShipping(e.target.checked)}
+              className="h-4 w-4 rounded border-gray-300"
+            />
+            Free Shipping
+          </label>
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Retail Stock
+          </label>
+          <input
+            type="number"
+            min="0"
+            step="1"
+            value={retailStock}
+            onChange={(e) => setRetailStock(e.target.value)}
             className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#081A4A]"
           />
         </div>

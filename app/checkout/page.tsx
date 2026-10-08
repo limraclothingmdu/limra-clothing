@@ -104,6 +104,10 @@ useEffect(() => {
     0
   );
 
+  const shipping = items.reduce((highest, item) =>
+    Math.max(highest, Number(item.shippingCharge ?? 0)), 0);
+  const total = subtotal + shipping;
+
   /*
    * ------------------------------------------------------------
    * Authentication loading
@@ -375,7 +379,7 @@ useEffect(() => {
               </span>
 
               <span className="font-semibold text-green-700">
-                Free
+              {shipping === 0 ? "Free" : formatPrice(shipping)}
               </span>
             </div>
 
@@ -387,13 +391,14 @@ useEffect(() => {
               </span>
 
               <span className="text-2xl font-bold text-[#081A4A]">
-                {formatPrice(subtotal)}
+                {formatPrice(total)}
               </span>
             </div>
 
             <RazorpayCheckout
               items={items}
               subtotal={subtotal}
+              shipping={shipping}
               customerName={customerName}
               customerPhone={customerPhone}
               addressLine1={addressLine1}

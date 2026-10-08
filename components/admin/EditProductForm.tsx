@@ -36,6 +36,9 @@ type Product = {
   retail_enabled?: boolean;
   retail_price?: number | null;
   retail_offer_price?: number | null;
+  retail_shipping_charge: number | string | null;
+  retail_free_shipping: boolean;
+  retail_stock: number | string | null;
   sku?: string | null;
   is_featured?: boolean;
 };
@@ -164,6 +167,14 @@ export default function EditProductForm({
   const [isFeatured, setIsFeatured] = useState(
     product.is_featured ?? false
   );
+  const [retailShippingCharge, setRetailShippingCharge] =
+  useState(product.retail_shipping_charge?.toString() ?? "0");
+
+const [retailFreeShipping, setRetailFreeShipping] =
+  useState(product.retail_free_shipping ?? false);
+
+const [retailStock, setRetailStock] =
+  useState(product.retail_stock?.toString() ?? "0");
 
   // --------------------------------------------------
   // Size-wise Stock
@@ -320,6 +331,10 @@ export default function EditProductForm({
         retailOfferPrice
           ? Number(retailOfferPrice)
           : null;
+      const numericRetailShippingCharge = Number(
+        retailShippingCharge || 0
+      );
+      const numericRetailStock = Number(retailStock || 0);
 
       if (retailEnabled) {
         if (
@@ -327,11 +342,23 @@ export default function EditProductForm({
           (!Number.isFinite(
             numericRetailPrice
           ) ||
-            numericRetailPrice < 0)
+            numericRetailPrice <= 0)
         ) {
           throw new Error(
             "Retail price cannot be negative."
           );
+        }
+        if (
+          !Number.isFinite(numericRetailShippingCharge) ||
+          numericRetailShippingCharge < 0
+        ) {
+          throw new Error("Shipping charge must be zero or greater.");
+        }
+        if (
+          !Number.isInteger(numericRetailStock) ||
+          numericRetailStock < 0
+        ) {
+          throw new Error("Retail stock must be a whole number greater than or equal to 0.");
         }
 
         if (
@@ -452,6 +479,17 @@ export default function EditProductForm({
             retail_offer_price: retailEnabled
               ? numericRetailOfferPrice
               : null,
+            retail_shipping_charge: retailEnabled
+              ? retailFreeShipping
+                ? 0
+                : numericRetailShippingCharge
+              : 0,
+            retail_free_shipping: retailEnabled
+              ? retailFreeShipping
+              : false,
+            retail_stock: retailEnabled
+              ? numericRetailStock
+              : 0,
             sku:
               retailEnabled &&
               sku.trim()
@@ -887,6 +925,52 @@ export default function EditProductForm({
                   }
                   placeholder="699"
                   className="w-full rounded-xl border border-[#081A4A]/15 px-4 py-3 outline-none transition focus:border-[#C89B3C] focus:ring-2 focus:ring-[#C89B3C]/10"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="retailShippingCharge"
+                  className="mb-2 block text-sm font-semibold text-[#081A4A]"
+                >
+                  Shipping Charge (₹)
+                </label>
+                <input
+                  id="retailShippingCharge"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={retailShippingCharge}
+                  onChange={(event) => setRetailShippingCharge(event.target.value)}
+                  disabled={retailFreeShipping}
+                  className="w-full rounded-xl border border-[#081A4A]/15 px-4 py-3 outline-none disabled:bg-gray-100"
+                />
+                <label className="mt-3 flex items-center gap-2 text-sm font-semibold text-[#081A4A]">
+                  <input
+                    type="checkbox"
+                    checked={retailFreeShipping}
+                    onChange={(event) => setRetailFreeShipping(event.target.checked)}
+                    className="h-4 w-4 accent-[#081A4A]"
+                  />
+                  Free Shipping
+                </label>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="retailStock"
+                  className="mb-2 block text-sm font-semibold text-[#081A4A]"
+                >
+                  Retail Stock
+                </label>
+                <input
+                  id="retailStock"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={retailStock}
+                  onChange={(event) => setRetailStock(event.target.value)}
+                  className="w-full rounded-xl border border-[#081A4A]/15 px-4 py-3 outline-none"
                 />
               </div>
 

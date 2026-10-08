@@ -51,6 +51,7 @@ function formatPrice(value: number) {
 type RazorpayCheckoutProps = {
   items: RetailCartItem[];
   subtotal: number;
+  shipping: number;
   customerName: string;
   customerPhone: string;
   addressLine1: string;
@@ -63,6 +64,7 @@ type RazorpayCheckoutProps = {
 export default function RazorpayCheckout({
   items,
   subtotal,
+  shipping,
   customerName,
   customerPhone,
   addressLine1,
@@ -275,7 +277,7 @@ export default function RazorpayCheckout({
           ? "Payment Complete"
           : isLoading
             ? "Starting Secure Checkout..."
-            : `Pay ${formatPrice(subtotal)}`}
+            : `Pay ${formatPrice(subtotal + shipping)}`}
       </button>
 
       {message && (

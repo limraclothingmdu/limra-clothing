@@ -8,7 +8,7 @@ export default function RetailCTA() {
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="rounded-[2rem] bg-[#081A4A] px-6 py-12 text-center sm:px-12 sm:py-16">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#C89B3C]">
-            Visit Limra Clothing
+            Retail Clothing in Madurai
           </p>
 
           <h2 className="mx-auto mt-4 max-w-2xl font-serif text-3xl font-semibold text-white sm:text-4xl">
@@ -16,8 +16,9 @@ export default function RetailCTA() {
           </h2>
 
           <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-white/60">
-            Contact us for product availability and current clothing
-            requirements.
+            Contact Limra Clothing for retail product availability,
+            current collections and clothing requirements. Serving
+            customers in Madurai and across Tamil Nadu.
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">

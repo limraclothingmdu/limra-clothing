@@ -47,6 +47,9 @@ export default async function EditProductPage({
       retail_enabled,
       retail_price,
       retail_offer_price,
+      retail_shipping_charge,
+      retail_free_shipping,
+      retail_stock,
       sku,
       is_featured
     `)

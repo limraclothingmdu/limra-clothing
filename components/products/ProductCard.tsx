@@ -27,6 +27,12 @@ export default function ProductCard({
       ? product.retail_offer_price ?? null
       : product.offer_price;
 
+  const shipping =
+    priceType === "retail" &&
+    product.retail_free_shipping
+      ? 0
+      : Number(product.retail_shipping_charge ?? 0);
+
   return (
     <Link
       href={productHref}
@@ -50,6 +56,7 @@ export default function ProductCard({
           <div className="flex h-full items-center justify-center px-4 text-center text-sm text-[#222]/40">
             No image available
           </div>
+
         )}
       </div>
 
@@ -85,6 +92,14 @@ export default function ProductCard({
                   ₹{displayPrice}
                 </span>
               </div>
+
+              {priceType === "retail" && (
+                <p className="mt-2 text-xs text-[#222]/55">
+                  {shipping === 0
+                    ? "Free Shipping"
+                    : `Shipping: ₹${shipping}`}
+                </p>
+              )}
             </>
           ) : displayPrice !== null ? (
             <span className="text-base font-bold text-[#081A4A] sm:text-lg">

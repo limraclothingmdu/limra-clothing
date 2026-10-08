@@ -495,6 +495,12 @@ export default async function RetailProductPage({
                         </span>
                       )}
 
+                      <p className="mt-3 text-sm font-semibold text-[#222]/65">
+                        {product.retail_free_shipping
+                          ? "Free Shipping"
+                          : `Shipping: ₹${Number(product.retail_shipping_charge ?? 0)}`}
+                      </p>
+
                       <div className="flex items-center gap-3">
                         <span className="text-2xl font-bold text-[#081A4A]">
                           ₹
@@ -599,6 +605,12 @@ export default async function RetailProductPage({
   sizes={sizes}
   price={product.retail_price ?? null}
   offerPrice={product.retail_offer_price ?? null}
+  shippingCharge={
+    product.retail_free_shipping
+      ? 0
+      : Number(product.retail_shipping_charge ?? 0)
+  }
+  retailStock={Number(product.retail_stock ?? 0)}
 />
 
             {/* Stock Summary */}

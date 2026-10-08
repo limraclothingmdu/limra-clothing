@@ -20,7 +20,10 @@ export const metadata: Metadata = {
     "readymade dress shop in madurai",
     "budget mens wear shop madurai",
     "gents dress collection madurai",
-    "boys wear store near me",
+    "retail clothing Madurai",
+"ladies wear Madurai",
+"ready made clothes Madurai",
+"clothing shop Madurai",
   ],
   alternates: {
     canonical: `${siteConfig.url}/retail`,

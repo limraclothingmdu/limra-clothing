@@ -78,6 +78,10 @@ useEffect(() => {
       total + item.unitPrice * item.quantity,
     0
   );
+  const shipping = items.reduce(
+    (highest, item) => Math.max(highest, Number(item.shippingCharge ?? 0)),
+    0
+  );
 
   if (!loaded) {
     return (
@@ -261,13 +265,20 @@ useEffect(() => {
 
         <div className="my-6 border-t border-[#081A4A]/10" />
 
+        <div className="mb-4 flex items-center justify-between text-sm">
+          <span className="text-[#222]/60">Shipping</span>
+          <span className="font-semibold text-green-700">
+            {shipping === 0 ? "Free" : formatPrice(shipping)}
+          </span>
+        </div>
+
         <div className="flex items-center justify-between">
           <span className="font-bold text-[#081A4A]">
             Total
           </span>
 
           <span className="text-2xl font-bold text-[#081A4A]">
-            {formatPrice(subtotal)}
+            {formatPrice(subtotal + shipping)}
           </span>
         </div>
 

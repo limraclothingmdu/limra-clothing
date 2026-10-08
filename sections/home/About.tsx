@@ -4,21 +4,21 @@ import { ArrowRight, MapPin, PackageCheck, Store } from "lucide-react";
 const highlights = [
   {
     icon: PackageCheck,
-    title: "Wholesale Focus",
+    title: "Retail & Wholesale",
     description:
-      "A clothing supply solution designed around the needs of wholesale buyers and retailers.",
+      "Shop ready-made clothing for everyday wear or connect with us for wholesale garment requirements.",
   },
   {
     icon: Store,
     title: "Ready-Made Collection",
     description:
-      "Explore ready-made clothing categories suitable for different business requirements.",
+      "Explore shirts, T-shirts, trousers, ladies wear and other ready-made clothing categories.",
   },
   {
     icon: MapPin,
     title: "Madurai Based",
     description:
-      "Based in Madurai and serving clothing buyers and businesses across Tamil Nadu.",
+      "Based in Madurai and serving retail customers, retailers and clothing businesses across Tamil Nadu.",
   },
 ];
 
@@ -33,21 +33,21 @@ export default function About() {
 
             <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
               <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#C89B3C]">
-                About Us
+                About Limra Clothing
               </span>
 
               <h2 className="mt-4 font-serif text-4xl font-semibold text-white sm:text-5xl">
-                Built Around
+                Quality Clothing
                 <span className="block text-[#C89B3C]">
-                  Better Business
+                  From Madurai
                 </span>
               </h2>
 
               <div className="mt-7 h-px w-20 bg-[#C89B3C]" />
 
               <p className="mt-6 max-w-sm text-sm leading-7 text-white/60">
-                Quality, value, and dependable service for wholesale clothing
-                buyers.
+                Quality, value and dependable service for retail customers and
+                wholesale clothing buyers.
               </p>
             </div>
 
@@ -75,24 +75,25 @@ export default function About() {
           </span>
 
           <h2 className="mt-4 max-w-2xl font-serif text-4xl font-semibold leading-tight text-[#081A4A] sm:text-5xl">
-            Your Wholesale Clothing Partner in Madurai
+            Your Clothing Partner in Madurai
           </h2>
 
           <p className="mt-6 max-w-2xl text-base leading-8 text-[#222]/65">
-            Limra Clothing is a wholesale and retail textile business based in
-            Madurai, offering shirts, pants, T-shirts and other ready-made
-            garments.
+            Limra Clothing is a wholesale and retail clothing business based
+            in Madurai, Tamil Nadu, offering ready-made shirts, T-shirts,
+            trousers, ladies wear and other clothing products.
           </p>
 
           <p className="mt-4 max-w-2xl text-base leading-8 text-[#222]/65">
-            We serve individual retail customers and wholesale buyers, with
-            clothing distribution across Tamil Nadu.
+            Our retail collection makes it easy for individual customers to
+            discover clothing online, view prices and place orders through our
+            secure checkout. We also serve retailers and businesses looking
+            for wholesale garment supply.
           </p>
 
           <p className="mt-4 max-w-2xl text-base leading-8 text-[#222]/65">
-            Our approach is simple: make it easier for businesses to discover
-            the right clothing collections and build reliable wholesale
-            relationships.
+            From our base in Madurai, we serve customers and distribute
+            ready-made clothing products across Tamil Nadu.
           </p>
 
           <div className="mt-9 grid gap-5 sm:grid-cols-3">
@@ -125,7 +126,6 @@ export default function About() {
             className="group mt-9 inline-flex items-center gap-2 text-sm font-bold text-[#081A4A]"
           >
             Learn More About Us
-
             <ArrowRight className="h-4 w-4 text-[#C89B3C] transition-transform group-hover:translate-x-1" />
           </Link>
         </div>

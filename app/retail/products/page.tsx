@@ -26,6 +26,9 @@ type RetailProduct = {
   retail_enabled: boolean;
   retail_price: number | null;
   retail_offer_price: number | null;
+  retail_shipping_charge: number | string | null;
+  retail_free_shipping: boolean;
+  retail_stock: number | string | null;
   sku: string | null;
   is_featured: boolean;
 };
@@ -80,12 +83,16 @@ export default async function RetailProductsPage() {
         retail_enabled,
         retail_price,
         retail_offer_price,
+        retail_shipping_charge,
+        retail_free_shipping,
+        retail_stock,
         sku,
         is_featured
       `
     )
     .eq("is_active", true)
     .eq("retail_enabled", true)
+    .gt("retail_stock", 0)
     .order("is_featured", {
       ascending: false,
     })
@@ -203,6 +210,8 @@ export default async function RetailProductsPage() {
       price: product.retail_price,
       offer_name: product.offer_name,
       offer_price: product.retail_offer_price,
+      retail_shipping_charge: product.retail_shipping_charge,
+      retail_free_shipping: product.retail_free_shipping,
     }}
   />
 ))}
