@@ -3,44 +3,44 @@ import { ArrowUpRight } from "lucide-react";
 
 const faqs = [
   {
-    question: "Does Limra Clothing provide wholesale clothing in Madurai?",
-    answer:
-      "Yes. Limra Clothing is a Madurai-based wholesale and retail clothing business supplying ready-made garments for retailers, businesses and individual customers.",
-  },
-  {
-    question: "What clothing products does Limra Clothing offer?",
-    answer:
-      "Our collection includes shirts, T-shirts, trousers, ladies wear and other ready-made clothing products. New categories and products are added as they become available.",
-  },
-  {
-    question: "Can I buy clothing from Limra Clothing online?",
-    answer:
-      "Yes. Selected retail products are available through our online retail collection, where customers can view product prices, add items to their cart and place orders through secure checkout.",
-  },
-  {
-    question: "Does Limra Clothing supply retailers and businesses?",
-    answer:
-      "Yes. We serve retailers and clothing businesses looking for ready-made garments and wholesale clothing supply from Madurai.",
-  },
-  {
-    question: "Does Limra Clothing distribute clothing across Tamil Nadu?",
-    answer:
-      "Yes. Limra Clothing is based in Madurai and serves customers and businesses across Tamil Nadu.",
-  },
-  {
-    question: "How can I enquire about wholesale pricing?",
-    answer:
-      "You can contact Limra Clothing through WhatsApp or phone to enquire about product availability, wholesale requirements and pricing.",
-  },
-  {
     question: "Where is Limra Clothing located?",
     answer:
-      "Limra Clothing is located on Solaiyalagupuram Main Road, Madurai, Tamil Nadu.",
+      "Limra Clothing is a wholesale and retail clothing business located on Solaiyalagupuram Main Road, Madurai, Tamil Nadu 625011. Contact us for directions and product enquiries.",
   },
   {
-    question: "Does Limra Clothing offer ladies wear?",
+    question: "Does Limra Clothing offer wholesale clothing in Madurai?",
     answer:
-      "Yes. Ladies wear and other ready-made clothing collections can be available through the Limra Clothing retail and product collections.",
+      "Yes. Limra Clothing serves wholesale and retail customers in Madurai, offering ready-made garments for retailers, clothing businesses and individual buyers. Contact us to discuss bulk requirements and current product availability.",
+  },
+  {
+    question: "What types of clothing does Limra Clothing sell?",
+    answer:
+      "Limra Clothing offers ready-made garments, including shirts, T-shirts, trousers, ladies wear and other clothing categories. Product availability may vary, so contact us or browse our current product collection.",
+  },
+  {
+    question: "Does Limra Clothing supply garments across Tamil Nadu?",
+    answer:
+      "Limra Clothing is based in Madurai and serves customers and businesses across Tamil Nadu. Contact us to confirm distribution arrangements for your location and order requirements.",
+  },
+  {
+    question: "How can retailers enquire about wholesale garment prices?",
+    answer:
+      "Retailers and business buyers can contact Limra Clothing by phone or WhatsApp to enquire about current products, bulk quantities, wholesale pricing and order arrangements.",
+  },
+  {
+    question: "Can I purchase clothing online from Limra Clothing?",
+    answer:
+      "Yes. Selected products are available through the Limra Clothing online retail collection. Browse product details and prices, add available items to your cart, and follow the checkout process to place an order.",
+  },
+  {
+    question: "Does Limra Clothing sell ladies wear and kurtis?",
+    answer:
+      "Limra Clothing offers ladies wear and related ready-made garment collections when available. Browse the current product listings or contact us to check specific styles, sizes and availability.",
+  },
+  {
+    question: "How do I contact Limra Clothing for a clothing order?",
+    answer:
+      "You can contact Limra Clothing through the website's contact page or available phone and WhatsApp options. Share the products you need, your quantity and your location so we can discuss availability and order arrangements.",
   },
 ];
 
@@ -60,13 +60,13 @@ export default function FAQ() {
             id="faq-heading"
             className="mt-3 font-serif text-4xl font-semibold leading-tight text-[#081A4A] sm:text-5xl"
           >
-            Questions About Limra Clothing
+            Limra Clothing FAQs
           </h2>
 
           <p className="mt-5 text-sm leading-7 text-[#222]/60 sm:text-base">
-            Find answers about our ready-made clothing products, retail
-            shopping, wholesale garment supply and distribution across Tamil
-            Nadu.
+            Learn about wholesale garments in Madurai, our ready-made clothing
+            collections, online retail shopping and distribution enquiries
+            across Tamil Nadu.
           </p>
         </div>
 

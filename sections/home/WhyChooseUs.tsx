@@ -8,30 +8,30 @@ import {
 const benefits = [
   {
     number: "01",
-    title: "Retail & Wholesale",
+    title: "Wholesale & Retail Clothing",
     description:
-      "Shop ready-made clothing online or connect with Limra Clothing for wholesale garment requirements.",
+      "Explore ready-made garments for personal shopping or contact us to discuss wholesale quantities and business requirements.",
     icon: ShoppingBag,
   },
   {
     number: "02",
-    title: "Ready-Made Collection",
+    title: "Ready-Made Garment Collection",
     description:
-      "Explore shirts, T-shirts, trousers, ladies wear and other ready-made clothing categories.",
+      "Browse clothing categories including shirts, T-shirts, trousers, ladies wear and other garments, subject to current availability.",
     icon: Package,
   },
   {
     number: "03",
-    title: "Tamil Nadu Distribution",
+    title: "Serving Tamil Nadu",
     description:
-      "Based in Madurai, we serve customers and businesses with clothing distribution across Tamil Nadu.",
+      "Based in Madurai, Limra Clothing serves customers and business buyers across Tamil Nadu. Contact us to confirm arrangements for your location.",
     icon: Truck,
   },
   {
     number: "04",
-    title: "Madurai Based",
+    title: "Located in Madurai",
     description:
-      "Visit Limra Clothing on Solaiyalagupuram Main Road, Madurai for your clothing requirements.",
+      "Find Limra Clothing on Solaiyalagupuram Main Road, Madurai, Tamil Nadu 625011, for clothing and wholesale enquiries.",
     icon: MapPin,
   },
 ];
@@ -43,7 +43,6 @@ export default function WhyChooseUs() {
       className="bg-white py-20 sm:py-24"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Heading */}
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#C89B3C]">
             Why Limra Clothing
@@ -53,17 +52,17 @@ export default function WhyChooseUs() {
             id="why-choose-heading"
             className="mt-3 font-serif text-4xl font-semibold leading-tight text-[#081A4A] sm:text-5xl"
           >
-            Quality Clothing from Madurai
+            Your Clothing Partner in Madurai
           </h2>
 
           <p className="mt-5 text-sm leading-7 text-[#222]/60 sm:text-base">
-            Whether you are shopping for yourself or sourcing garments for
-            your business, Limra Clothing provides ready-made clothing with
-            retail and wholesale options.
+            Limra Clothing brings wholesale and retail garment options
+            together in Madurai, with ready-made clothing collections and
+            distribution enquiries for customers and businesses across
+            Tamil Nadu.
           </p>
         </div>
 
-        {/* Benefits */}
         <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-[#081A4A]/10 bg-[#081A4A]/10 sm:grid-cols-2 lg:grid-cols-4">
           {benefits.map((benefit) => {
             const Icon = benefit.icon;
@@ -75,10 +74,16 @@ export default function WhyChooseUs() {
               >
                 <div className="flex items-start justify-between">
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#081A4A]">
-                    <Icon className="h-5 w-5 text-[#C89B3C]" />
+                    <Icon
+                      aria-hidden="true"
+                      className="h-5 w-5 text-[#C89B3C]"
+                    />
                   </div>
 
-                  <span className="text-xs font-bold tracking-[0.15em] text-[#081A4A]/20">
+                  <span
+                    aria-hidden="true"
+                    className="text-xs font-bold tracking-[0.15em] text-[#081A4A]/20"
+                  >
                     {benefit.number}
                   </span>
                 </div>
