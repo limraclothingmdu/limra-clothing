@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 
 export type Product = {
   id: string;
@@ -120,10 +120,7 @@ export async function getProductsByCategory(
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(
-      "Failed to fetch category products:",
-      error
-    );
+    console.error("Failed to fetch category products:", error);
     return [];
   }
 
