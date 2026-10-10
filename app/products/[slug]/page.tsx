@@ -248,11 +248,8 @@ const productSchema = {
   "@id": `${productUrl}/#product`,
 
   name: product.name,
-
   description: product.description,
-
   image: [imageUrl],
-
   url: productUrl,
 
   category: category?.name ?? product.category_id,
@@ -268,19 +265,27 @@ const productSchema = {
     url: siteConfig.url,
   },
 
-  ...(sellingPrice !== null
+  ...(sellingPrice != null
     ? {
         offers: {
           "@type": "Offer",
           url: productUrl,
           priceCurrency: "INR",
           price: sellingPrice,
+
           availability: "https://schema.org/InStock",
 
           seller: {
             "@type": "Organization",
             name: siteConfig.name,
             url: siteConfig.url,
+          },
+
+          hasMerchantReturnPolicy: {
+            "@type": "MerchantReturnPolicy",
+            applicableCountry: "IN",
+            returnPolicyCategory:
+              "https://schema.org/MerchantReturnNotPermitted",
           },
         },
       }
