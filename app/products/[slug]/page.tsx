@@ -48,7 +48,7 @@ const imageUrl = product.image
     : `${siteConfig.url}${product.image}`
   : undefined;
 
-  const title = `${product.name} Wholesale in Madurai | ${siteConfig.name}`;
+  const title = `${product.name} Wholesale in Madurai`;
 
   const description =
     `${product.description} ` +
