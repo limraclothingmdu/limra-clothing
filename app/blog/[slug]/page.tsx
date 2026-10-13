@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
+import BlogContent from "@/components/blog/BlogContent";
 import { getBlogBySlug } from "@/lib/blog";
 import { siteConfig } from "@/lib/site";
 
@@ -231,7 +231,7 @@ export default async function BlogArticlePage({
           )}
 
           <div className="mt-12 whitespace-pre-line text-base leading-8 text-[#222]/75 sm:text-lg">
-            {blog.content}
+            <BlogContent content={blog.content ?? ""} />
           </div>
 
           <div className="mt-12 border-t border-[#081A4A]/10 pt-8">
