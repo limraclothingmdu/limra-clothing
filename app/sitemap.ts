@@ -17,6 +17,11 @@ const staticRoutes = [
     changeFrequency: "weekly" as const,
   },
   {
+    path: "/tamil-nadu-wholesale-clothing",
+    priority: 0.8,
+    changeFrequency: "monthly" as const,
+  },
+  {
     path: "/retail",
     priority: 0.9,
     changeFrequency: "weekly" as const,
