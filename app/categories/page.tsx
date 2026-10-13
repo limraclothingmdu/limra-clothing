@@ -103,7 +103,7 @@ export default async function CategoriesPage() {
                     </div>
                   </div>
 
-                  <div className="p-5">
+                  <div className="p-3 sm:p-5">
                     <p className="text-sm leading-6 text-[#222]/60">
                       {category.short_description ||
                         `Explore our ${category.name.toLowerCase()} collection.`}

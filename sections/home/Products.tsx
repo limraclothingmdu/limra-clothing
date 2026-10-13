@@ -86,7 +86,7 @@ export default async function Products() {
 
         {/* Products */}
         {featuredProducts.length > 0 ? (
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
             {featuredProducts.map((product) => {
               const pricing = getRetailPrice(product);
               const shipping =
@@ -111,7 +111,7 @@ export default async function Products() {
                         src={product.image}
                         alt={`${product.name} from Limra Clothing`}
                         fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        sizes="(max-width: 639px) 50vw, (max-width: 1023px) 50vw, 25vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
@@ -130,14 +130,14 @@ export default async function Products() {
                   </div>
 
                   {/* Product Details */}
-                  <div className="p-5">
+                  <div className="p-3 sm:p-5">
                     <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#C89B3C]">
                       {product.is_featured
                         ? "Featured Collection"
                         : "Retail Collection"}
                     </p>
 
-                    <h3 className="mt-2 line-clamp-2 min-h-[3.5rem] font-serif text-xl font-semibold leading-7 text-[#081A4A]">
+                    <h3 className="mt-2 line-clamp-2 min-h-[2.5rem] font-serif text-base font-semibold leading-5 text-[#081A4A] sm:min-h-[3.5rem] sm:text-xl sm:leading-7">
                       {product.name}
                     </h3>
 

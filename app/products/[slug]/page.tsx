@@ -4,7 +4,11 @@ import Link from "next/link";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 import { notFound } from "next/navigation";
 import { createBreadcrumbSchema } from "@/lib/schema";
-import { getProductBySlug } from "@/lib/products";
+import {
+  getProductBySlug,
+  getProductRecommendations,
+} from "@/lib/products";
+import ProductCard from "@/components/products/ProductCard";
 import { getCategoryById } from "@/lib/categories";
 import { siteConfig } from "@/lib/site";
 import { createClient } from "@/lib/supabase/server";
@@ -109,7 +113,8 @@ export default async function ProductPage({
   if (!product) {
     notFound();
   }
-
+  const { relatedProducts, moreProducts } =
+  await getProductRecommendations(product.id, product.category_id);
   const supabase = await createClient();
 
   const [sizeRelationsResult, styleRelationsResult, materialRelationsResult] =
@@ -520,7 +525,94 @@ const productSchema = {
             </div>
           </div>
         </div>
+      
+      </section>
+
+      {/* Related Products */}
+      {relatedProducts.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#C89B3C]">
+                Selected for You
+              </p>
+              <h2 className="mt-2 font-serif text-3xl font-semibold text-[#081A4A]">
+                You May Also Like
+              </h2>
+              <p className="mt-2 text-sm text-[#222]/60">
+                Discover more styles from this collection.
+              </p>
+            </div>
+            <Link
+              href="/products"
+              className="shrink-0 text-sm font-semibold text-[#081A4A] hover:text-[#C89B3C]"
+            >
+              View All
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+            {relatedProducts.map((item) => (
+              <ProductCard key={item.id} product={item} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* More Products */}
+      {moreProducts.length > 0 && (
+        <section className="bg-[#F8F6F1]">
+          <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div className="mb-6">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#C89B3C]">
+                Keep Exploring
+              </p>
+              <h2 className="mt-2 font-serif text-3xl font-semibold text-[#081A4A]">
+                More to Explore
+              </h2>
+              <p className="mt-2 text-sm text-[#222]/60">
+                Find more styles across our clothing collection.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+              {moreProducts.map((item) => (
+                <ProductCard key={item.id} product={item} />
+              ))}
+            </div>
+
+            <div className="mt-8 text-center">
+              <Link
+                href="/products"
+                className="inline-flex items-center justify-center rounded-full bg-[#081A4A] px-7 py-3 text-sm font-bold text-white transition-colors hover:bg-[#C89B3C] hover:text-[#081A4A]"
+              >
+                Explore All Products
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Continue Shopping */}
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-[#081A4A]/10 bg-white p-6 sm:flex-row sm:items-center sm:p-8">
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-[#081A4A]">
+              Still Looking for Something?
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-[#222]/60">
+              Browse our full collection to discover more clothing styles.
+            </p>
+          </div>
+          <Link
+            href="/products"
+            className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#C89B3C] px-6 py-3 text-sm font-bold text-[#081A4A] transition-transform hover:-translate-y-0.5"
+          >
+            Continue Shopping
+          </Link>
+        </div>
       </section>
     </main>
+
   );
 }

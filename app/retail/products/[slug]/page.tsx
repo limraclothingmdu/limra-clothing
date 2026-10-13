@@ -9,7 +9,12 @@ import { notFound } from "next/navigation";
 
 import RetailProductPurchase from "@/components/retail/RetailProductPurchase";
 import { getCategoryById } from "@/lib/categories";
-import { getProductBySlug } from "@/lib/products";
+import {
+  getProductBySlug,
+  getRetailProductRecommendations,
+} from "@/lib/products";
+
+import ProductCard from "@/components/products/ProductCard";
 import { createClient } from "@/lib/supabase/server";
 import { siteConfig } from "@/lib/site";
 import { createBreadcrumbSchema } from "@/lib/schema";
@@ -274,6 +279,11 @@ export default async function RetailProductPage({
         product.category_id
       )
     : null;
+  const { relatedProducts, moreProducts } =
+  await getRetailProductRecommendations(
+    product.id,
+    product.category_id
+  );
 
   const productUrl =
     `${siteConfig.url}/retail/products/${product.slug}`;
@@ -638,6 +648,104 @@ export default async function RetailProductPage({
               </p>
             </div>
           </div>
+        </div>
+      
+      </section>
+
+      {/* Related Retail Products */}
+      {relatedProducts.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+          <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#C89B3C]">
+                Selected for You
+              </p>
+              <h2 className="mt-2 font-serif text-3xl font-semibold text-[#081A4A]">
+                You May Also Like
+              </h2>
+              <p className="mt-2 text-sm text-[#222]/60">
+                Discover more styles from this collection.
+              </p>
+            </div>
+
+            <Link
+              href="/retail/products"
+              className="shrink-0 text-sm font-semibold text-[#081A4A] transition-colors hover:text-[#C89B3C]"
+            >
+              View All Retail Products
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+            {relatedProducts.map((item) => (
+              <ProductCard
+                key={item.id}
+                product={item}
+                priceType="retail"
+                hrefPrefix="/retail/products"
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* More Retail Products */}
+      {moreProducts.length > 0 && (
+        <section className="bg-[#F8F6F1]">
+          <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div className="mb-6">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#C89B3C]">
+                Keep Exploring
+              </p>
+              <h2 className="mt-2 font-serif text-3xl font-semibold text-[#081A4A]">
+                More to Explore
+              </h2>
+              <p className="mt-2 text-sm text-[#222]/60">
+                Explore other styles available in our retail collection.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+              {moreProducts.map((item) => (
+                <ProductCard
+                  key={item.id}
+                  product={item}
+                  priceType="retail"
+                  hrefPrefix="/retail/products"
+                />
+              ))}
+            </div>
+
+            <div className="mt-8 text-center">
+              <Link
+                href="/retail/products"
+                className="inline-flex items-center justify-center rounded-full bg-[#081A4A] px-7 py-3 text-sm font-bold text-white transition-colors hover:bg-[#C89B3C] hover:text-[#081A4A]"
+              >
+                Explore All Retail Products
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Continue Shopping */}
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-[#081A4A]/10 bg-white p-6 sm:flex-row sm:items-center sm:p-8">
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-[#081A4A]">
+              Still Looking for Something?
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-[#222]/60">
+              Browse our retail collection to discover more styles.
+            </p>
+          </div>
+
+          <Link
+            href="/retail/products"
+            className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#C89B3C] px-6 py-3 text-sm font-bold text-[#081A4A] transition-transform hover:-translate-y-0.5"
+          >
+            Continue Shopping
+          </Link>
         </div>
       </section>
     </main>

@@ -126,3 +126,140 @@ export async function getProductsByCategory(
 
   return data ?? [];
 }
+
+export async function getProductRecommendations(
+  currentProductId: string,
+  categoryId: string | null
+): Promise<{
+  relatedProducts: Product[];
+  moreProducts: Product[];
+}> {
+  const supabase = await createClient();
+
+  let relatedProducts: Product[] = [];
+
+  // First, find other active products in the same category.
+  if (categoryId) {
+    const { data, error } = await supabase
+      .from("products")
+      .select(productSelect)
+      .eq("is_active", true)
+      .eq("category_id", categoryId)
+      .neq("id", currentProductId)
+      .order("created_at", { ascending: false })
+      .limit(4);
+
+    if (error) {
+      console.error("Failed to fetch related products:", error);
+    } else {
+      relatedProducts = data ?? [];
+    }
+  }
+
+  // Then, find active products from other categories.
+  let moreQuery = supabase
+    .from("products")
+    .select(productSelect)
+    .eq("is_active", true)
+    .neq("id", currentProductId)
+    .order("created_at", { ascending: false })
+    .limit(4);
+
+  if (categoryId) {
+    moreQuery = moreQuery.neq("category_id", categoryId);
+  }
+
+  const { data: moreData, error: moreError } = await moreQuery;
+
+  if (moreError) {
+    console.error("Failed to fetch more products:", moreError);
+  }
+
+  const relatedIds = new Set(relatedProducts.map((item) => item.id));
+
+  const moreProducts = (moreData ?? [])
+    .filter((item) => !relatedIds.has(item.id))
+    .slice(0, 4);
+
+  return {
+    relatedProducts,
+    moreProducts,
+  };
+}
+
+export async function getRetailProductRecommendations(
+  currentProductId: string,
+  categoryId: string | null
+): Promise<{
+  relatedProducts: Product[];
+  moreProducts: Product[];
+}> {
+  const supabase = await createClient();
+
+  let relatedProducts: Product[] = [];
+
+  // Fetch retail-enabled products from the same category.
+  if (categoryId) {
+    const { data, error } = await supabase
+      .from("products")
+      .select(productSelect)
+      .eq("is_active", true)
+      .eq("retail_enabled", true)
+      .eq("category_id", categoryId)
+      .neq("id", currentProductId)
+      .order("is_featured", { ascending: false })
+      .order("created_at", { ascending: false })
+      .limit(4);
+
+    if (error) {
+      console.error(
+        "Failed to fetch related retail products:",
+        error
+      );
+    } else {
+      relatedProducts = data ?? [];
+    }
+  }
+
+  // Fetch retail-enabled products from other categories.
+  let moreQuery = supabase
+    .from("products")
+    .select(productSelect)
+    .eq("is_active", true)
+    .eq("retail_enabled", true)
+    .neq("id", currentProductId)
+    .order("is_featured", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(4);
+
+  if (categoryId) {
+    moreQuery = moreQuery.neq("category_id", categoryId);
+  }
+
+  const { data: moreData, error: moreError } =
+    await moreQuery;
+
+  if (moreError) {
+    console.error(
+      "Failed to fetch more retail products:",
+      moreError
+    );
+  }
+
+  const relatedIds = new Set(
+    relatedProducts.map((item) => item.id)
+  );
+
+  const moreProducts = (moreData ?? [])
+    .filter(
+      (item) =>
+        !relatedIds.has(item.id) &&
+        item.id !== currentProductId
+    )
+    .slice(0, 4);
+
+  return {
+    relatedProducts,
+    moreProducts,
+  };
+}
