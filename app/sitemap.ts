@@ -2,7 +2,7 @@
 
 import { siteConfig } from "@/lib/site";
 import { getCategories } from "@/lib/categories";
-import { getProducts } from "@/lib/products";
+import { getProducts, getRetailProducts } from "@/lib/products";
 import { getPublishedBlogs } from "@/lib/blog";
 
 const staticRoutes = [
@@ -61,11 +61,12 @@ const staticRoutes = [
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
-  const [categories, products, blogs] = await Promise.all([
-    getCategories(),
-    getProducts(),
-    getPublishedBlogs(),
-  ]);
+const [categories, products, retailProducts, blogs] = await Promise.all([
+  getCategories(),
+  getProducts(),
+  getRetailProducts(),
+  getPublishedBlogs(),
+]);
 
   const staticEntries = staticRoutes.map((route) => ({
     url: `${siteConfig.url}${route.path}`,
@@ -91,7 +92,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.7,
     }));
-
+   const retailProductEntries = retailProducts
+  .filter((product) => product.is_active && product.retail_enabled)
+  .map((product) => ({
+    url: `${siteConfig.url}/retail/products/${product.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  })); 
   const blogEntries = blogs.map((blog) => ({
     url: `${siteConfig.url}/blog/${blog.slug}`,
     lastModified: new Date(
@@ -104,9 +112,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   return [
-    ...staticEntries,
-    ...categoryEntries,
-    ...productEntries,
-    ...blogEntries,
-  ];
+  ...staticEntries,
+  ...categoryEntries,
+  ...productEntries,
+  ...retailProductEntries,
+  ...blogEntries,
+];
 }
