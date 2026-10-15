@@ -9,10 +9,11 @@ export const siteConfig = {
 
   url: "https://www.limraclothing.in",
 
-  contact: {
-    phone: "8220523907",
-    whatsapp: "918220523907",
-  },
+contact: {
+  phone: "8220523907",
+  whatsapp: "918220523907",
+  email: "limraclothingmdu@gmail.com",
+},
 
   address: {
     street: "No. 25/3, 1st Floor, Solaiyalagupuram Main Road",

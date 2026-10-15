@@ -1,9 +1,5 @@
 import Link from "next/link";
-import {
-  MapPin,
-  MessageCircle,
-  Phone,
-} from "lucide-react";
+import { MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { siteConfig } from "@/lib/site";
 
@@ -18,6 +14,13 @@ const quickLinks = [
   { name: "Contact", href: "/contact" },
 ];
 
+const legalLinks = [
+  { name: "Privacy Policy", href: "/privacy-policy" },
+  { name: "Terms & Conditions", href: "/terms-and-conditions" },
+  { name: "Cookie Policy", href: "/cookie-policy" },
+  { name: "Refund Policy", href: "/refund-policy" },
+];
+
 export default function Footer() {
   const whatsappUrl = `https://wa.me/${siteConfig.contact.whatsapp}`;
 
@@ -25,22 +28,17 @@ export default function Footer() {
     <footer className="bg-[#081A4A] text-white">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1.2fr]">
-          {/* Brand */}
           <div>
             <Link href="/" className="inline-block">
-              <div className="font-serif text-3xl font-bold">
-                LIMRA
-              </div>
-
+              <div className="font-serif text-3xl font-bold">LIMRA</div>
               <div className="-mt-1 text-[10px] font-bold uppercase tracking-[0.35em] text-[#C89B3C]">
                 Clothing
               </div>
             </Link>
 
             <p className="mt-6 max-w-sm text-sm leading-7 text-white/55">
-              Wholesale and retail textile and clothing business in
-              Madurai, offering shirts, pants and other ready-made
-              garments.
+              Wholesale and retail textile and clothing business in Madurai,
+              offering shirts, pants and other ready-made garments.
             </p>
 
             <a
@@ -54,7 +52,6 @@ export default function Footer() {
             </a>
           </div>
 
-          {/* Links */}
           <div>
             <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-[#C89B3C]">
               Quick Links
@@ -73,7 +70,6 @@ export default function Footer() {
             </nav>
           </div>
 
-          {/* Contact */}
           <div>
             <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-[#C89B3C]">
               Contact
@@ -85,13 +81,21 @@ export default function Footer() {
                 className="flex gap-3 text-sm text-white/60 hover:text-white"
               >
                 <Phone className="mt-0.5 h-5 w-5 shrink-0 text-[#C89B3C]" />
-
                 <span>{siteConfig.contact.phone}</span>
+              </a>
+
+              <a
+                href={`mailto:${siteConfig.contact.email}`}
+                className="flex gap-3 text-sm text-white/60 transition-colors hover:text-white"
+              >
+                <span aria-hidden="true" className="text-[#C89B3C]">
+                  ✉
+                </span>
+                <span className="break-all">{siteConfig.contact.email}</span>
               </a>
 
               <div className="flex gap-3 text-sm leading-6 text-white/60">
                 <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#C89B3C]" />
-
                 <address className="not-italic">
                   No. 25/3, 1st Floor,
                   <br />
@@ -105,7 +109,6 @@ export default function Footer() {
                 <p className="text-xs uppercase tracking-[0.15em] text-white/35">
                   GSTIN
                 </p>
-
                 <p className="mt-1 text-sm font-semibold text-white/70">
                   {siteConfig.gstin}
                 </p>
@@ -115,15 +118,26 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 border-t border-white/10 pt-7">
-          <div className="flex flex-col gap-3 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
-            <p>
-              © {new Date().getFullYear()} {siteConfig.name}. All
-              rights reserved.
-            </p>
+          <nav
+            aria-label="Legal policies"
+            className="flex flex-wrap gap-x-6 gap-y-3"
+          >
+            {legalLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-xs text-white/50 transition-colors hover:text-[#C89B3C]"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
 
+          <div className="mt-6 flex flex-col gap-3 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
             <p>
-              Wholesale & Retail Clothing · Madurai, Tamil Nadu
+              © {new Date().getFullYear()} Limra Clothing. All rights reserved.
             </p>
+            <p>Wholesale &amp; Retail Clothing · Madurai, Tamil Nadu</p>
           </div>
         </div>
       </div>
