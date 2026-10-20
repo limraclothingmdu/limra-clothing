@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -11,9 +11,9 @@ import {
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
+  title: "Contact Limra Clothing | Madurai Wholesale Garments",
   description:
-    "Contact Limra Clothing in Madurai for wholesale clothing enquiries, ready-made garments, product availability, and business requirements.",
+    "Contact Limra Clothing in Madurai for wholesale garment enquiries, retail product questions, availability and business requirements. We serve clothing buyers and retailers across Tamil Nadu.",
   keywords: [
     "contact Limra Clothing",
     "wholesale clothing Madurai contact",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}/contact`,
   },
   openGraph: {
-    title: `Contact Us | ${siteConfig.name}`,
+    title: `Contact Limra Clothing | Madurai Wholesale Garments`,
     description:
-      "Contact Limra Clothing for wholesale clothing enquiries in Madurai.",
+      "Contact Limra Clothing in Madurai for wholesale garment enquiries, retail product questions and business requirements.",
     url: `${siteConfig.url}/contact`,
     type: "website",
   },
@@ -262,3 +262,5 @@ export default function ContactPage() {
     </main>
   );
 }
+
+

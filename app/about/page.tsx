@@ -6,7 +6,7 @@ import AboutValues from "@/sections/about/AboutValues";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "About Us",
+  title: "About Limra Clothing | Madurai Garment Business",
   description:
   "Learn about Limra Clothing, a ready-made clothing business in Madurai serving wholesale buyers, retailers and clothing businesses across Tamil Nadu.",
   keywords: [
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}/about`,
   },
   openGraph: {
-    title: `About Us | ${siteConfig.name}`,
+    title: `About Limra Clothing | Madurai Garment Business`,
     description:
-      "Learn about Limra Clothing and our wholesale clothing business.",
+      "Discover Limra Clothing, a ready-made garment business in Madurai serving wholesale buyers and retailers across Tamil Nadu.",
     url: `${siteConfig.url}/about`,
     type: "website",
   },

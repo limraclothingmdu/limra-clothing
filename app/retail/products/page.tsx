@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -34,9 +34,9 @@ type RetailProduct = {
 };
 
 export const metadata: Metadata = {
-  title: "Shop Ready-Made Clothing Online in Madurai",
+  title: "Shop Ready-Made Clothes in Madurai | Limra Clothing",
   description:
-    "Shop ready-made shirts, T-shirts, trousers and other clothing from Limra Clothing in Madurai. Explore our retail collection and shop available products.",
+    "Shop available ready-made clothing from Limra Clothing in Madurai. Browse retail products, compare product details and prices, and order online where available.",
   keywords: [
     "shop clothes online Madurai",
     "retail clothing Madurai",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}/retail/products`,
   },
   openGraph: {
-    title: `Shop Ready-Made Clothing | ${siteConfig.name}`,
+    title: `Shop Ready-Made Clothes in Madurai | ${siteConfig.name}`,
     description:
       "Explore and shop Limra Clothing's retail collection of ready-made garments in Madurai.",
     url: `${siteConfig.url}/retail/products`,
@@ -151,16 +151,16 @@ export default async function RetailProductsPage() {
             </div>
 
             <h1 className="mt-5 font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
-              Shop Ready-Made
+              Shop Ready-Made Clothes
               <span className="block text-[#C89B3C]">
-                Clothing
+                in Madurai
               </span>
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
-              Explore Limra Clothing&apos;s retail collection
-              of shirts, T-shirts, trousers and other
-              ready-made garments available in Madurai.
+              Browse Limra Clothing&apos;s available retail collection
+              of ready-made clothes. Review product details
+              and prices, and shop online where ordering is available.
             </p>
           </div>
         </div>
@@ -177,7 +177,7 @@ export default async function RetailProductsPage() {
               </div>
 
               <h2 className="mt-2 font-serif text-3xl font-semibold text-[#081A4A] sm:text-4xl">
-                Shop Our Products
+                Ready-Made Clothing Available to Shop
               </h2>
             </div>
 
@@ -244,3 +244,10 @@ export default async function RetailProductsPage() {
     </main>
   );
 }
+
+
+
+
+
+
+

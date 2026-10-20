@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -13,7 +13,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Wholesale & Retail Clothing in Madurai | Limra Clothing",
   description:
-    "Choose wholesale clothing for bulk orders or shop our retail collection online from Limra Clothing in Madurai, serving customers across Tamil Nadu.",
+    "Explore Limra Clothing in Madurai for retail shopping and wholesale garment enquiries. Browse available ready-made clothes or find clothing options for retailers and bulk buyers across Tamil Nadu.",
   keywords: [
     "wholesale clothing Madurai",
     "retail clothing Madurai",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}/products`,
   },
   openGraph: {
-    title: "Wholesale & Retail Clothing | Limra Clothing",
+    title: "Wholesale & Retail Clothing in Madurai | Limra Clothing",
     description:
       "Shop wholesale and retail clothing from Limra Clothing in Madurai, serving customers and businesses across Tamil Nadu.",
     url: `${siteConfig.url}/products`,
@@ -71,16 +71,14 @@ export default function ProductsPage() {
             </div>
 
             <h1 className="mt-5 font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
-              Choose How You Want
+              Wholesale & Retail Clothing
               <span className="block text-[#C89B3C]">
-                to Shop
+                in Madurai
               </span>
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
-              Whether you are buying in bulk for your business
-              or shopping for yourself, choose the collection
-              that suits your needs.
+              Explore Limra Clothing in Madurai for wholesale garment enquiries or retail shopping. Browse available ready-made clothing and choose the collection that suits your needs across Tamil Nadu.
             </p>
           </div>
         </div>
@@ -121,7 +119,7 @@ export default function ProductsPage() {
 
                   <li className="flex items-center gap-3">
                     <span className="h-1.5 w-1.5 rounded-full bg-[#C89B3C]" />
-                    Wholesale pricing
+                    Wholesale pricing enquiries
                   </li>
 
                   <li className="flex items-center gap-3">
@@ -158,9 +156,7 @@ export default function ProductsPage() {
                 </h2>
 
                 <p className="mt-5 max-w-lg text-sm leading-7 text-[#222]/60 sm:text-base">
-                  Shop individual clothing products online with
-                  retail pricing, product details, size options
-                  and convenient checkout.
+                  Shop ready-made clothes from Limra Clothing in Madurai. Browse available retail garments, review product details and prices, and proceed to checkout where available.
                 </p>
 
                 <ul className="mt-7 space-y-3 text-sm text-[#222]/70">
@@ -243,3 +239,11 @@ export default function ProductsPage() {
     </main>
   );
 }
+
+
+
+
+
+
+
+
