@@ -61,10 +61,14 @@ export default async function CategoriesPage() {
               </span>
             </h1>
 
-            <p className="mt-6 text-base leading-8 text-white/65">
-              Browse our clothing categories and discover products available
-              for wholesale buyers and retailers.
-            </p>
+            
+<p className="mt-6 max-w-2xl text-base leading-8 text-white/65">
+  Explore Limra Clothing&apos;s ready-made garment categories
+  in Madurai. Browse available men&apos;s shirts and other clothing
+  collections for wholesale buyers and retail customers.
+  Product availability and ordering options may vary by item.
+</p>
+
           </div>
         </div>
       </section>

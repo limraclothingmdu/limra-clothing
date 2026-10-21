@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import BlogContent from "@/components/blog/BlogContent";
 import { getBlogBySlug } from "@/lib/blog";
 import { siteConfig } from "@/lib/site";
+import { safeJsonLdStringify } from "@/lib/schema";
 
 type BlogPageProps = {
   params: Promise<{
@@ -150,14 +151,14 @@ export default async function BlogArticlePage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(articleSchema),
+          __html: safeJsonLdStringify(articleSchema),
         }}
       />
 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema),
+          __html: safeJsonLdStringify(breadcrumbSchema),
         }}
       />
 

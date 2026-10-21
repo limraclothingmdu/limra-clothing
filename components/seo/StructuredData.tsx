@@ -1,5 +1,5 @@
 ﻿import { siteConfig } from "@/lib/site";
-
+import { safeJsonLdStringify } from "@/lib/schema";
 export default function StructuredData() {
   const businessId = `${siteConfig.url}/#business`;
   const websiteId = `${siteConfig.url}/#website`;
@@ -50,13 +50,13 @@ export default function StructuredData() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(businessSchema),
-        }}
+  __html: safeJsonLdStringify(businessSchema),
+}}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(websiteSchema),
+          __html: safeJsonLdStringify(websiteSchema),
         }}
       />
     </>

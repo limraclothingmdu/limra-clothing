@@ -38,28 +38,30 @@ export const metadata: Metadata = {
   },
 };
 
+
 const buyerQuestions = [
   {
     question: "What clothing products can I enquire about?",
     answer:
-      "Limra Clothing deals in ready-made garments, including shirts, pants, T-shirts and other clothing. Visit the product catalogue or contact us to confirm the categories and designs currently available.",
+      "You can enquire about available men's shirts and ladies' wear, including two-piece sets, three-piece sets, nightwear and Bombay nighties. Contact Limra Clothing to confirm current stock, designs and sizes.",
   },
   {
-    question: "Can retailers enquire about bulk clothing orders?",
+    question: "Can retailers enquire about wholesale orders?",
     answer:
-      "Yes. Retailers and other buyers can contact Limra Clothing to discuss their requirements. Order quantities, pricing and product availability should be confirmed directly for the items you need.",
+      "Yes. Retailers and bulk buyers can contact Limra Clothing to discuss garment requirements, applicable order quantities, wholesale pricing and product availability.",
   },
   {
-    question: "Does Limra Clothing serve buyers outside Madurai?",
+    question: "Does Limra Clothing serve buyers across Tamil Nadu?",
     answer:
-      "Limra Clothing is based in Madurai and states that it distributes across Tamil Nadu. Contact the team to confirm arrangements for your location, order and selected products.",
+      "Limra Clothing is based in Madurai, Tamil Nadu, and serves buyers across the state. Contact the business to confirm delivery or distribution arrangements for your location.",
   },
   {
-    question: "How do I check current stock and prices?",
+    question: "How can I check wholesale prices and stock?",
     answer:
-      "Product availability, sizes, designs, pricing and applicable order quantities can vary. Share the products you are interested in through WhatsApp or the contact page for current details.",
+      "Wholesale prices and availability may vary by product and order. Share the garments you need and your approximate quantity through WhatsApp or the contact page to request current details.",
   },
 ];
+
 
 export default function TamilNaduWholesaleClothingPage() {
   const whatsappUrl = `https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(

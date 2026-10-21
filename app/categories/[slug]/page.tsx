@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 import { notFound } from "next/navigation";
 
+import { safeJsonLdStringify } from "@/lib/schema";
 import {
   getCategoryBySlug,
 } from "@/lib/categories";
@@ -129,14 +130,14 @@ export default async function CategoryPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema),
+          __html: safeJsonLdStringify(breadcrumbSchema),
         }}
       />
 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(collectionSchema),
+          __html: safeJsonLdStringify(collectionSchema),
         }}
       />
 

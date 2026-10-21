@@ -17,7 +17,7 @@ import {
 import ProductCard from "@/components/products/ProductCard";
 import { createClient } from "@/lib/supabase/server";
 import { siteConfig } from "@/lib/site";
-import { createBreadcrumbSchema } from "@/lib/schema";
+import { createBreadcrumbSchema, safeJsonLdStringify } from "@/lib/schema";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -371,7 +371,7 @@ export default async function RetailProductPage({
         }
       : {}),
 
-    ...(sellingPrice !== null
+    ...(sellingPrice != null
       ? {
           offers: {
             "@type": "Offer",
@@ -396,9 +396,7 @@ export default async function RetailProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html:
-            JSON.stringify(
-              breadcrumbSchema
-            ),
+            safeJsonLdStringify(breadcrumbSchema),
         }}
       />
 
@@ -407,9 +405,7 @@ export default async function RetailProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html:
-            JSON.stringify(
-              productSchema
-            ),
+            safeJsonLdStringify(productSchema),
         }}
       />
 

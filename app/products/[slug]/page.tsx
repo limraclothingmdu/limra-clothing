@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 import { notFound } from "next/navigation";
-import { createBreadcrumbSchema } from "@/lib/schema";
+import { createBreadcrumbSchema, safeJsonLdStringify } from "@/lib/schema";
 import {
   getProductBySlug,
   getProductRecommendations,
@@ -303,7 +303,7 @@ const productSchema = {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema),
+          __html: safeJsonLdStringify(breadcrumbSchema),
         }}
       />
 
@@ -311,7 +311,7 @@ const productSchema = {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productSchema),
+          __html: safeJsonLdStringify(productSchema),
         }}
       />
 

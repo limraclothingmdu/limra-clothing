@@ -11,28 +11,39 @@ import { getProducts } from "@/lib/products";
 import { siteConfig } from "@/lib/site";
 
 
+
 export const metadata: Metadata = {
-  title: "Wholesale Clothing Products in Madurai",
+  title: "Garment Wholesaler in Madurai | Limra Clothing",
   description:
-    "Explore ready-made shirts, T-shirts, trousers and other clothing products from Limra Clothing for wholesale buyers and retailers in Madurai and across Tamil Nadu.",
+    "Explore wholesale clothing from Limra Clothing, Madurai, including available men's shirts and ladies' garments. Contact us to enquire about two-piece sets, three-piece sets, nightwear, Bombay nighties, bulk orders and Tamil Nadu distribution.",
   keywords: [
-    "wholesale clothing products Madurai",
-    "ready made garments Madurai",
-    "mens clothing wholesale",
-    "wholesale garments Tamil Nadu",
-    "clothing distributor Tamil Nadu",
+    "garment wholesaler Madurai",
+    "wholesale clothing Madurai",
+    "men's shirts wholesale Tamil Nadu",
+    "ladies wear wholesale Madurai",
+    "two piece ladies set wholesale",
+    "three piece ladies set wholesale",
+    "nightwear wholesale Tamil Nadu",
+    "Bombay nighties wholesale",
+    "மொத்த ஆடை விற்பனை",
+    "ஆண்கள் சட்டைகள் மொத்த விற்பனை",
+    "பெண்கள் ஆடைகள் மொத்த விற்பனை",
+    "நைட்டி மொத்த விற்பனை",
   ],
   alternates: {
     canonical: `${siteConfig.url}/products/wholesale`,
   },
   openGraph: {
-    title: "Wholesale Clothing Products | Limra Clothing",
+    title: "Wholesale Garments in Madurai | Limra Clothing",
     description:
-      "Explore ready-made clothing products for wholesale buyers and retailers in Madurai and across Tamil Nadu.",
+      "Enquire about men's shirts and ladies' garments from Limra Clothing in Madurai, with wholesale enquiries for buyers across Tamil Nadu.",
     url: `${siteConfig.url}/products/wholesale`,
+    siteName: "Limra Clothing",
+    locale: "en_IN",
     type: "website",
   },
 };
+
 
 export default async function ProductsPage() {
   const products = await getProducts();
@@ -76,12 +87,16 @@ export default async function ProductsPage() {
               </span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
-              Explore our collection of ready-made shirts,
-              T-shirts, trousers and other clothing products
-              for wholesale buyers, retailers and businesses
-              across Tamil Nadu.
-            </p>
+
+<p className="mt-6 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
+  Limra Clothing is a Madurai-based garment business serving
+  wholesale buyers, retailers and resellers across Tamil Nadu.
+  Explore available men&apos;s shirts and ladies&apos; wear, and contact
+  us to enquire about two-piece sets, three-piece sets,
+  nightwear and Bombay nighties. Product availability and
+  wholesale pricing are confirmed on enquiry.
+</p>
+
           </div>
         </div>
       </section>
@@ -96,8 +111,8 @@ export default async function ProductsPage() {
               </p>
 
               <h2 className="mt-2 font-serif text-3xl font-semibold text-[#081A4A] sm:text-4xl">
-                Explore Our Products
-              </h2>
+  Wholesale Garments Available from Limra Clothing
+</h2>
             </div>
 
             <p className="text-sm text-[#222]/50">
