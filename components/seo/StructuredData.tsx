@@ -10,6 +10,7 @@ export default function StructuredData() {
     "@id": businessId,
     name: siteConfig.name,
     url: siteConfig.url,
+    sameAs: ["https://www.instagram.com/limra_clothing_/"],
     description: siteConfig.description,
     telephone: `+91-${siteConfig.contact.phone}`,
     logo: `${siteConfig.url}/images/limra-favicon.jpeg`,

@@ -50,6 +50,31 @@ export default function Footer() {
               <MessageCircle className="h-4 w-4" />
               WhatsApp Us
             </a>
+            <a
+  href="https://www.instagram.com/limra_clothing_/"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Follow Limra Clothing on Instagram"
+  className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-semibold text-white transition-colors hover:border-[#C89B3C] hover:text-[#C89B3C]"
+>
+  <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="16"
+  height="16"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  strokeWidth="2"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  aria-hidden="true"
+>
+  <rect width="20" height="20" x="2" y="2" rx="5" />
+  <circle cx="12" cy="12" r="4" />
+  <circle cx="18" cy="6" r="0.5" fill="currentColor" />
+</svg>
+  Follow us on Instagram
+</a>
           </div>
 
           <div>
