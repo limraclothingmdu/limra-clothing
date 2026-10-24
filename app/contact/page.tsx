@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -256,11 +256,60 @@ export default function ContactPage() {
                 </a>
               </div>
             </div>
+
           </div>
+
+          {/* Explore More from Limra */}
+          <section
+            aria-labelledby="contact-next-steps"
+            className="mt-16 rounded-3xl border border-[#081A4A]/10 bg-white p-8 shadow-sm sm:p-10"
+          >
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#C89B3C]">
+                Explore Limra Clothing
+              </p>
+
+              <h2
+                id="contact-next-steps"
+                className="mt-3 font-serif text-2xl font-semibold text-[#081A4A] sm:text-3xl"
+              >
+                How Can We Help You Next?
+              </h2>
+
+              <p className="mt-4 text-sm leading-7 text-[#222]/65 sm:text-base">
+                Browse our retail collection, explore wholesale clothing
+                options, or read our guides to clothing and shopping in Madurai.
+              </p>
+
+              <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+                <Link
+                  href="/retail/products"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#081A4A] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#10285f]"
+                >
+                  Shop Retail Products
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+                <Link
+                  href="/wholesale"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#081A4A]/20 px-6 py-3 text-sm font-semibold text-[#081A4A] transition-colors hover:bg-[#081A4A]/5"
+                >
+                  Explore Wholesale
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+                <Link
+                  href="/blog"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#C89B3C]/60 px-6 py-3 text-sm font-semibold text-[#081A4A] transition-colors hover:bg-[#C89B3C]/10"
+                >
+                  Read Our Blog
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </section>
         </div>
       </section>
     </main>
   );
 }
-
-

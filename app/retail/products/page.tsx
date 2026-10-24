@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -92,7 +92,7 @@ export default async function RetailProductsPage() {
     )
     .eq("is_active", true)
     .eq("retail_enabled", true)
-    
+
     .order("is_featured", {
       ascending: false,
     })
@@ -238,10 +238,62 @@ export default async function RetailProductsPage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
+
           )}
+
+          {/* Explore More */}
+          <section
+            aria-labelledby="retail-next-steps"
+            className="mt-16 rounded-3xl border border-[#081A4A]/10 bg-white p-8 shadow-sm sm:p-10"
+          >
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#C89B3C]">
+                More from Limra Clothing
+              </p>
+
+              <h2
+                id="retail-next-steps"
+                className="mt-3 font-serif text-2xl font-semibold text-[#081A4A] sm:text-3xl"
+              >
+                Find the Right Clothing for Your Needs
+              </h2>
+
+              <p className="mt-4 text-sm leading-7 text-[#222]/65 sm:text-base">
+                Explore our retail collection, learn about our wholesale
+                garment supply, or contact our team for product enquiries.
+              </p>
+
+              <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+                <Link
+                  href="/retail"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#081A4A] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#10285f]"
+                >
+                  Explore Retail
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+                <Link
+                  href="/wholesale"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#081A4A]/20 px-6 py-3 text-sm font-semibold text-[#081A4A] transition-colors hover:bg-[#081A4A]/5"
+                >
+                  Wholesale Garments
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#C89B3C]/60 px-6 py-3 text-sm font-semibold text-[#081A4A] transition-colors hover:bg-[#C89B3C]/10"
+                >
+                  Contact Limra
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </section>
         </div>
       </section>
     </main>
+
   );
 }
 
