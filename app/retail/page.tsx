@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 import RetailHero from "@/sections/retail/RetailHero";
 import RetailCategories from "@/sections/retail/RetailCategories";
 import RetailCTA from "@/sections/retail/RetailCTA";
+import RetailProductShowcase from "@/components/products/RetailProductShowcase";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -42,6 +43,10 @@ export default function RetailPage() {
     <main>
       <RetailHero />
       <RetailCategories />
+      <RetailProductShowcase
+        title="Shop Our Latest Retail Collection"
+        description="Explore available clothing from Limra Clothing in Madurai, with retail options for your everyday wardrobe."
+      />
       <RetailCTA />
     </main>
   );

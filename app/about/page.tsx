@@ -3,6 +3,7 @@
 import AboutHero from "@/sections/about/AboutHero";
 import AboutStory from "@/sections/about/AboutStory";
 import AboutValues from "@/sections/about/AboutValues";
+import RetailProductShowcase from "@/components/products/RetailProductShowcase";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -33,6 +34,10 @@ export default function AboutPage() {
       <AboutHero />
       <AboutStory />
       <AboutValues />
+      <RetailProductShowcase
+        title="Explore Limra Clothing Products"
+        description="Discover clothing available from Limra Clothing in Madurai, serving retail shoppers and wholesale buyers across Tamil Nadu."
+      />
     </main>
   );
 }

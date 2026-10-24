@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { siteConfig } from "@/lib/site";
+import RetailProductShowcase from "@/components/products/RetailProductShowcase";
 
 export const metadata: Metadata = {
   title: "Contact Limra Clothing | Madurai Wholesale Garments",
@@ -259,6 +260,10 @@ export default function ContactPage() {
 
           </div>
 
+          <RetailProductShowcase
+            title="Browse Products Before You Enquire"
+            description="Explore our available retail products, then contact Limra Clothing for product details or wholesale and bulk clothing requirements."
+          />
           {/* Explore More from Limra */}
           <section
             aria-labelledby="contact-next-steps"
