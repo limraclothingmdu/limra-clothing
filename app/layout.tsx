@@ -36,12 +36,12 @@ export const metadata: Metadata = {
 icons: {
   icon: [
     {
-      url: "/images/limra-favicon.jpeg",
+      url: "/images/limra-favicon-256.jpg",
       type: "image/jpeg",
     },
   ],
-  shortcut: "/images/limra-favicon.jpeg",
-  apple: "/images/limra-favicon.jpeg",
+  shortcut: "/images/limra-favicon-256.jpg",
+  apple: "/images/limra-favicon-256.jpg",
 },
 
   keywords: siteConfig.keywords,

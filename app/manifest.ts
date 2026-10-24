@@ -15,8 +15,8 @@ export default function manifest(): MetadataRoute.Manifest {
 
     icons: [
       {
-        src: "/images/limra-favicon.jpeg",
-        sizes: "512x512",
+        src: "/images/limra-favicon-256.jpg",
+        sizes: "256x256",
         type: "image/jpeg",
         purpose: "any",
       },
