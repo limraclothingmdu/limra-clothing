@@ -56,6 +56,11 @@ const staticRoutes = [
   path: "/wholesale/mens-tshirts",
   priority: 0.85,
   changeFrequency: "monthly" as const,
+  },
+{
+  path: "/wholesale/tamil-nadu-garment-supply",
+  priority: 0.85,
+  changeFrequency: "monthly" as const,
 },
   {
     path: "/retail",
