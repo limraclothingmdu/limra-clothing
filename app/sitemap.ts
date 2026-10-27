@@ -17,6 +17,16 @@ const staticRoutes = [
     changeFrequency: "weekly" as const,
   },
   {
+    path: "/wholesale/mens-shirts",
+    priority: 0.85,
+    changeFrequency: "monthly" as const,
+  },
+  {
+    path: "/wholesale/ladies-wear",
+    priority: 0.85,
+    changeFrequency: "monthly" as const,
+  },
+  {
     path: "/wholesale-clothing-madurai",
     priority: 0.8,
     changeFrequency: "monthly" as const,
@@ -124,5 +134,6 @@ const [categories, products, retailProducts, blogs] = await Promise.all([
   ...blogEntries,
 ];
 }
+
 
 
