@@ -1,4 +1,5 @@
-﻿import type { MetadataRoute } from "next";
+﻿
+import type { MetadataRoute } from "next";
 
 import { siteConfig } from "@/lib/site";
 import { getCategories } from "@/lib/categories";
@@ -23,6 +24,11 @@ const staticRoutes = [
   },
   {
     path: "/wholesale/ladies-wear",
+    priority: 0.85,
+    changeFrequency: "monthly" as const,
+  },
+  {
+    path: "/wholesale/ladies-nighties",
     priority: 0.85,
     changeFrequency: "monthly" as const,
   },
@@ -76,12 +82,12 @@ const staticRoutes = [
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
-const [categories, products, retailProducts, blogs] = await Promise.all([
-  getCategories(),
-  getProducts(),
-  getRetailProducts(),
-  getPublishedBlogs(),
-]);
+  const [categories, products, retailProducts, blogs] = await Promise.all([
+    getCategories(),
+    getProducts(),
+    getRetailProducts(),
+    getPublishedBlogs(),
+  ]);
 
   const staticEntries = staticRoutes.map((route) => ({
     url: `${siteConfig.url}${route.path}`,
@@ -107,33 +113,30 @@ const [categories, products, retailProducts, blogs] = await Promise.all([
       changeFrequency: "monthly" as const,
       priority: 0.7,
     }));
-   const retailProductEntries = retailProducts
-  .filter((product) => product.is_active && product.retail_enabled)
-  .map((product) => ({
-    url: `${siteConfig.url}/retail/products/${product.slug}`,
-    lastModified: now,
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  })); 
+
+  const retailProductEntries = retailProducts
+    .filter((product) => product.is_active && product.retail_enabled)
+    .map((product) => ({
+      url: `${siteConfig.url}/retail/products/${product.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    }));
+
   const blogEntries = blogs.map((blog) => ({
     url: `${siteConfig.url}/blog/${blog.slug}`,
     lastModified: new Date(
-      blog.updated_at ||
-        blog.published_at ||
-        blog.created_at
+      blog.updated_at || blog.published_at || blog.created_at
     ),
     changeFrequency: "monthly" as const,
     priority: 0.8,
   }));
 
   return [
-  ...staticEntries,
-  ...categoryEntries,
-  ...productEntries,
-  ...retailProductEntries,
-  ...blogEntries,
-];
+    ...staticEntries,
+    ...categoryEntries,
+    ...productEntries,
+    ...retailProductEntries,
+    ...blogEntries,
+  ];
 }
-
-
-
