@@ -11,7 +11,7 @@ import {
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Wholesale & Retail Clothing in Madurai | Limra Clothing",
+  title: "Wholesale & Retail Clothing in Madurai",
   description:
     "Explore Limra Clothing in Madurai for retail shopping and wholesale garment enquiries. Browse available ready-made clothes or find clothing options for retailers and bulk buyers across Tamil Nadu.",
   keywords: [
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}/products`,
   },
   openGraph: {
-    title: "Wholesale & Retail Clothing in Madurai | Limra Clothing",
+    title: "Wholesale & Retail Clothing in Madurai",
     description:
       "Shop wholesale and retail clothing from Limra Clothing in Madurai, serving customers and businesses across Tamil Nadu.",
     url: `${siteConfig.url}/products`,
@@ -239,6 +239,10 @@ export default function ProductsPage() {
     </main>
   );
 }
+
+
+
+
 
 
 

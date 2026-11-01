@@ -7,7 +7,7 @@ import { siteConfig } from "@/lib/site";
 const pageUrl = `${siteConfig.url}/tamil-nadu-wholesale-clothing`;
 
 export const metadata: Metadata = {
-  title: "Wholesale Clothing Supplier Across Tamil Nadu | Limra Clothing",
+  title: { absolute: "Wholesale Clothing Supplier Across Tamil Nadu | Limra Clothing" },
   description:
     "Explore wholesale clothing options from Limra Clothing, a Madurai-based garment business serving wholesale and retail customers. Ask about products, bulk requirements, current stock and distribution across Tamil Nadu.",
   keywords: [
@@ -258,3 +258,6 @@ export default function TamilNaduWholesaleClothingPage() {
     </main>
   );
 }
+
+
+
