@@ -284,14 +284,33 @@ const productSchema = {
             "@type": "Organization",
             name: siteConfig.name,
             url: siteConfig.url,
-          },
+        },
+          shippingDetails: {
+  "@type": "OfferShippingDetails",
+  shippingDestination: {
+    "@type": "DefinedRegion",
+    addressCountry: "IN",
+  },
+  deliveryTime: {
+    "@type": "ShippingDeliveryTime",
+    handlingTime: {
+      "@type": "QuantitativeValue",
+      minValue: 1,
+      maxValue: 2,
+      unitCode: "DAY",
+    },
+  },
+},
 
           hasMerchantReturnPolicy: {
-            "@type": "MerchantReturnPolicy",
-            applicableCountry: "IN",
-            returnPolicyCategory:
-              "https://schema.org/MerchantReturnNotPermitted",
-          },
+  "@type": "MerchantReturnPolicy",
+  applicableCountry: "IN",
+  returnPolicyCategory:
+    "https://schema.org/MerchantReturnNotPermitted",
+  returnFees:
+    "https://schema.org/ReturnFeesCustomerResponsibility",
+},
+          
         },
       }
     : {}),

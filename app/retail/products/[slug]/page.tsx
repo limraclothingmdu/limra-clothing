@@ -372,21 +372,54 @@ export default async function RetailProductPage({
       : {}),
 
     ...(sellingPrice != null
-      ? {
-          offers: {
-            "@type": "Offer",
-            url: productUrl,
-            priceCurrency: "INR",
-            price: sellingPrice,
-            availability,
-            seller: {
-              "@type": "Organization",
-              name: siteConfig.name,
-              url: siteConfig.url,
+  ? {
+      offers: {
+        "@type": "Offer",
+        url: productUrl,
+        priceCurrency: "INR",
+        price: sellingPrice,
+        availability,
+        seller: {
+          "@type": "Organization",
+          name: siteConfig.name,
+          url: siteConfig.url,
+        },
+
+        shippingDetails: {
+          "@type": "OfferShippingDetails",
+          shippingDestination: {
+            "@type": "DefinedRegion",
+            addressCountry: "IN",
+          },
+          shippingRate: {
+            "@type": "MonetaryAmount",
+            currency: "INR",
+            value: product.retail_free_shipping
+              ? 0
+              : Number(product.retail_shipping_charge ?? 0),
+          },
+          deliveryTime: {
+            "@type": "ShippingDeliveryTime",
+            handlingTime: {
+              "@type": "QuantitativeValue",
+              minValue: 1,
+              maxValue: 2,
+              unitCode: "DAY",
             },
           },
-        }
-      : {}),
+        },
+
+        hasMerchantReturnPolicy: {
+          "@type": "MerchantReturnPolicy",
+          applicableCountry: "IN",
+          returnPolicyCategory:
+            "https://schema.org/MerchantReturnNotPermitted",
+          returnFees:
+            "https://schema.org/ReturnFeesCustomerResponsibility",
+        },
+      },
+    }
+  : {}),
   };
 
   return (
