@@ -10,7 +10,7 @@ const whatsappUrl =
   );
 
 export const metadata: Metadata = {
-  title: "Men's T-Shirts Wholesale in Madurai | Limra Clothing",
+  title: "Men's T-Shirts Wholesale in Madurai",
   description:
     "Looking for men's T-shirts wholesale in Madurai? Contact Limra Clothing to enquire about available styles, sizes, bulk orders and delivery across Tamil Nadu.",
   alternates: { canonical: pageUrl },
@@ -226,3 +226,4 @@ export default function MensTshirtsWholesalePage() {
     </main>
   );
 }
+

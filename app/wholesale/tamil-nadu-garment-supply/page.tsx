@@ -11,7 +11,7 @@ const whatsappUrl =
   );
 
 export const metadata: Metadata = {
-  title: "Tamil Nadu Wholesale Garment Supplier | Limra Clothing, Madurai",
+  title: "Tamil Nadu Wholesale Garment Supplier in Madurai",
   description:
     "Looking for wholesale garment supply in Tamil Nadu? Contact Limra Clothing, Madurai, for men's shirts, ladies wear, nighties, and garment bulk enquiries.",
   alternates: {
@@ -353,3 +353,4 @@ export default function TamilNaduGarmentSupplyPage() {
     </main>
   );
 }
+

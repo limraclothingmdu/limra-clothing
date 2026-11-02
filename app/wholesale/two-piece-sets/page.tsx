@@ -10,7 +10,7 @@ const whatsappUrl =
   );
 
 export const metadata: Metadata = {
-  title: "Two-Piece Ladies Sets Wholesale in Madurai | Limra Clothing",
+  title: "Two-Piece Ladies Sets Wholesale in Madurai",
   description:
     "Enquire about two-piece ladies sets wholesale in Madurai. Contact Limra Clothing for available styles, bulk garment orders and delivery enquiries across Tamil Nadu.",
   alternates: { canonical: pageUrl },

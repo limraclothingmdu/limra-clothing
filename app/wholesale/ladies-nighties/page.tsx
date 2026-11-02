@@ -7,7 +7,7 @@ const whatsappUrl =
   encodeURIComponent("Hello Limra Clothing, I am interested in wholesale ladies nighties and nightwear. Please share available styles, sizes, and bulk pricing.");
 
 export const metadata: Metadata = {
-  title: "Ladies Nighties Wholesale Supplier in Madurai | Limra Clothing",
+  title: "Ladies Nighties Wholesale Supplier in Madurai",
   description:
     "Looking for ladies nighties wholesale in Madurai? Contact Limra Clothing for Bombay nighties, ladies nightwear and bulk garment enquiries across Tamil Nadu.",
   alternates: { canonical: pageUrl },
@@ -198,3 +198,4 @@ export default function LadiesNightiesWholesalePage() {
     </main>
   );
 }
+

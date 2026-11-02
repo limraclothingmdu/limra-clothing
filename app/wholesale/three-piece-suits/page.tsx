@@ -10,7 +10,7 @@ const whatsappUrl =
   );
 
 export const metadata: Metadata = {
-  title: "Three-Piece Suit Sets Wholesale in Madurai | Limra Clothing",
+  title: "Three-Piece Suit Sets Wholesale in Madurai",
   description:
     "Enquire about three-piece ladies suit sets wholesale in Madurai. Contact Limra Clothing for available collections, bulk order options and shipping enquiries across Tamil Nadu.",
   alternates: { canonical: pageUrl },
@@ -221,3 +221,4 @@ export default function ThreePieceSuitsWholesalePage() {
     </main>
   );
 }
+
