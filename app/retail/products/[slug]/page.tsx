@@ -334,6 +334,69 @@ export default async function RetailProductPage({
         url: productUrl,
       },
     ]);
+    
+  const { data: approvedReviews } = await supabase
+    .from("product_reviews")
+    .select("id, rating, title, review_text, verified_purchase, created_at")
+    .eq("product_id", product.id)
+    .eq("product_type", "retail")
+    .eq("status", "approved")
+    .order("created_at", { ascending: false });
+
+  const reviewList = approvedReviews ?? [];
+
+  const reviewCount = reviewList.length;
+
+  const averageRating =
+    reviewCount > 0
+      ? reviewList.reduce(
+          (total, review) => total + review.rating,
+          0
+        ) / reviewCount
+      : 0;
+
+  const reviewSchema =
+    reviewCount > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: Number(averageRating.toFixed(1)),
+            reviewCount,
+            bestRating: 5,
+            worstRating: 1,
+          },
+
+          review: reviewList.map((review) => ({
+            "@type": "Review",
+
+            author: {
+              "@type": "Person",
+              name: "Customer",
+            },
+
+            reviewRating: {
+              "@type": "Rating",
+              ratingValue: review.rating,
+              bestRating: 5,
+              worstRating: 1,
+            },
+
+            ...(review.title
+              ? {
+                  name: review.title,
+                }
+              : {}),
+
+            reviewBody: review.review_text,
+
+            datePublished: new Date(
+              review.created_at
+            )
+              .toISOString()
+              .slice(0, 10),
+          })),
+        }
+      : {};
 
   const productSchema = {
     "@context": "https://schema.org",
@@ -421,7 +484,8 @@ export default async function RetailProductPage({
         },
       },
     }
-  : {}),
+      : {}),
+    ...reviewSchema,
   };
 
   return (
