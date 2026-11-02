@@ -18,6 +18,8 @@ import ProductCard from "@/components/products/ProductCard";
 import { createClient } from "@/lib/supabase/server";
 import { siteConfig } from "@/lib/site";
 import { createBreadcrumbSchema, safeJsonLdStringify } from "@/lib/schema";
+import ProductReviewForm from "@/components/products/ProductReviewForm";
+import ProductReviews from "@/components/products/ProductReviews";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -680,6 +682,18 @@ export default async function RetailProductPage({
         </div>
       
       </section>
+      {/* Customer Reviews */}
+<section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+  <ProductReviews
+    productId={product.id}
+    productType="retail"
+  />
+
+  <ProductReviewForm
+    productId={product.id}
+    productType="retail"
+  />
+</section>
 
       {/* Related Retail Products */}
       {relatedProducts.length > 0 && (

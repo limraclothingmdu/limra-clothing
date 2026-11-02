@@ -10,6 +10,7 @@ import {
   Settings2,
   ShoppingCart,
   Store,
+  Star,
   Users,
 } from "lucide-react";
 
@@ -27,6 +28,11 @@ const navigation = [
     href: "/admin/orders",
     icon: ShoppingCart,
   },
+  {
+  name: "Reviews",
+  href: "/admin/reviews",
+  icon: Star,
+},
   {
     name: "Products",
     href: "/admin/products",

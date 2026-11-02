@@ -12,6 +12,8 @@ import ProductCard from "@/components/products/ProductCard";
 import { getCategoryById } from "@/lib/categories";
 import { siteConfig } from "@/lib/site";
 import { createClient } from "@/lib/supabase/server";
+import ProductReviewForm from "@/components/products/ProductReviewForm";
+import ProductReviews from "@/components/products/ProductReviews";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -546,6 +548,18 @@ const productSchema = {
         </div>
       
       </section>
+      {/* Customer Reviews */}
+<section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+  <ProductReviews
+    productId={product.id}
+    productType="wholesale"
+  />
+
+  <ProductReviewForm
+    productId={product.id}
+    productType="wholesale"
+  />
+</section>
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (

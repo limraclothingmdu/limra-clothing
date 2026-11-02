@@ -1,4 +1,4 @@
-import Script from "next/script";
+﻿import Script from "next/script";
 
 const GA_MEASUREMENT_ID = "G-LZJPGH6EKN";
 
@@ -7,10 +7,10 @@ export default function GoogleAnalytics() {
     <>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
 
-      <Script id="google-analytics" strategy="afterInteractive">
+      <Script id="google-analytics" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){window.dataLayer.push(arguments);}

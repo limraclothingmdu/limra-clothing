@@ -171,9 +171,8 @@ export default function TwoPieceSetsWholesalePage() {
               href="/wholesale/mens-shirts"
               className="rounded-xl border border-slate-200 bg-white p-5 font-semibold text-[#081A4A] hover:border-[#C89B3C]"
             >
-              Men's Shirts Wholesale →
+              Men&apos;s Shirts Wholesale →
             </Link>
-
             <Link
               href="/wholesale"
               className="rounded-xl border border-slate-200 bg-white p-5 font-semibold text-[#081A4A] hover:border-[#C89B3C]"
