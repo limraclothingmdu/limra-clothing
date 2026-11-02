@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 import About from "@/sections/home/About";
 import CategoriesPreview from "@/sections/home/CategoriesPreview";
@@ -10,7 +10,7 @@ import { siteConfig } from "@/lib/site";
 
 
 export const metadata: Metadata = {
-  title: "Limra Clothing | Wholesale Garments in Madurai",
+  title: { absolute: "Wholesale Garments in Madurai | Limra Clothing" },
   description:
     "Limra Clothing is a wholesale and retail garment business in Madurai, Tamil Nadu. Explore men's shirts, ladies' wear and ready-made clothing, with wholesale enquiries and distribution across Tamil Nadu.",
   keywords: [
@@ -21,9 +21,9 @@ export const metadata: Metadata = {
     "men's shirts wholesale Madurai",
     "ladies wear wholesale Tamil Nadu",
     "ready-made garments supplier Madurai",
-    "மொத்த ஆடை விற்பனை மதுரை",
-    "ஆண்கள் சட்டைகள் மொத்த விற்பனை",
-    "பெண்கள் ஆடைகள் மொத்த விற்பனை",
+    "à®®à¯Šà®¤à¯à®¤ à®†à®Ÿà¯ˆ à®µà®¿à®±à¯à®ªà®©à¯ˆ à®®à®¤à¯à®°à¯ˆ",
+    "à®†à®£à¯à®•à®³à¯ à®šà®Ÿà¯à®Ÿà¯ˆà®•à®³à¯ à®®à¯Šà®¤à¯à®¤ à®µà®¿à®±à¯à®ªà®©à¯ˆ",
+    "à®ªà¯†à®£à¯à®•à®³à¯ à®†à®Ÿà¯ˆà®•à®³à¯ à®®à¯Šà®¤à¯à®¤ à®µà®¿à®±à¯à®ªà®©à¯ˆ",
     "Limra Clothing",
     "Limra Clothing Madurai",
   ],
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     canonical: siteConfig.url,
   },
   openGraph: {
-    title: "Limra Clothing | Wholesale Garments in Madurai",
+    title: { absolute: "Wholesale Garments in Madurai | Limra Clothing" },
     description:
       "Explore men's shirts, ladies' wear and ready-made garments from Limra Clothing in Madurai. Contact us for wholesale enquiries across Tamil Nadu.",
     url: siteConfig.url,
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Limra Clothing | Wholesale Garments in Madurai",
+    title: { absolute: "Wholesale Garments in Madurai | Limra Clothing" },
     description:
       "Men's shirts, ladies' wear and ready-made garments. Wholesale enquiries from Madurai, serving Tamil Nadu.",
   },

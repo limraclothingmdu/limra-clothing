@@ -1,16 +1,19 @@
 ﻿import type { Metadata } from "next";
 
+import { siteConfig } from "@/lib/site";
 import WholesaleHero from "@/sections/wholesale/WholesaleHero";
 import WholesaleBenefits from "@/sections/wholesale/WholesaleBenefits";
+import WholesaleCategoryLinks from "@/sections/wholesale/WholesaleCategoryLinks";
 import WholesaleLadiesWear from "@/sections/wholesale/WholesaleLadiesWear";
 import WholesaleCTA from "@/sections/wholesale/WholesaleCTA";
-import { siteConfig } from "@/lib/site";
 
 const canonicalUrl = `${siteConfig.url}/wholesale`;
 
-const pageTitle = "Wholesale Clothing Supplier in Madurai";
+const pageTitle = "Wholesale Clothing Supplier in Madurai | Limra Clothing";
+
 const pageDescription =
-   "Looking for wholesale clothing in Madurai? Limra Clothing supplies garments and ladies wear for retailers and bulk buyers, with distribution across Tamil Nadu.";
+  "Looking for a wholesale clothing supplier in Madurai? Limra Clothing welcomes retailer and bulk garment enquiries for men's shirts, ladies wear and other clothing categories, with distribution enquiries across Tamil Nadu.";
+
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
@@ -19,16 +22,14 @@ export const metadata: Metadata = {
     "wholesale clothing supplier Madurai",
     "wholesale clothing Madurai",
     "wholesale garments Madurai",
-    "ladies wear wholesale Madurai",
-    "kurti wholesale supplier Tamil Nadu",
-    "ladies garments wholesale Tamil Nadu",
     "clothing wholesaler Madurai",
+    "ladies wear wholesale Madurai",
+    "ladies garments wholesale Tamil Nadu",
+    "mens shirts wholesale Madurai",
+    "wholesale shirts Tamil Nadu",
     "wholesale clothing Tamil Nadu",
     "garments distributor Tamil Nadu",
     "ready made garments wholesale",
-    "wholesale shirts Tamil Nadu",
-    "wholesale pants Tamil Nadu",
-    "mens clothing wholesale Madurai",
     "textile wholesale market Madurai",
     "moththa vilai thuni kadai Madurai",
   ],
@@ -38,9 +39,8 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: `${pageTitle} | ${siteConfig.name}`,
-    description:
-      "Source garments and ladies wear in bulk from Limra Clothing in Madurai. Enquire about wholesale orders and distribution across Tamil Nadu.",
+    title: pageTitle,
+    description: pageDescription,
     url: canonicalUrl,
     siteName: siteConfig.name,
     locale: "en_IN",
@@ -49,9 +49,8 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: `${pageTitle} | ${siteConfig.name}`,
-    description:
-       "Wholesale garments and ladies wear from Madurai, with distribution across Tamil Nadu. Contact Limra Clothing for bulk enquiries.",
+    title: pageTitle,
+    description: pageDescription,
   },
 
   robots: {
@@ -69,6 +68,7 @@ export default function WholesalePage() {
     <main>
       <WholesaleHero />
       <WholesaleBenefits />
+      <WholesaleCategoryLinks />
       <WholesaleLadiesWear />
       <WholesaleCTA />
     </main>

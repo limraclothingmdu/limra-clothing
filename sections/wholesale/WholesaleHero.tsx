@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowRight, MessageCircle, Truck } from "lucide-react";
 
 import { siteConfig } from "@/lib/site";
@@ -38,8 +38,8 @@ export default function WholesaleHero() {
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
-              Limra Clothing supplies shirts, pants, T-shirts and other
-              ready-made garments for wholesale requirements. Based in
+              Limra Clothing supplies men's shirts, ladies wear and other
+              ready-made garments for wholesale enquiries. Based in
               Madurai, we provide clothing distribution across Tamil Nadu.
             </p>
 

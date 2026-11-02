@@ -6,7 +6,7 @@ import GalleryGrid from "@/sections/gallery/GalleryGrid";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Gallery | Limra Clothing Madurai",
+  title: "Gallery in Madurai",
   description:
     "View Limra Clothing&apos;s store, clothing collections and ready-made garments in Madurai. Wholesale and retail clothing distributed across Tamil Nadu.",
   keywords: [

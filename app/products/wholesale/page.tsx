@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -13,7 +13,7 @@ import { siteConfig } from "@/lib/site";
 
 
 export const metadata: Metadata = {
-  title: "Garment Wholesaler in Madurai | Limra Clothing",
+  title: "Garment Wholesaler in Madurai",
   description:
     "Explore wholesale clothing from Limra Clothing, Madurai, including available men's shirts and ladies' garments. Contact us to enquire about two-piece sets, three-piece sets, nightwear, Bombay nighties, bulk orders and Tamil Nadu distribution.",
   keywords: [
@@ -25,10 +25,10 @@ export const metadata: Metadata = {
     "three piece ladies set wholesale",
     "nightwear wholesale Tamil Nadu",
     "Bombay nighties wholesale",
-    "மொத்த ஆடை விற்பனை",
-    "ஆண்கள் சட்டைகள் மொத்த விற்பனை",
-    "பெண்கள் ஆடைகள் மொத்த விற்பனை",
-    "நைட்டி மொத்த விற்பனை",
+    "à®®à¯Šà®¤à¯à®¤ à®†à®Ÿà¯ˆ à®µà®¿à®±à¯à®ªà®©à¯ˆ",
+    "à®†à®£à¯à®•à®³à¯ à®šà®Ÿà¯à®Ÿà¯ˆà®•à®³à¯ à®®à¯Šà®¤à¯à®¤ à®µà®¿à®±à¯à®ªà®©à¯ˆ",
+    "à®ªà¯†à®£à¯à®•à®³à¯ à®†à®Ÿà¯ˆà®•à®³à¯ à®®à¯Šà®¤à¯à®¤ à®µà®¿à®±à¯à®ªà®©à¯ˆ",
+    "à®¨à¯ˆà®Ÿà¯à®Ÿà®¿ à®®à¯Šà®¤à¯à®¤ à®µà®¿à®±à¯à®ªà®©à¯ˆ",
   ],
   alternates: {
     canonical: `${siteConfig.url}/products/wholesale`,

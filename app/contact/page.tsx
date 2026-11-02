@@ -12,9 +12,9 @@ import { siteConfig } from "@/lib/site";
 import RetailProductShowcase from "@/components/products/RetailProductShowcase";
 
 export const metadata: Metadata = {
-  title: "Contact Limra Clothing | Madurai Wholesale Garments",
+  title: "Contact Wholesale Garments in Madurai",
   description:
-    "Contact Limra Clothing in Madurai for wholesale garment enquiries, retail product questions, availability and business requirements. We serve clothing buyers and retailers across Tamil Nadu.",
+    "Contact Limra Clothing in Madurai for wholesale garment enquiries, retail product questions, availability, and business requirements. We serve clothing buyers and retailers across Tamil Nadu.",
   keywords: [
     "contact Limra Clothing",
     "wholesale clothing Madurai contact",

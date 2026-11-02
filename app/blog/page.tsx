@@ -6,11 +6,25 @@ import { getPublishedBlogs } from "@/lib/blog";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: `Clothing & Wholesale Insights | ${siteConfig.name}`,
+  title: "Clothing & Wholesale Insights",
   description:
-    "Read clothing wholesale guides, garment sourcing tips, fashion retail insights and information about wholesale clothing in Madurai and Tamil Nadu.",
+    "Explore clothing trends, wholesale garment insights, men's shirts, ladies' wear, and garment shopping guides from Limra Clothing in Madurai.",
   alternates: {
     canonical: `${siteConfig.url}/blog`,
+  },
+  openGraph: {
+    title: "Clothing & Wholesale Insights | Limra Clothing",
+    description:
+      "Explore clothing trends, wholesale garment insights, men's shirts, ladies' wear, and garment shopping guides from Limra Clothing in Madurai.",
+    url: `${siteConfig.url}/blog`,
+    siteName: "Limra Clothing",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Clothing & Wholesale Insights | Limra Clothing",
+    description:
+      "Explore clothing trends, wholesale garment insights, men's shirts, ladies' wear, and garment shopping guides from Limra Clothing in Madurai.",
   },
 };
 

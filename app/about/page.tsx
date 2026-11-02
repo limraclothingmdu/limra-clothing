@@ -7,9 +7,9 @@ import RetailProductShowcase from "@/components/products/RetailProductShowcase";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "About Limra Clothing | Madurai Garment Business",
+  title: "About Our Garment Business in Madurai",
   description:
-  "Learn about Limra Clothing, a ready-made clothing business in Madurai serving wholesale buyers, retailers and clothing businesses across Tamil Nadu.",
+  "Learn about Limra Clothing, a ready-made garment business in Madurai serving wholesale buyers, retailers, and clothing businesses across Tamil Nadu.",
   keywords: [
     "about Limra Clothing",
     "wholesale clothing Madurai",

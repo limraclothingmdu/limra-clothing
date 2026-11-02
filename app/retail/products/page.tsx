@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -34,7 +34,7 @@ type RetailProduct = {
 };
 
 export const metadata: Metadata = {
-  title: "Shop Ready-Made Clothes in Madurai | Limra Clothing",
+  title: "Shop Ready-Made Clothes in Madurai",
   description:
     "Shop available ready-made clothing from Limra Clothing in Madurai. Browse retail products, compare product details and prices, and order online where available.",
   keywords: [
@@ -296,6 +296,7 @@ export default async function RetailProductsPage() {
 
   );
 }
+
 
 
 
