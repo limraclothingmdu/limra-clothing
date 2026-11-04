@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: `${title} | ${siteConfig.name}`,
+    title,
     description,
     url: canonicalUrl,
     siteName: siteConfig.name,
@@ -81,10 +81,10 @@ export default function MensShirtsWholesalePage() {
             Wholesale Menswear · Madurai
           </p>
           <h1 className="mt-4 max-w-3xl font-serif text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-            Men's Shirts Wholesale Supplier in Madurai
+            Men&apos;s Shirts Wholesale Supplier in Madurai
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-8 text-white/75 sm:text-lg">
-            Looking for men's shirts for your clothing shop or resale business?
+            Looking for men&apos;s shirts for your clothing shop or resale business?
             Contact Limra Clothing to discuss available shirt styles, bulk
             requirements, pricing and delivery arrangements across Tamil Nadu.
           </p>
@@ -119,7 +119,7 @@ export default function MensShirtsWholesalePage() {
             <p className="mt-5 leading-8 text-gray-600">
               Limra Clothing is a Madurai-based wholesale and retail garment
               business. We welcome enquiries from clothing retailers, shop
-              owners and resellers looking for men's shirts. Contact us to
+              owners and resellers looking for men&apos;s shirts. Contact us to
               discuss your requirements and check current product availability
               before placing an order.
             </p>
@@ -133,7 +133,7 @@ export default function MensShirtsWholesalePage() {
               href="/categories/mens-shirts"
               className="mt-6 inline-flex items-center gap-2 font-semibold text-[#081A4A] underline decoration-[#C89B3C] underline-offset-4"
             >
-              Explore men's shirt products <ArrowRight className="h-4 w-4" />
+              Explore men&apos;s shirt products <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
@@ -159,7 +159,7 @@ export default function MensShirtsWholesalePage() {
       <section className="bg-gray-50">
         <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
           <h2 className="font-serif text-3xl font-semibold text-[#081A4A]">
-            Men's shirts wholesale FAQs
+            Men&apos;s shirts wholesale FAQs
           </h2>
           <div className="mt-7 divide-y divide-gray-200">
             {faqs.map((faq) => (
@@ -186,7 +186,7 @@ export default function MensShirtsWholesalePage() {
 
       <section className="bg-[#081A4A] px-4 py-14 text-center text-white sm:px-6 lg:px-8">
         <h2 className="font-serif text-3xl font-semibold sm:text-4xl">
-          Enquire about men's shirts in bulk
+          Enquire about men&apos;s shirts in bulk
         </h2>
         <p className="mx-auto mt-4 max-w-2xl leading-7 text-white/70">
           Contact Limra Clothing in Madurai to discuss your stock requirements,

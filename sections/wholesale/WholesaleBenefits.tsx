@@ -10,7 +10,7 @@ const benefits = [
     icon: Boxes,
     title: "Multiple Clothing Categories",
     description:
-      "Source shirts, T-shirts, trousers and other ready-made clothing categories for your retail or wholesale business.",
+  "Enquire about men's shirts, ladies' sets, nightwear and other ready-made clothing categories for your retail or wholesale business.",
   },
   {
     icon: Truck,

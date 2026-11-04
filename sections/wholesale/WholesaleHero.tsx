@@ -37,11 +37,12 @@ export default function WholesaleHero() {
               </span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
-              Limra Clothing supplies men's shirts, ladies wear and other
-              ready-made garments for wholesale enquiries. Based in
-              Madurai, we provide clothing distribution across Tamil Nadu.
-            </p>
+<p className="mt-6 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
+  Limra Clothing welcomes wholesale enquiries from retailers, clothing
+  shops and bulk buyers for men&apos;s shirts, ladies&apos; 2-piece and 3-piece
+  sets, nightwear and other ready-made garments. Based in Madurai,
+  we also welcome distribution enquiries from across Tamil Nadu.
+</p>
 
             <div className="mt-9 flex flex-wrap gap-3">
               <a

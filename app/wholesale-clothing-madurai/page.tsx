@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight, MapPin, MessageCircle, Phone, Shirt } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 
-const pageTitle = "Wholesale Clothing in Madurai | Limra Clothing";
+const pageTitle = "Wholesale Clothing in Madurai";
 const pageDescription =
   "Contact Limra Clothing in Madurai for wholesale garment enquiries, men's shirts, ladies' wear and current product availability. Ask about bulk quantities, prices and supply arrangements across Tamil Nadu.";
 

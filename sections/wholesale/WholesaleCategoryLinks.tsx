@@ -4,25 +4,25 @@ const wholesaleCategories = [
   {
     title: "Ladies Wear Wholesale",
     description:
-      "Explore wholesale enquiries for ladies wear, including available sets and nightwear categories.",
+      "Enquire about ladies' wear, including available sets and nightwear categories.",
     href: "/wholesale/ladies-wear",
   },
   {
     title: "Ladies Nighties Wholesale",
     description:
-      "Enquire about ladies nighties, nightwear styles, sizes and bulk order requirements.",
+      "Ask about ladies' nighties, nightwear styles, sizes and wholesale requirements.",
     href: "/wholesale/ladies-nighties",
   },
   {
     title: "Two-Piece Ladies Sets",
     description:
-      "Contact Limra Clothing about available two-piece ladies sets and wholesale order details.",
+      "Enquire about available two-piece ladies' sets and wholesale order details.",
     href: "/wholesale/two-piece-sets",
   },
   {
-    title: "Three-Piece Ladies Suit Sets",
+    title: "Three-Piece Ladies Sets",
     description:
-      "Ask about available three-piece ladies suit sets, quantities and wholesale terms.",
+      "Ask about available three-piece ladies' sets, quantities and wholesale terms.",
     href: "/wholesale/three-piece-suits",
   },
   {

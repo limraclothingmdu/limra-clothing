@@ -9,10 +9,10 @@ import WholesaleCTA from "@/sections/wholesale/WholesaleCTA";
 
 const canonicalUrl = `${siteConfig.url}/wholesale`;
 
-const pageTitle = "Wholesale Clothing Supplier in Madurai | Limra Clothing";
+const pageTitle = "Wholesale Clothing Supplier in Madurai";
 
 const pageDescription =
-  "Looking for a wholesale clothing supplier in Madurai? Limra Clothing welcomes retailer and bulk garment enquiries for men's shirts, ladies wear and other clothing categories, with distribution enquiries across Tamil Nadu.";
+  "Looking for wholesale clothing in Madurai? Limra Clothing welcomes retailers and bulk buyers enquiring about men's shirts, ladies' 2-piece and 3-piece sets, nightwear and Bombay nighties. Contact us to discuss current availability and wholesale supply across Tamil Nadu.";
 
 export const metadata: Metadata = {
   title: pageTitle,

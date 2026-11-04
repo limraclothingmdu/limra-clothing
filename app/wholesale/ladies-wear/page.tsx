@@ -7,7 +7,7 @@ const canonicalUrl = `${siteConfig.url}/wholesale/ladies-wear`;
 
 const title = "Ladies Wear Wholesale Supplier in Madurai";
 const description =
-  "Looking for ladies wear wholesale in Madurai? Contact Limra Clothing about available ladies' 2-piece sets, 3-piece sets, nightwear and Bombay nighties for retailers and bulk buyers.";
+  "Looking for ladies wear wholesale in Madurai? Contact Limra Clothing about available Ladies&apos; 2-piece sets, 3-piece sets, nightwear and Bombay nighties for retailers and bulk buyers.";
 
 export const metadata: Metadata = {
   title,
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: `${title} | ${siteConfig.name}`,
+    title,
     description,
     url: canonicalUrl,
     siteName: siteConfig.name,
@@ -48,7 +48,7 @@ const faqs = [
   {
     question: "What types of ladies wear can I enquire about?",
     answer:
-      "You can enquire about ladies' 2-piece sets, 3-piece sets, nightwear and Bombay nighties. Confirm current styles and stock availability directly with our team.",
+      "You can enquire about Ladies&apos; 2-piece sets, 3-piece sets, nightwear and Bombay nighties. Confirm current styles and stock availability directly with our team.",
   },
   {
     question: "Can buyers from other parts of Tamil Nadu contact Limra Clothing?",
@@ -86,7 +86,7 @@ export default function LadiesWearWholesalePage() {
             Ladies Wear Wholesale Supplier in Madurai
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-8 text-white/75 sm:text-lg">
-            Sourcing ladies' garments for your clothing shop or resale business?
+            Sourcing ladies&apos; garments for your clothing shop or resale business?
             Contact Limra Clothing to enquire about 2-piece sets, 3-piece sets,
             nightwear and Bombay nighties, including current availability,
             wholesale pricing and delivery arrangements.
@@ -117,17 +117,17 @@ export default function LadiesWearWholesalePage() {
         <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
           <div>
             <h2 className="font-serif text-3xl font-semibold text-[#081A4A] sm:text-4xl">
-              Ladies' garments for retailers and bulk buyers
+              Ladies&apos; garments for retailers and bulk buyers
             </h2>
             <p className="mt-5 leading-8 text-gray-600">
               Limra Clothing is a Madurai-based wholesale and retail garment
               business. We welcome enquiries from clothing shops, retailers
-              and resellers looking for ladies' wear. Tell us which products
+              and resellers looking for ladies&apos; wear. Tell us which products
               you are sourcing and the approximate quantities you require so
               we can discuss availability and order terms.
             </p>
             <p className="mt-4 leading-8 text-gray-600">
-              Buyers can enquire about ladies' 2-piece sets, 3-piece sets,
+              Buyers can enquire about ladies&apos; 2-piece sets, 3-piece sets,
               nightwear and Bombay nighties. Product designs, sizes, prices
               and stock can vary, so please confirm the current selection
               directly before placing an order.
@@ -136,7 +136,7 @@ export default function LadiesWearWholesalePage() {
               href="/categories/ladies-wear"
               className="mt-6 inline-flex items-center gap-2 font-semibold text-[#081A4A] underline decoration-[#C89B3C] underline-offset-4"
             >
-              Explore ladies' wear products <ArrowRight className="h-4 w-4" />
+              Explore ladies&apos; wear products <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
@@ -145,9 +145,9 @@ export default function LadiesWearWholesalePage() {
               Product categories to enquire about
             </h2>
             <ul className="mt-5 space-y-4 text-sm leading-6 text-gray-600">
-              <li>• Ladies' 2-piece sets</li>
-              <li>• Ladies' 3-piece sets</li>
-              <li>• Ladies' nightwear</li>
+              <li>• Ladies&apos; 2-piece sets</li>
+              <li>• Ladies&apos; 3-piece sets</li>
+              <li>• Ladies&apos; nightwear</li>
               <li>• Bombay nighties</li>
             </ul>
             <p className="mt-5 text-sm leading-6 text-gray-500">
@@ -191,8 +191,7 @@ export default function LadiesWearWholesalePage() {
           Enquire about ladies wear in bulk
         </h2>
         <p className="mx-auto mt-4 max-w-2xl leading-7 text-white/70">
-          Contact Limra Clothing in Madurai to discuss ladies' garment
-          requirements, current availability, wholesale prices and delivery.
+          Contact Limra Clothing in Madurai to discuss discuss ladies&apos; garment requirements, current availability, wholesale prices and delivery.
         </p>
         <a
           href={whatsappUrl}
