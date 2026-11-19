@@ -134,13 +134,29 @@ export default function NewBlogPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          data.error || "Failed to create blog"
-        );
-      }
+  throw new Error(
+    data.error || "Failed to update blog"
+  );
+}
 
-      router.push("/admin/blogs");
-      router.refresh();
+if (!isPublished) {
+  alert("Draft saved successfully. It was not sent to Google.");
+} else if (data.googlePublish?.success) {
+  alert(
+    data.googlePublish.status === "already_tracked"
+      ? "Blog saved. A Google post already exists. No duplicate was created."
+      : "Blog saved and successfully submitted to Google Business Profile."
+  );
+} else {
+  alert(
+    `Blog saved, but Google publishing needs attention. ${
+      data.googlePublish?.message || "No publishing result was returned."
+    }`
+  );
+}
+
+router.push("/admin/blogs");
+router.refresh();
     } catch (error) {
       alert(
         error instanceof Error

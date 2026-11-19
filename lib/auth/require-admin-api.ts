@@ -30,7 +30,7 @@ export async function requireAdminApi() {
     return {
       authorized: false as const,
       status: 403,
-      error: "Admin access required",
+      error: "Administrator access required",
     };
   }
 

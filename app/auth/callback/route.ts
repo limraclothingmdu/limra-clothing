@@ -1,11 +1,16 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
 
   const code = url.searchParams.get("code");
-  const next = url.searchParams.get("next") || "/reset-password";
+  const requestedNext = url.searchParams.get("next") || "/reset-password";
+
+  const next =
+    requestedNext.startsWith("/") && !requestedNext.startsWith("//")
+      ? requestedNext
+      : "/reset-password";
 
   if (!code) {
     return NextResponse.redirect(
@@ -18,19 +23,12 @@ export async function GET(request: Request) {
   const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
-    console.error("Auth callback error:", error);
+    console.error("Supabase auth callback failed:", error.message);
 
     return NextResponse.redirect(
-      new URL(
-        `/login?error=auth_callback_failed&message=${encodeURIComponent(
-          error.message
-        )}`,
-        url.origin
-      )
+      new URL("/login?error=auth_callback_failed", url.origin)
     );
   }
 
-  return NextResponse.redirect(
-    new URL(next, url.origin)
-  );
+  return NextResponse.redirect(new URL(next, url.origin));
 }
