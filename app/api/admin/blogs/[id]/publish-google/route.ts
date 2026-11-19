@@ -31,9 +31,22 @@ export async function POST(
     );
   }
 
-  const result = await publishBlogToGoogle(id);
+  try {
+    const result = await publishBlogToGoogle(id);
 
-  return NextResponse.json(result, {
-    status: result.success ? 200 : 400,
-  });
+    return NextResponse.json(result, {
+      status: result.success ? 200 : 400,
+    });
+  } catch (error) {
+    console.error("Google publishing API exception:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        status: "failed",
+        message: "An unexpected server error occurred during Google publishing.",
+      },
+      { status: 500 }
+    );
+  }
 }

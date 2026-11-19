@@ -162,7 +162,33 @@ async function publishToGoogle(id: string) {
       }
     );
 
-    const data = await response.json();
+    const responseText = await response.text();
+
+    let data: {
+      success?: boolean;
+      message?: string;
+      error?: string;
+    } = {};
+
+    if (!responseText.trim()) {
+      throw new Error(
+        `Google publishing server returned an empty response (HTTP ${response.status}).`
+      );
+    }
+
+    try {
+      data = JSON.parse(responseText);
+    } catch {
+      console.error(
+        "Google publishing returned a non-JSON response:",
+        response.status,
+        responseText.slice(0, 500)
+      );
+
+      throw new Error(
+        `Google publishing server returned an invalid response (HTTP ${response.status}).`
+      );
+    }
 
     if (!response.ok || !data.success) {
       throw new Error(
